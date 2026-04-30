@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+cloudflared
+start.sh
+歴史音声ガイドを起動.command
+/tmp/

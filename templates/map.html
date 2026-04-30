@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="歴史音声ガイド">
+<title>歴史音声ガイド</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Hiragino Sans', sans-serif;
+  background: #1a1a2e;
+  min-height: 100vh;
+  color: white;
+}
+header {
+  background: linear-gradient(135deg, #16213e, #0f3460);
+  padding: 20px 20px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.05em; }
+header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.gps-bar {
+  background: rgba(255,255,255,0.05);
+  padding: 10px 20px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gps-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #8e8e93;
+  flex-shrink: 0;
+}
+.gps-dot.active { background: #34c759; animation: pulse 1.5s infinite; }
+.gps-dot.error { background: #ff3b30; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.list { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.spot-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.spot-card:active { background: rgba(255,255,255,0.12); }
+.spot-card.nearby {
+  background: rgba(52, 199, 89, 0.12);
+  border-color: rgba(52, 199, 89, 0.4);
+}
+.spot-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #533483, #e94560);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.spot-card.nearby .spot-icon {
+  background: linear-gradient(135deg, #1a7a4a, #34c759);
+}
+.spot-info { flex: 1; min-width: 0; }
+.spot-name { font-size: 17px; font-weight: 700; }
+.spot-kana { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.spot-era { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.spot-highlight { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; line-height: 1.4; }
+.spot-dist {
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 60px;
+}
+.dist-num { font-size: 20px; font-weight: 800; color: white; line-height: 1; }
+.dist-unit { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.spot-card.nearby .dist-num { color: #34c759; }
+.nearby-badge {
+  display: inline-block;
+  background: #34c759;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+.arrow { font-size: 18px; color: rgba(255,255,255,0.3); margin-left: 4px; }
+.no-gps {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏯 歴史音声ガイド</h1>
+  <p>近くの史跡をタップすると音声解説が聞けます</p>
+</header>
+<div class="gps-bar">
+  <div class="gps-dot" id="gpsDot"></div>
+  <span id="gpsStatus">位置情報を取得中...</span>
+  <button onclick="retryGPS()" style="margin-left:auto;background:rgba(255,255,255,0.12);border:none;color:white;font-size:12px;padding:4px 10px;border-radius:10px;cursor:pointer;">再取得</button>
+</div>
+<div id="gpsHelp" style="display:none; background:#2a1a1a; border-left:3px solid #ff9f0a; padding:14px 16px; font-size:13px; color:rgba(255,255,255,0.9); line-height:1.9;">
+  ⚠️ <b>GPSが使えない場合の確認手順</b><br>
+  ① 設定 → <b>プライバシーとセキュリティ</b> → 位置情報サービス<br>
+  &nbsp;&nbsp;→ Safari → <b>「使用中は許可」</b><br>
+  ② 設定 → <b>Safari</b> → 「履歴とWebサイトデータを消去」<br>
+  ③ このページを再読み込み → 「許可」をタップ<br>
+  <br>
+  <b>GPSなしでも使えます ↓</b><br>
+  スポット名をタップすれば音声・動画・解説は見られます
+</div>
+<div class="list" id="spotList">
+  {% for id, spot in spots.items() %}
+  <a class="spot-card" href="/spot/{{ id }}" id="card-{{ id }}">
+    <div class="spot-icon">🏯</div>
+    <div class="spot-info">
+      <div class="spot-name">{{ spot.name }}</div>
+      <div class="spot-kana">{{ spot.kana }}</div>
+      <div class="spot-era">{{ spot.era }}</div>
+      <div class="spot-highlight">{{ spot.highlight }}</div>
+    </div>
+    <div class="spot-dist">
+      <div class="dist-num" id="dist-{{ id }}">—</div>
+      <div class="dist-unit">km</div>
+    </div>
+    <div class="arrow">›</div>
+  </a>
+  {% endfor %}
+</div>
+
+<script>
+const SPOTS = {{ spots | tojson }};
+const ICONS = {
+  kumamoto_castle: '🏯', kato_shrine: '⛩️',
+  suizenji: '🌿', honmyoji: '🛕', tabaruzaka: '⚔️',
+  kikuchi_shrine: '⛩️', kikuchi_takemitsu: '🗡️',
+  kikuchijo: '🏔️', tsujunbashi: '🌉', sakitsu: '⛪',
+  misumi_port: '⚓', eikokuji: '🌸', tsukahara_kofun: '🪦',
+  koama_onsen: '♨️'
+};
+
+Object.keys(SPOTS).forEach(id => {
+  const icon = ICONS[id] || '🏛️';
+  const el = document.querySelector(`#card-${id} .spot-icon`);
+  if (el) el.textContent = icon;
+});
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function updateDistances(lat, lon) {
+  const entries = Object.entries(SPOTS).map(([id, spot]) => {
+    const dist = haversine(lat, lon, spot.lat, spot.lon);
+    return { id, spot, dist };
+  }).sort((a, b) => a.dist - b.dist);
+
+  const list = document.getElementById('spotList');
+  list.innerHTML = '';
+
+  entries.forEach(({ id, spot, dist }) => {
+    const nearby = dist * 1000 <= spot.radius_m;
+    const distText = dist < 1 ? Math.round(dist * 1000) + 'm' : dist.toFixed(1) + 'km';
+    const icon = ICONS[id] || '🏛️';
+
+    const card = document.createElement('a');
+    card.className = 'spot-card' + (nearby ? ' nearby' : '');
+    card.href = `/spot/${id}`;
+    card.innerHTML = `
+      <div class="spot-icon">${icon}</div>
+      <div class="spot-info">
+        <div class="spot-name">${spot.name}</div>
+        <div class="spot-kana">${spot.kana}</div>
+        <div class="spot-era">${spot.era}</div>
+        <div class="spot-highlight">${spot.highlight}</div>
+        ${nearby ? '<span class="nearby-badge">📍 近くにいます</span>' : ''}
+      </div>
+      <div class="spot-dist">
+        <div class="dist-num">${dist < 1 ? Math.round(dist*1000) : dist.toFixed(1)}</div>
+        <div class="dist-unit">${dist < 1 ? 'm' : 'km'}</div>
+      </div>
+      <div class="arrow">›</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function setLocation(lat, lon, label) {
+  document.getElementById('gpsDot').className = 'gps-dot active';
+  document.getElementById('gpsStatus').textContent = label;
+  document.getElementById('gpsHelp').style.display = 'none';
+  updateDistances(lat, lon);
+}
+
+function tryIPLocation() {
+  document.getElementById('gpsStatus').textContent = '位置を確認中...';
+  fetch('https://ipapi.co/json/')
+    .then(r => r.json())
+    .then(d => {
+      if (d.latitude) {
+        setLocation(d.latitude, d.longitude, `📡 ${d.city || d.region}付近（概算）`);
+      } else {
+        showGPSHelp();
+      }
+    })
+    .catch(() => showGPSHelp());
+}
+
+function showGPSHelp() {
+  document.getElementById('gpsDot').className = 'gps-dot error';
+  document.getElementById('gpsStatus').textContent = '位置情報を取得できません';
+  document.getElementById('gpsHelp').style.display = 'block';
+}
+
+function retryGPS() {
+  document.getElementById('gpsDot').className = 'gps-dot';
+  document.getElementById('gpsHelp').style.display = 'none';
+  if (navigator.geolocation) {
+    document.getElementById('gpsStatus').textContent = 'GPS取得中...';
+    navigator.geolocation.getCurrentPosition(
+      pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
+      () => tryIPLocation(),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  } else {
+    tryIPLocation();
+  }
+}
+
+// 起動時：GPSを試して、ダメならIP位置情報
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
+    () => tryIPLocation(),
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+  // GPS成功後は継続監視
+  navigator.geolocation.watchPosition(
+    pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
+    () => {},
+    { enableHighAccuracy: true, maximumAge: 15000, timeout: 15000 }
+  );
+} else {
+  tryIPLocation();
+}
+</script>
+</body>
+</html>

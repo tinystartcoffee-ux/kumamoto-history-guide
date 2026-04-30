@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>{{ spot.name }} — 歴史音声ガイド</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  font-family: -apple-system, 'Hiragino Sans', sans-serif;
+  background: #1a1a2e;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+.scrollable {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+header {
+  background: linear-gradient(135deg, #16213e, #0f3460);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.back {
+  font-size: 28px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.header-info h1 { font-size: 19px; font-weight: 700; }
+.header-info .kana { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.era-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+/* 映像エリア（固定） */
+.video-section {
+  width: 100%;
+  background: #000;
+  flex-shrink: 0;
+}
+.video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+.video-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.no-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  font-size: 48px;
+}
+
+/* 音声プレイヤー */
+.player-section { padding: 16px 20px; }
+.player-card {
+  background: linear-gradient(135deg, #533483, #e94560);
+  border-radius: 20px;
+  padding: 20px 24px;
+}
+.player-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.player-title { font-size: 14px; font-weight: 600; opacity: 0.9; flex: 1; }
+.play-btn {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.play-btn:active { transform: scale(0.93); background: rgba(255,255,255,0.35); }
+.play-btn.playing { background: rgba(255,255,255,0.35); }
+.progress-wrap {
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+  height: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.progress-bar {
+  background: white;
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.player-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.time-row { font-size: 12px; opacity: 0.7; }
+.speed-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* コンテンツ */
+.content-section { padding: 0 20px 40px; }
+.highlight-box {
+  background: rgba(255,255,255,0.07);
+  border-left: 3px solid #e94560;
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+}
+.maps-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #1a73e8;
+  color: white;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  -webkit-tap-highlight-color: transparent;
+}
+.maps-btn:active { opacity: 0.85; }
+.section-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.transit-section { margin-bottom: 24px; }
+.transit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.transit-icon { font-size: 20px; flex-shrink: 0; }
+.transit-name { flex: 1; color: rgba(255,255,255,0.9); }
+.transit-walk { font-size: 12px; color: #34c759; font-weight: 600; white-space: nowrap; }
+.text-body {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.85);
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="/">‹</a>
+  <div class="header-info">
+    <h1>{{ spot.name }}</h1>
+    <div class="kana">{{ spot.kana }}</div>
+  </div>
+  <div class="era-badge">{{ spot.era }}</div>
+</header>
+
+<!-- 映像エリア -->
+{% if spot.youtube_id %}
+<div class="video-section">
+  <div class="video-wrap">
+    <iframe id="ytIframe"
+      src="https://www.youtube-nocookie.com/embed/{{ spot.youtube_id }}?rel=0&modestbranding=1&playsinline=1&mute=1"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+{% else %}
+<div class="no-video">🏯</div>
+{% endif %}
+
+<div class="scrollable">
+<!-- 音声プレイヤー -->
+<div class="player-section">
+  <div class="player-card">
+    <div class="player-top">
+      <div class="player-title">🎙️ 音声解説を再生</div>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+    </div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="player-bottom">
+      <div class="time-row">
+        <span id="currentTime">0:00</span> / <span id="totalTime">--:--</span>
+      </div>
+      <button class="speed-btn" id="speedBtn" onclick="changeSpeed()">1.0×</button>
+    </div>
+  </div>
+</div>
+
+<div class="content-section">
+  <div class="highlight-box">{{ spot.highlight }}</div>
+
+  <a class="maps-btn" href="https://www.google.com/maps/dir/?api=1&destination={{ spot.lat }},{{ spot.lon }}&travelmode=transit" target="_blank">
+    🗺️ Google Maps で経路を見る
+  </a>
+
+  {% if spot.transit %}
+  <div class="transit-section">
+    <div class="section-label">■ 最寄りの交通機関</div>
+    {% for t in spot.transit %}
+    <div class="transit-item">
+      <span class="transit-icon">{{ t.type }}</span>
+      <span class="transit-name">{{ t.name }}</span>
+      {% if t.walk %}<span class="transit-walk">{{ t.walk }}</span>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="section-label">■ 解説テキスト</div>
+  <div class="text-body">{{ spot.text }}</div>
+</div>
+</div><!-- /scrollable -->
+
+<audio id="audio" src="/audio/{{ spot_id }}" preload="auto"></audio>
+
+<script>
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const progressBar = document.getElementById('progressBar');
+const currentTimeEl = document.getElementById('currentTime');
+const totalTimeEl = document.getElementById('totalTime');
+const speedBtn = document.getElementById('speedBtn');
+const speeds = [1.0, 1.2, 1.5, 0.8];
+let speedIdx = 0;
+let videoStarted = false;
+
+const BASE_VIDEO_SRC = {% if spot.youtube_id %}"https://www.youtube-nocookie.com/embed/{{ spot.youtube_id }}?rel=0&modestbranding=1&playsinline=1&mute=1"{% else %}null{% endif %};
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = '⏸';
+    playBtn.classList.add('playing');
+    // 初回のみiframe srcにautoplay=1を付けて差し替え → iOS対応
+    if (BASE_VIDEO_SRC && !videoStarted) {
+      const iframe = document.getElementById('ytIframe');
+      if (iframe) {
+        iframe.src = BASE_VIDEO_SRC + '&autoplay=1';
+        videoStarted = true;
+      }
+    }
+  } else {
+    audio.pause();
+    playBtn.textContent = '▶';
+    playBtn.classList.remove('playing');
+  }
+}
+
+function changeSpeed() {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  audio.playbackRate = speeds[speedIdx];
+  speedBtn.textContent = `${speeds[speedIdx].toFixed(1)}×`;
+}
+
+document.getElementById('progressWrap').addEventListener('click', e => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  if (audio.duration) audio.currentTime = ratio * audio.duration;
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    currentTimeEl.textContent = fmt(audio.currentTime);
+  }
+});
+audio.addEventListener('loadedmetadata', () => {
+  totalTimeEl.textContent = fmt(audio.duration);
+});
+audio.addEventListener('ended', () => {
+  playBtn.textContent = '▶';
+  playBtn.classList.remove('playing');
+  progressBar.style.width = '0%';
+  audio.currentTime = 0;
+});
+</script>
+</body>
+</html>

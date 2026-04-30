@@ -77,6 +77,22 @@ header {
   background: linear-gradient(135deg, #0f3460, #16213e);
   font-size: 48px;
 }
+.spot-image-section {
+  width: 100%;
+  background: #000;
+  flex-shrink: 0;
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+.spot-image-section img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
 
 /* 音声プレイヤー */
 .player-section { padding: 16px 20px; }
@@ -220,6 +236,10 @@ header {
       allowfullscreen>
     </iframe>
   </div>
+</div>
+{% elif spot.image_url %}
+<div class="spot-image-section">
+  <img src="{{ spot.image_url }}" alt="{{ spot.name }}">
 </div>
 {% else %}
 <div class="no-video">🏯</div>

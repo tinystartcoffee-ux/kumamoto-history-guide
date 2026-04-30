@@ -242,7 +242,7 @@ function retryGPS() {
     navigator.geolocation.getCurrentPosition(
       pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
       () => tryIPLocation(),
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 30000 }
     );
   } else {
     tryIPLocation();
@@ -254,13 +254,13 @@ if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
     () => tryIPLocation(),
-    { enableHighAccuracy: true, timeout: 10000 }
+    { enableHighAccuracy: true, timeout: 30000 }
   );
   // GPS成功後は継続監視
   navigator.geolocation.watchPosition(
     pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
     () => {},
-    { enableHighAccuracy: true, maximumAge: 15000, timeout: 15000 }
+    { enableHighAccuracy: true, maximumAge: 15000, timeout: 30000 }
   );
 } else {
   tryIPLocation();

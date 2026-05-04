@@ -4,267 +4,414 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="歴史音声ガイド">
-<title>歴史音声ガイド</title>
+<meta name="apple-mobile-web-app-title" content="熊本歴史音声ガイド">
+<title>熊本歴史音声ガイド</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, 'Hiragino Sans', sans-serif;
-  background: #1a1a2e;
-  min-height: 100vh;
-  color: white;
-}
-header {
+html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-serif; background: #1a1a2e; color: white; overflow: hidden; }
+
+/* ── ヘッダー ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   background: linear-gradient(135deg, #16213e, #0f3460);
-  padding: 20px 20px 16px;
-  text-align: center;
+  padding: 10px 16px 8px;
+  display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
-header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.05em; }
-header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
-.gps-bar {
-  background: rgba(255,255,255,0.05);
-  padding: 10px 20px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.gps-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #8e8e93;
+#header h1 { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
+#header p  { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.gps-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.08); border-radius: 20px;
+  padding: 5px 10px; font-size: 11px; cursor: pointer;
   flex-shrink: 0;
 }
-.gps-dot.active { background: #34c759; animation: pulse 1.5s infinite; }
-.gps-dot.error { background: #ff3b30; }
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+.gps-dot { width: 7px; height: 7px; border-radius: 50%; background: #8e8e93; }
+.gps-dot.active  { background: #34c759; animation: pulse 1.5s infinite; }
+.gps-dot.error   { background: #ff3b30; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── エリアフィルター ── */
+#area-bar {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 999;
+  background: rgba(22,33,62,0.97);
+  backdrop-filter: blur(10px);
+  padding: 8px 12px;
+  display: flex; gap: 7px; overflow-x: auto;
+  scrollbar-width: none; border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.list { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+#area-bar::-webkit-scrollbar { display: none; }
+.area-btn {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  color: white; font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: all .15s;
+}
+.area-btn.active { color: white; border-color: transparent; }
+
+/* ── 地図 ── */
+#map {
+  position: fixed;
+  top: 106px; bottom: 52px; left: 0; right: 0;
+  z-index: 1;
+}
+
+/* ── タブ ── */
+#tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(22,33,62,0.98);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex; height: 52px;
+}
+.tab-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer;
+  font-size: 10px; color: rgba(255,255,255,0.45);
+  border: none; background: none;
+  transition: color .15s;
+}
+.tab-btn .tab-icon { font-size: 20px; }
+.tab-btn.active { color: #5c9cf5; }
+
+/* ── リストビュー ── */
+#list-view {
+  display: none;
+  position: fixed;
+  top: 106px; bottom: 52px; left: 0; right: 0;
+  z-index: 2; overflow-y: auto;
+  background: #1a1a2e;
+  padding: 12px;
+}
+#list-view.show { display: block; }
 .spot-card {
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 16px 18px;
-  text-decoration: none;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: background 0.15s;
+  border-radius: 14px; padding: 14px 16px;
+  text-decoration: none; color: white;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px; transition: background .15s;
   -webkit-tap-highlight-color: transparent;
 }
 .spot-card:active { background: rgba(255,255,255,0.12); }
-.spot-card.nearby {
-  background: rgba(52, 199, 89, 0.12);
-  border-color: rgba(52, 199, 89, 0.4);
-}
-.spot-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #533483, #e94560);
+.spot-icon-box {
+  width: 44px; height: 44px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-.spot-card.nearby .spot-icon {
-  background: linear-gradient(135deg, #1a7a4a, #34c759);
+  font-size: 22px; flex-shrink: 0;
 }
 .spot-info { flex: 1; min-width: 0; }
-.spot-name { font-size: 17px; font-weight: 700; }
-.spot-kana { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.spot-era { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
-.spot-highlight { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; line-height: 1.4; }
-.spot-dist {
-  text-align: right;
-  flex-shrink: 0;
-  min-width: 60px;
-}
-.dist-num { font-size: 20px; font-weight: 800; color: white; line-height: 1; }
-.dist-unit { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.spot-card.nearby .dist-num { color: #34c759; }
-.nearby-badge {
-  display: inline-block;
-  background: #34c759;
+.spot-name { font-size: 15px; font-weight: 700; }
+.spot-kana { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+.spot-era  { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 3px; }
+.spot-area-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 1px 8px; border-radius: 8px; margin-top: 4px;
   color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-top: 4px;
 }
-.arrow { font-size: 18px; color: rgba(255,255,255,0.3); margin-left: 4px; }
-.no-gps {
-  text-align: center;
-  padding: 40px 20px;
-  color: rgba(255,255,255,0.5);
-  font-size: 14px;
-  line-height: 1.8;
+.arrow { font-size: 16px; color: rgba(255,255,255,0.25); }
+
+/* ── Leafletカスタム ── */
+.leaflet-popup-content-wrapper {
+  background: #1e2d5a; color: white; border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.leaflet-popup-tip { background: #1e2d5a; }
+.leaflet-popup-content { margin: 14px 16px; }
+.popup-name { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+.popup-era  { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+.popup-highlight { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 10px; }
+.popup-btn {
+  display: block; text-align: center;
+  background: #5c9cf5; color: white;
+  border-radius: 10px; padding: 7px 14px;
+  text-decoration: none; font-size: 13px; font-weight: 700;
+}
+.marker-icon {
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+  border: 2px solid rgba(255,255,255,0.8);
+  font-size: 13px; line-height: 1;
 }
 </style>
 </head>
 <body>
-<header>
-  <h1>🏯 歴史音声ガイド</h1>
-  <p>近くの史跡をタップすると音声解説が聞けます</p>
-</header>
-<div class="gps-bar">
-  <div class="gps-dot" id="gpsDot"></div>
-  <span id="gpsStatus">位置情報を取得中...</span>
-  <button onclick="retryGPS()" style="margin-left:auto;background:rgba(255,255,255,0.12);border:none;color:white;font-size:12px;padding:4px 10px;border-radius:10px;cursor:pointer;">再取得</button>
+
+<!-- ヘッダー -->
+<div id="header">
+  <div>
+    <h1>🏯 熊本歴史音声ガイド</h1>
+    <p>史跡をタップして音声解説を聞く</p>
+  </div>
+  <div class="gps-badge" onclick="retryGPS()">
+    <div class="gps-dot" id="gpsDot"></div>
+    <span id="gpsLabel">GPS</span>
+  </div>
 </div>
-<div id="gpsHelp" style="display:none; background:#2a1a1a; border-left:3px solid #ff9f0a; padding:14px 16px; font-size:13px; color:rgba(255,255,255,0.9); line-height:1.9;">
-  ⚠️ <b>GPSが使えない場合の確認手順</b><br>
-  ① 設定 → <b>プライバシーとセキュリティ</b> → 位置情報サービス<br>
-  &nbsp;&nbsp;→ Safari → <b>「使用中は許可」</b><br>
-  ② 設定 → <b>Safari</b> → 「履歴とWebサイトデータを消去」<br>
-  ③ このページを再読み込み → 「許可」をタップ<br>
-  <br>
-  <b>GPSなしでも使えます ↓</b><br>
-  スポット名をタップすれば音声・動画・解説は見られます
+
+<!-- エリアフィルター -->
+<div id="area-bar">
+  <button class="area-btn active" data-area="all" onclick="filterArea('all')">🗾 全て</button>
+  <button class="area-btn" data-area="kumamoto"   onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
+  <button class="area-btn" data-area="tabaruzaka" onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部・田原坂</button>
+  <button class="area-btn" data-area="kikuchi"    onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池・山鹿</button>
+  <button class="area-btn" data-area="tamana"     onclick="filterArea('tamana')"     style="--ac:#FF9800">🌊 玉名</button>
+  <button class="area-btn" data-area="yatsushiro" onclick="filterArea('yatsushiro')" style="--ac:#009688">⛪ 八代・天草</button>
+  <button class="area-btn" data-area="aso"        onclick="filterArea('aso')"        style="--ac:#4CAF50">🌋 阿蘇・東部</button>
+  <button class="area-btn" data-area="hitoyoshi"  onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉・球磨</button>
+  <button class="area-btn" data-area="kamimashiki"onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
 </div>
-<div class="list" id="spotList">
-  {% for id, spot in spots.items() %}
-  <a class="spot-card" href="/spot/{{ id }}" id="card-{{ id }}">
-    <div class="spot-icon">🏯</div>
-    <div class="spot-info">
-      <div class="spot-name">{{ spot.name }}</div>
-      <div class="spot-kana">{{ spot.kana }}</div>
-      <div class="spot-era">{{ spot.era }}</div>
-      <div class="spot-highlight">{{ spot.highlight }}</div>
-    </div>
-    <div class="spot-dist">
-      <div class="dist-num" id="dist-{{ id }}">—</div>
-      <div class="dist-unit">km</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-  {% endfor %}
+
+<!-- 地図 -->
+<div id="map"></div>
+
+<!-- リストビュー -->
+<div id="list-view">
+  <div id="list-content"></div>
+</div>
+
+<!-- タブバー -->
+<div id="tab-bar">
+  <button class="tab-btn active" id="tab-map"  onclick="switchTab('map')">
+    <span class="tab-icon">🗺️</span>地図
+  </button>
+  <button class="tab-btn" id="tab-list" onclick="switchTab('list')">
+    <span class="tab-icon">📋</span>リスト
+  </button>
 </div>
 
 <script>
 const SPOTS = {{ spots | tojson }};
-const ICONS = {
-  kumamoto_castle: '🏯', kato_shrine: '⛩️',
-  suizenji: '🌿', honmyoji: '🛕', tabaruzaka: '⚔️',
-  kikuchi_shrine: '⛩️', kikuchi_takemitsu: '🗡️',
-  kikuchijo: '🏔️', tsujunbashi: '🌉', sakitsu: '⛪',
-  misumi_port: '⚓', eikokuji: '🌸', tsukahara_kofun: '🪦',
-  koama_onsen: '♨️'
+
+/* ── 地区定義 ── */
+const AREAS = {
+  kumamoto:    { name:'熊本市',       emoji:'🏯', color:'#2196F3',
+    ids:['kumamoto_castle','kato_shrine','suizenji','honmyoji',
+         'higo_kokufu','kojo_park','kengun_jinja_kessho',
+         'shinpuren_ran','kawashiri_kosenjo','kumamoto_ikki_hi'] },
+  tabaruzaka:  { name:'北部・田原坂', emoji:'⚔️', color:'#F44336',
+    ids:['tabaruzaka','kimeru_honei','yokohira_kosenjo',
+         'hankouzan_yoshijitoge','shonenji_dankon','koba_kosenjo',
+         'seinan_sensou_museum','joyama_kosenjo_seinan'] },
+  kikuchi:     { name:'菊池・山鹿',   emoji:'⚜️', color:'#9C27B0',
+    ids:['kikuchi_shrine','kikuchi_takemitsu','kikuchijo','seiseifu_kikuchi',
+         'kikuchi_castle_ruins','kikuchi_takejiro_kessho','ohara_kosenjo_1359',
+         'jokoji_kikuchi','kikuchi_dankon_seinan','kikuchi_takeshige_hi',
+         'tsukahara_kofun','chibusan_kofun','sokokan',
+         'yamaga_kosenjo_seinan','nankan_kosenjo'] },
+  tamana:      { name:'玉名',         emoji:'🌊', color:'#FF9800',
+    ids:['saigo_kohei_hi','shigemine_hachimangu_dankon',
+         'takase_kosenjo','etafunayana_kofun','koama_onsen'] },
+  yatsushiro:  { name:'八代・天草',   emoji:'⛪', color:'#009688',
+    ids:['yatsushiro_miya','yatsushiro_castle_konishi',
+         'hinagu_joriku_hi','sakitsu','misumi_port','uto_nanbokucho'] },
+  aso:         { name:'阿蘇・東部',   emoji:'🌋', color:'#4CAF50',
+    ids:['aso_shrine_nanbokucho','ozu_kosenjo'] },
+  hitoyoshi:   { name:'人吉・球磨',   emoji:'🏔️', color:'#795548',
+    ids:['eikokuji','hitoyoshi_castle','gokasho_heike',
+         'kureko','momiki','itsuki','shiibaru'] },
+  kamimashiki: { name:'上益城',       emoji:'🌉', color:'#FF5722',
+    ids:['tsujunbashi','mifune_kosenjo','kiyama_kosenjo',
+         'yamato_kosenjo_seinan','yabe_castle_aso'] }
 };
 
-Object.keys(SPOTS).forEach(id => {
-  const icon = ICONS[id] || '🏛️';
-  const el = document.querySelector(`#card-${id} .spot-icon`);
-  if (el) el.textContent = icon;
+/* spot_id → エリア のルックアップ */
+const SPOT_AREA = {};
+Object.entries(AREAS).forEach(([aKey, a]) => {
+  a.ids.forEach(id => { SPOT_AREA[id] = aKey; });
 });
-
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 +
-    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function getArea(id) {
+  const key = SPOT_AREA[id] || 'kumamoto';
+  return { key, ...AREAS[key] };
 }
 
-function updateDistances(lat, lon) {
-  const entries = Object.entries(SPOTS).map(([id, spot]) => {
-    const dist = haversine(lat, lon, spot.lat, spot.lon);
-    return { id, spot, dist };
-  }).sort((a, b) => a.dist - b.dist);
+/* ── Leaflet マップ初期化 ── */
+const map = L.map('map', { zoomControl: false }).setView([32.73, 130.74], 9);
 
-  const list = document.getElementById('spotList');
-  list.innerHTML = '';
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 18
+}).addTo(map);
 
-  entries.forEach(({ id, spot, dist }) => {
-    const nearby = dist * 1000 <= spot.radius_m;
-    const distText = dist < 1 ? Math.round(dist * 1000) + 'm' : dist.toFixed(1) + 'km';
-    const icon = ICONS[id] || '🏛️';
+L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    const card = document.createElement('a');
-    card.className = 'spot-card' + (nearby ? ' nearby' : '');
-    card.href = `/spot/${id}`;
-    card.innerHTML = `
-      <div class="spot-icon">${icon}</div>
-      <div class="spot-info">
-        <div class="spot-name">${spot.name}</div>
-        <div class="spot-kana">${spot.kana}</div>
-        <div class="spot-era">${spot.era}</div>
-        <div class="spot-highlight">${spot.highlight}</div>
-        ${nearby ? '<span class="nearby-badge">📍 近くにいます</span>' : ''}
-      </div>
-      <div class="spot-dist">
-        <div class="dist-num">${dist < 1 ? Math.round(dist*1000) : dist.toFixed(1)}</div>
-        <div class="dist-unit">${dist < 1 ? 'm' : 'km'}</div>
-      </div>
-      <div class="arrow">›</div>
+/* ── マーカー生成 ── */
+const markers = {};   // id → { marker, areaKey }
+
+Object.entries(SPOTS).forEach(([id, spot]) => {
+  const area = getArea(id);
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="marker-icon" style="width:30px;height:30px;background:${area.color}">${area.emoji}</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -16]
+  });
+
+  const marker = L.marker([spot.lat, spot.lon], { icon }).addTo(map);
+  marker.bindPopup(`
+    <div class="popup-name">${spot.name}</div>
+    <div class="popup-era">${spot.era}</div>
+    <div class="popup-highlight">${spot.highlight}</div>
+    <a class="popup-btn" href="/spot/${id}">🎵 音声解説を聞く</a>
+  `, { maxWidth: 240 });
+
+  markers[id] = { marker, areaKey: area.key };
+});
+
+/* ── エリアフィルター ── */
+let currentArea = 'all';
+function filterArea(areaKey) {
+  currentArea = areaKey;
+  document.querySelectorAll('.area-btn').forEach(b => {
+    const isActive = b.dataset.area === areaKey;
+    b.classList.toggle('active', isActive);
+    if (isActive) {
+      const color = areaKey === 'all' ? '#5c9cf5' : AREAS[areaKey]?.color || '#5c9cf5';
+      b.style.background = color;
+      b.style.borderColor = color;
+    } else {
+      b.style.background = '';
+      b.style.borderColor = '';
+    }
+  });
+
+  const bounds = [];
+  Object.entries(markers).forEach(([id, { marker, areaKey: mk }]) => {
+    const show = areaKey === 'all' || mk === areaKey;
+    if (show) { marker.addTo(map); bounds.push([SPOTS[id].lat, SPOTS[id].lon]); }
+    else       { marker.remove(); }
+  });
+
+  if (bounds.length > 0 && areaKey !== 'all') {
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+  } else if (areaKey === 'all') {
+    map.setView([32.73, 130.74], 9);
+  }
+
+  // リストも更新
+  buildList(areaKey);
+}
+
+/* 初期ボタンスタイル */
+document.querySelector('[data-area="all"]').style.background = '#5c9cf5';
+document.querySelector('[data-area="all"]').style.borderColor = '#5c9cf5';
+
+/* ── リスト生成 ── */
+function buildList(areaKey) {
+  const container = document.getElementById('list-content');
+  container.innerHTML = '';
+
+  const filtered = Object.entries(SPOTS).filter(([id]) => {
+    return areaKey === 'all' || SPOT_AREA[id] === areaKey;
+  });
+
+  // エリアでグループ化
+  const grouped = {};
+  filtered.forEach(([id, spot]) => {
+    const aKey = SPOT_AREA[id] || 'kumamoto';
+    if (!grouped[aKey]) grouped[aKey] = [];
+    grouped[aKey].push([id, spot]);
+  });
+
+  Object.entries(grouped).forEach(([aKey, spots]) => {
+    const area = AREAS[aKey];
+    if (!area) return;
+
+    const header = document.createElement('div');
+    header.style.cssText = `
+      font-size:13px; font-weight:800; color:${area.color};
+      padding:8px 4px 6px; letter-spacing:.06em;
+      border-bottom:1px solid ${area.color}44; margin-bottom:8px; margin-top:12px;
     `;
-    list.appendChild(card);
+    header.textContent = `${area.emoji} ${area.name}（${spots.length}）`;
+    container.appendChild(header);
+
+    spots.forEach(([id, spot]) => {
+      const card = document.createElement('a');
+      card.href = `/spot/${id}`;
+      card.className = 'spot-card';
+      card.innerHTML = `
+        <div class="spot-icon-box" style="background:${area.color}33;">${area.emoji}</div>
+        <div class="spot-info">
+          <div class="spot-name">${spot.name}</div>
+          <div class="spot-kana">${spot.kana}</div>
+          <div class="spot-era">${spot.era}</div>
+        </div>
+        <div class="arrow">›</div>
+      `;
+      // マップへのリンク
+      card.addEventListener('click', e => {
+        // map viewならマーカーへ移動
+      });
+      container.appendChild(card);
+    });
   });
 }
 
-function setLocation(lat, lon, label) {
+buildList('all');
+
+/* ── タブ切り替え ── */
+function switchTab(tab) {
+  const listView = document.getElementById('list-view');
+  document.getElementById('tab-map').classList.toggle('active', tab === 'map');
+  document.getElementById('tab-list').classList.toggle('active', tab === 'list');
+  listView.classList.toggle('show', tab === 'list');
+  if (tab === 'map') map.invalidateSize();
+}
+
+/* ── GPS ── */
+let userMarker = null;
+
+function setGPS(lat, lon, label) {
   document.getElementById('gpsDot').className = 'gps-dot active';
-  document.getElementById('gpsStatus').textContent = label;
-  document.getElementById('gpsHelp').style.display = 'none';
-  updateDistances(lat, lon);
-}
+  document.getElementById('gpsLabel').textContent = label;
 
-function tryIPLocation() {
-  document.getElementById('gpsStatus').textContent = '位置を確認中...';
-  fetch('https://ipapi.co/json/')
-    .then(r => r.json())
-    .then(d => {
-      if (d.latitude) {
-        setLocation(d.latitude, d.longitude, `📡 ${d.city || d.region}付近（概算）`);
-      } else {
-        showGPSHelp();
-      }
-    })
-    .catch(() => showGPSHelp());
-}
-
-function showGPSHelp() {
-  document.getElementById('gpsDot').className = 'gps-dot error';
-  document.getElementById('gpsStatus').textContent = '位置情報を取得できません';
-  document.getElementById('gpsHelp').style.display = 'block';
+  if (userMarker) map.removeLayer(userMarker);
+  userMarker = L.circleMarker([lat, lon], {
+    radius: 9, fillColor: '#5c9cf5', color: 'white',
+    weight: 2, fillOpacity: 1
+  }).addTo(map).bindPopup('📍 現在地');
 }
 
 function retryGPS() {
   document.getElementById('gpsDot').className = 'gps-dot';
-  document.getElementById('gpsHelp').style.display = 'none';
+  document.getElementById('gpsLabel').textContent = '取得中';
   if (navigator.geolocation) {
-    document.getElementById('gpsStatus').textContent = 'GPS取得中...';
     navigator.geolocation.getCurrentPosition(
-      pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
+      p => setGPS(p.coords.latitude, p.coords.longitude, 'GPS'),
       () => tryIPLocation(),
-      { enableHighAccuracy: true, timeout: 30000 }
+      { enableHighAccuracy: true, timeout: 20000 }
     );
-  } else {
-    tryIPLocation();
-  }
+  } else { tryIPLocation(); }
 }
 
-// 起動時：GPSを試して、ダメならIP位置情報
+function tryIPLocation() {
+  fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+    if (d.latitude) setGPS(d.latitude, d.longitude, '概算');
+    else { document.getElementById('gpsDot').className='gps-dot error'; document.getElementById('gpsLabel').textContent='取得失敗'; }
+  }).catch(()=>{ document.getElementById('gpsDot').className='gps-dot error'; });
+}
+
+// 起動時GPS
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
-    pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
+    p => setGPS(p.coords.latitude, p.coords.longitude, 'GPS'),
     () => tryIPLocation(),
-    { enableHighAccuracy: true, timeout: 30000 }
+    { enableHighAccuracy: true, timeout: 20000 }
   );
-  // GPS成功後は継続監視
   navigator.geolocation.watchPosition(
-    pos => setLocation(pos.coords.latitude, pos.coords.longitude, '📍 GPS取得済み'),
-    () => {},
-    { enableHighAccuracy: true, maximumAge: 15000, timeout: 30000 }
+    p => setGPS(p.coords.latitude, p.coords.longitude, 'GPS'),
+    ()=>{}, { enableHighAccuracy: true, maximumAge: 15000 }
   );
-} else {
-  tryIPLocation();
-}
+} else { tryIPLocation(); }
 </script>
 </body>
 </html>

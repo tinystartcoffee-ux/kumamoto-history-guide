@@ -167,6 +167,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="aso"        onclick="filterArea('aso')"        style="--ac:#4CAF50">🌋 阿蘇・東部</button>
   <button class="area-btn" data-area="hitoyoshi"  onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉・球磨</button>
   <button class="area-btn" data-area="kamimashiki"onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
+  <button class="area-btn" data-area="oguni"      onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
 </div>
 
 <!-- 地図 -->
@@ -208,18 +209,24 @@ const AREAS = {
          'yamaga_kosenjo_seinan','nankan_kosenjo'] },
   tamana:      { name:'玉名',         emoji:'🌊', color:'#FF9800',
     ids:['saigo_kohei_hi','shigemine_hachimangu_dankon',
-         'takase_kosenjo','etafunayana_kofun','koama_onsen'] },
+         'takase_kosenjo','etafunayana_kofun','koama_onsen',
+         'takase_komezo','takase_megane_bridge','yokoshima_kattaku'] },
   yatsushiro:  { name:'八代・天草',   emoji:'⛪', color:'#009688',
     ids:['yatsushiro_miya','yatsushiro_castle_konishi',
-         'hinagu_joriku_hi','sakitsu','misumi_port','uto_nanbokucho'] },
+         'hinagu_joriku_hi','sakitsu','misumi_port','uto_nanbokucho',
+         'amakusa_kirishitan_museum','amakusa_shiro_museum','amakusa_collegio',
+         'shiki_castle','oe_tenshudo','suzuki_shigenari'] },
   aso:         { name:'阿蘇・東部',   emoji:'🌋', color:'#4CAF50',
     ids:['aso_shrine_nanbokucho','ozu_kosenjo'] },
   hitoyoshi:   { name:'人吉・球磨',   emoji:'🏔️', color:'#795548',
     ids:['eikokuji','hitoyoshi_castle','gokasho_heike',
-         'kureko','momiki','itsuki','shiibaru'] },
+         'kureko','momiki','itsuki','shiibaru',
+         'aoi_aso_shrine','ganjoji_temple'] },
   kamimashiki: { name:'上益城',       emoji:'🌉', color:'#FF5722',
     ids:['tsujunbashi','mifune_kosenjo','kiyama_kosenjo',
-         'yamato_kosenjo_seinan','yabe_castle_aso'] }
+         'yamato_kosenjo_seinan','yabe_castle_aso'] },
+  oguni:       { name:'小国',         emoji:'🌲', color:'#00BCD4',
+    ids:['oguni_shrine','oshitoishi_hill','tsue_tate_onsen','oguni_sugi_culture'] }
 };
 
 /* spot_id → エリア のルックアップ */

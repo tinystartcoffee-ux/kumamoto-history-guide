@@ -170,6 +170,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="oguni"      onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
   <button class="area-btn" data-area="oita"       onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
   <button class="area-btn" data-area="nagasaki"  onclick="filterArea('nagasaki')"  style="--ac:#FF6B6B">⛪ 長崎</button>
+  <button class="area-btn" data-area="fukuoka"   onclick="filterArea('fukuoka')"   style="--ac:#FF9800">🏮 福岡</button>
 </div>
 
 <!-- 地図 -->
@@ -239,7 +240,13 @@ const AREAS = {
          'meganebashi','sofukuji','nagasaki_hollander_slope',
          'shimabara_castle','hara_castle','hirado_castle','hirado_xavier_church',
          'goto_dozan_church','kashiragashima_church','tsushima_kaneda_castle',
-         'izuhara_banshoin','nagasaki_bugyosho','matsuura_museum'] }
+         'izuhara_banshoin','nagasaki_bugyosho','matsuura_museum'] },
+  fukuoka:     { name:'福岡',         emoji:'🏮', color:'#FF9800',
+    ids:['dazaifu_tenmangu','dazaifu_ruins','mizuki_wall','fukuoka_castle',
+         'kushida_shrine','shofukuji_hakata','tochoji_hakata','genko_boruei',
+         'shikano_island','munakata_taisha','akizuki_castle','yanagawa',
+         'kokura_castle','yahata_seitetsu','itoshima_ito_koku','ono_castle',
+         'fukuoka_museum','nanzoin','jotenji_hakata','sumiyoshi_shrine_hakata'] }
 };
 
 /* spot_id → エリア のルックアップ */

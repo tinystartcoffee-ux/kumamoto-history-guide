@@ -171,6 +171,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="oita"       onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
   <button class="area-btn" data-area="nagasaki"  onclick="filterArea('nagasaki')"  style="--ac:#FF6B6B">⛪ 長崎</button>
   <button class="area-btn" data-area="fukuoka"   onclick="filterArea('fukuoka')"   style="--ac:#FF9800">🏮 福岡</button>
+  <button class="area-btn" data-area="kagoshima" onclick="filterArea('kagoshima')" style="--ac:#8BC34A">🌋 鹿児島</button>
 </div>
 
 <!-- 地図 -->
@@ -246,7 +247,13 @@ const AREAS = {
          'kushida_shrine','shofukuji_hakata','tochoji_hakata','genko_boruei',
          'shikano_island','munakata_taisha','akizuki_castle','yanagawa',
          'kokura_castle','yahata_seitetsu','itoshima_ito_koku','ono_castle',
-         'fukuoka_museum','nanzoin','jotenji_hakata','sumiyoshi_shrine_hakata'] }
+         'fukuoka_museum','nanzoin','jotenji_hakata','sumiyoshi_shrine_hakata'] },
+  kagoshima:   { name:'鹿児島',       emoji:'🌋', color:'#8BC34A',
+    ids:['tsurumaru_castle','sengan_en','shiroyama_kagoshima','nanshu_cemetery',
+         'chiran_peace','chiran_bukeyashiki','kirishima_jingu','sakurajima_history',
+         'tanegashima_teppo','yakushima_jomon','amami_saigo','bonotsu_port',
+         'izumi_bukeyashiki','kagoshima_spinning','sekiya_sosui','terayama_charcoal',
+         'satsuma_students','nitta_shrine','kagoshima_jingu','ibusuki_hasimuregawa'] }
 };
 
 /* spot_id → エリア のルックアップ */

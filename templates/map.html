@@ -169,6 +169,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="kamimashiki"onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
   <button class="area-btn" data-area="oguni"      onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
   <button class="area-btn" data-area="oita"       onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
+  <button class="area-btn" data-area="nagasaki"  onclick="filterArea('nagasaki')"  style="--ac:#FF6B6B">⛪ 長崎</button>
 </div>
 
 <!-- 地図 -->
@@ -231,7 +232,14 @@ const AREAS = {
   oita:        { name:'大分',         emoji:'🏮', color:'#E91E63',
     ids:['usa_jingu','oka_castle','usuki_sekibutsu','fukiji_temple',
          'oita_castle','yusuhara_hachimangu','ryosonji','nakatsu_castle',
-         'kumano_magaibutsu','otomo_ruins'] }
+         'kumano_magaibutsu','otomo_ruins'] },
+  nagasaki:    { name:'長崎',         emoji:'⛪', color:'#FF6B6B',
+    ids:['nagasaki_atomic_bomb_museum','nagasaki_peace_park','urakami_cathedral',
+         'glover_garden','oura_cathedral','dejima','nishizaka_martyrs',
+         'meganebashi','sofukuji','nagasaki_hollander_slope',
+         'shimabara_castle','hara_castle','hirado_castle','hirado_xavier_church',
+         'goto_dozan_church','kashiragashima_church','tsushima_kaneda_castle',
+         'izuhara_banshoin','nagasaki_bugyosho','matsuura_museum'] }
 };
 
 /* spot_id → エリア のルックアップ */

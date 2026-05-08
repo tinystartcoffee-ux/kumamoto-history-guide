@@ -281,7 +281,7 @@ function getArea(id) {
 }
 
 /* ── Leaflet マップ初期化 ── */
-const map = L.map('map', { zoomControl: false }).setView([33.0, 131.1], 8);
+const map = L.map('map', { zoomControl: false }).setView([32.5, 130.7], 7);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors',
@@ -341,7 +341,7 @@ function filterArea(areaKey) {
   if (bounds.length > 0 && areaKey !== 'all') {
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
   } else if (areaKey === 'all') {
-    map.setView([33.0, 131.1], 8);
+    map.setView([32.5, 130.7], 7);
   }
 
   // リストも更新

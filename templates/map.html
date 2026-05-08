@@ -172,6 +172,8 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="nagasaki"  onclick="filterArea('nagasaki')"  style="--ac:#FF6B6B">⛪ 長崎</button>
   <button class="area-btn" data-area="fukuoka"   onclick="filterArea('fukuoka')"   style="--ac:#FF9800">🏮 福岡</button>
   <button class="area-btn" data-area="kagoshima" onclick="filterArea('kagoshima')" style="--ac:#8BC34A">🌋 鹿児島</button>
+  <button class="area-btn" data-area="miyazaki"  onclick="filterArea('miyazaki')"  style="--ac:#4CAF50">🌄 宮崎</button>
+  <button class="area-btn" data-area="saga"      onclick="filterArea('saga')"      style="--ac:#9C27B0">🏺 佐賀</button>
 </div>
 
 <!-- 地図 -->
@@ -253,7 +255,19 @@ const AREAS = {
          'chiran_peace','chiran_bukeyashiki','kirishima_jingu','sakurajima_history',
          'tanegashima_teppo','yakushima_jomon','amami_saigo','bonotsu_port',
          'izumi_bukeyashiki','kagoshima_spinning','sekiya_sosui','terayama_charcoal',
-         'satsuma_students','nitta_shrine','kagoshima_jingu','ibusuki_hasimuregawa'] }
+         'satsuma_students','nitta_shrine','kagoshima_jingu','ibusuki_hasimuregawa'] },
+  miyazaki:    { name:'宮崎',         emoji:'🌄', color:'#4CAF50',
+    ids:['takachiho_gorge','amanoiwato_shrine','takachiho_shrine','miyazaki_jingu',
+         'udo_shrine','aoshima_shrine','saito_kofun','obi_castle',
+         'hyuga_misaki','nobeoka_castle','miyakonojo_shimazu','kushima_toi',
+         'heguri_shrine','tsuma_shrine','ebino_kogen','nango_baekje',
+         'heiwadai_park','hososhima_port','sadowara_castle','kirishima_higashi'] },
+  saga:        { name:'佐賀',         emoji:'🏺', color:'#9C27B0',
+    ids:['yoshinogari','saga_castle','karatsu_castle','nagoya_castle_saga',
+         'arita_porcelain_town','yobuko_asaichi','yutoku_inari','nijino_matsubara',
+         'takeo_onsen','taku_seibyo','okawachiyama','nanatsugama',
+         'hamanourano_tanada','ureshino_onsen','mifuneyama_rakuen','hagakure_saga',
+         'karatsu_kunchi','hizen_koku_cho','saga_nabeshima_blast','kabe_island_tajima'] }
 };
 
 /* spot_id → エリア のルックアップ */

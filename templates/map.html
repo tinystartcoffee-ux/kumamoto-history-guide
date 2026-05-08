@@ -168,6 +168,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
   <button class="area-btn" data-area="hitoyoshi"  onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉・球磨</button>
   <button class="area-btn" data-area="kamimashiki"onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
   <button class="area-btn" data-area="oguni"      onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
+  <button class="area-btn" data-area="oita"       onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
 </div>
 
 <!-- 地図 -->
@@ -226,7 +227,11 @@ const AREAS = {
     ids:['tsujunbashi','mifune_kosenjo','kiyama_kosenjo',
          'yamato_kosenjo_seinan','yabe_castle_aso'] },
   oguni:       { name:'小国',         emoji:'🌲', color:'#00BCD4',
-    ids:['oguni_shrine','oshitoishi_hill','tsue_tate_onsen','oguni_sugi_culture'] }
+    ids:['oguni_shrine','oshitoishi_hill','tsue_tate_onsen','oguni_sugi_culture'] },
+  oita:        { name:'大分',         emoji:'🏮', color:'#E91E63',
+    ids:['usa_jingu','oka_castle','usuki_sekibutsu','fukiji_temple',
+         'oita_castle','yusuhara_hachimangu','ryosonji','nakatsu_castle',
+         'kumano_magaibutsu','otomo_ruins'] }
 };
 
 /* spot_id → エリア のルックアップ */
@@ -240,7 +245,7 @@ function getArea(id) {
 }
 
 /* ── Leaflet マップ初期化 ── */
-const map = L.map('map', { zoomControl: false }).setView([32.73, 130.74], 9);
+const map = L.map('map', { zoomControl: false }).setView([33.0, 131.1], 8);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors',
@@ -300,7 +305,7 @@ function filterArea(areaKey) {
   if (bounds.length > 0 && areaKey !== 'all') {
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
   } else if (areaKey === 'all') {
-    map.setView([32.73, 130.74], 9);
+    map.setView([33.0, 131.1], 8);
   }
 
   // リストも更新

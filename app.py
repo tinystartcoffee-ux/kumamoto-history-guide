@@ -1,4 +1,5 @@
-import os, json
+import os, json, threading, time
+from urllib import request as urlreq
 from flask import Flask, render_template, jsonify, send_file
 
 app = Flask(__name__)
@@ -34,6 +35,20 @@ def audio(spot_id):
 def api_spots():
     spots = load_spots()
     return jsonify(spots)
+
+def _keep_alive():
+    base = os.environ.get("RENDER_EXTERNAL_URL", "").rstrip("/")
+    if not base:
+        return
+    time.sleep(60)
+    while True:
+        try:
+            urlreq.urlopen(f"{base}/health", timeout=10)
+        except Exception:
+            pass
+        time.sleep(600)  # 10分ごと
+
+threading.Thread(target=_keep_alive, daemon=True).start()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5002))

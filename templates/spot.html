@@ -69,13 +69,16 @@ header {
   width: 100%; height: 100%;
   border: none;
 }
-.no-video {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 160px;
-  background: linear-gradient(135deg, #0f3460, #16213e);
-  font-size: 48px;
+.map-section {
+  width: 100%;
+  height: 200px;
+  background: #000;
+  flex-shrink: 0;
+}
+.map-section iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 .spot-image-section {
   width: 100%;
@@ -242,7 +245,12 @@ header {
   <img src="{{ spot.image_url }}" alt="{{ spot.name }}">
 </div>
 {% else %}
-<div class="no-video">🏯</div>
+<div class="map-section">
+  <iframe
+    src="https://www.openstreetmap.org/export/embed.html?bbox={{ spot.lon - 0.008 }},{{ spot.lat - 0.005 }},{{ spot.lon + 0.008 }},{{ spot.lat + 0.005 }}&layer=mapnik&marker={{ spot.lat }},{{ spot.lon }}"
+    loading="lazy">
+  </iframe>
+</div>
 {% endif %}
 
 <div class="scrollable">

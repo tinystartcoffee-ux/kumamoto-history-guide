@@ -282,7 +282,101 @@ html, body {
 }
 @keyframes playerbob { 0%{transform:translateY(0)} 50%{transform:translateY(-2px)} 100%{transform:translateY(0)} }
 
-/* ── スキャンライン（ブラウン管テレビ風） ── */
+/* ══════════════════════════════════
+   オープニング画面
+   ══════════════════════════════════ */
+#opening {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #000010;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: 'DotGothic16', monospace;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#opening.flash { background: #FFFFFF; transition: background 0.05s; }
+#opening.fadeout { opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
+
+/* ピクセルグリッド背景 */
+#opening::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,80,0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,80,0.25) 1px, transparent 1px);
+  background-size: 8px 8px;
+  pointer-events: none;
+}
+
+/* 星 */
+.op-star {
+  position: absolute; background: white;
+  width: 2px; height: 2px;
+  animation: op-twinkle var(--t,2s) steps(2) infinite var(--d,0s);
+}
+@keyframes op-twinkle { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+/* ロゴ城 */
+#op-logo {
+  font-size: 56px; line-height: 1;
+  filter: drop-shadow(0 0 8px #FFD700) drop-shadow(2px 2px 0 #000);
+  opacity: 0;
+  animation: op-drop 0.6s cubic-bezier(.2,1.4,.5,1) forwards 0.4s;
+}
+@keyframes op-drop {
+  from { opacity:0; transform: translateY(-30px) scale(0.6); }
+  to   { opacity:1; transform: translateY(0)    scale(1); }
+}
+
+/* タイトル */
+#op-title {
+  font-size: 30px;
+  color: #FFD700;
+  text-shadow: 3px 3px 0 #000000, -1px -1px 0 #996600;
+  letter-spacing: 0.12em;
+  margin-top: 14px;
+  opacity: 0;
+  animation: op-rise 0.7s ease forwards 1.1s;
+}
+/* サブタイトル */
+#op-subtitle {
+  font-size: 13px; color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em; margin-top: 6px;
+  opacity: 0;
+  animation: op-rise 0.5s ease forwards 1.7s;
+}
+/* セパレーター */
+#op-sep {
+  margin: 28px 0 0;
+  color: rgba(255,215,0,0.35);
+  font-size: 13px; letter-spacing: 0.3em;
+  opacity: 0;
+  animation: op-rise 0.4s ease forwards 2.2s;
+}
+/* ぼうけんボタン */
+#op-btn {
+  margin-top: 22px;
+  font-size: 17px; color: #FFFFFF;
+  letter-spacing: 0.1em;
+  text-shadow: 2px 2px 0 #000;
+  opacity: 0;
+  animation: op-rise 0.3s ease forwards 2.6s, op-blink 1.1s steps(1) infinite 3s;
+}
+@keyframes op-rise {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes op-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ヒント */
+#op-hint {
+  position: absolute; bottom: 28px;
+  font-size: 10px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.05em;
+}
+
+/* スキャンライン（ブラウン管テレビ風） ── */
 #scanlines {
   position: fixed; inset: 0;
   z-index: 500; pointer-events: none;
@@ -305,6 +399,16 @@ html, body {
 </style>
 </head>
 <body>
+
+<!-- オープニング画面 -->
+<div id="opening" onclick="startAdventure()">
+  <div id="op-logo">🏯</div>
+  <div id="op-title">HISTORY QUEST</div>
+  <div id="op-subtitle">～ 歴史音声ガイド ～</div>
+  <div id="op-sep">◆ ◆ ◆ ◆ ◆</div>
+  <div id="op-btn">▼ ぼうけんをはじめる ▼</div>
+  <div id="op-hint">画面をタップしてください</div>
+</div>
 
 <div id="scanlines"></div>
 <div id="corner-tl"></div>
@@ -389,6 +493,46 @@ html, body {
 </div>
 
 <script>
+/* ── オープニング ── */
+(function() {
+  const op = document.getElementById('opening');
+
+  // ランダム星を生成
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'op-star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
+      --t:${1.5+Math.random()*3}s;--d:${Math.random()*3}s;
+      opacity:${0.3+Math.random()*0.7};`;
+    op.appendChild(s);
+  }
+
+  // DQ風ファンファーレ
+  function playFanfare() {
+    try {
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      [[523,0,0.15],[659,0.15,0.15],[784,0.3,0.15],[1047,0.45,0.4]].forEach(([f,t,d])=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type='square'; o.frequency.value=f;
+        g.gain.setValueAtTime(0.12, ctx.currentTime+t);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+d);
+        o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+d+0.01);
+      });
+    } catch(e){}
+  }
+
+  window.startAdventure = function() {
+    playFanfare();
+    op.classList.add('flash');
+    setTimeout(() => {
+      op.classList.remove('flash');
+      op.classList.add('fadeout');
+    }, 120);
+    setTimeout(() => { op.style.display = 'none'; }, 750);
+  };
+})();
+
 const SPOTS = {{ spots | tojson }};
 const SPOT_SIZES = {{ spot_sizes | tojson }};
 

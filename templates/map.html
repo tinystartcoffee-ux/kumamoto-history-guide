@@ -116,10 +116,32 @@ html, body {
 }
 .area-btn.active { color: #000030; border-color: transparent; box-shadow: 1px 1px 0 #000000; }
 
+/* ── 種別フィルターバー ── */
+#type-bar {
+  position: fixed; top: 93px; left: 0; right: 0; z-index: 998;
+  background: #00003a;
+  padding: 4px 8px;
+  display: flex; gap: 4px; overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+#type-bar::-webkit-scrollbar { display: none; }
+.type-btn {
+  flex-shrink: 0;
+  padding: 3px 9px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,60,0.8);
+  color: rgba(255,255,255,0.55);
+  font-size: 10px; cursor: pointer; white-space: nowrap;
+  font-family: 'DotGothic16', monospace;
+  -webkit-tap-highlight-color: transparent;
+}
+.type-btn.active { color: #000030; border-color: transparent; }
+
 /* ── 地図 ── */
 #map {
   position: fixed;
-  top: 102px; bottom: 52px; left: 0; right: 0;
+  top: 133px; bottom: 52px; left: 0; right: 0;
   z-index: 1;
 }
 
@@ -149,7 +171,7 @@ html, body {
 #list-view {
   display: none;
   position: fixed;
-  top: 102px; bottom: 52px; left: 0; right: 0;
+  top: 133px; bottom: 52px; left: 0; right: 0;
   z-index: 2; overflow-y: auto;
   background: #000040;
   padding: 10px;
@@ -276,8 +298,8 @@ html, body {
   border-color: rgba(255,255,255,0.2);
   border-style: solid;
 }
-#corner-tl { top: 102px; left: 0; border-width: 2px 0 0 2px; }
-#corner-tr { top: 102px; right: 0; border-width: 2px 2px 0 0; }
+#corner-tl { top: 133px; left: 0; border-width: 2px 0 0 2px; }
+#corner-tr { top: 133px; right: 0; border-width: 2px 2px 0 0; }
 #corner-bl { bottom: 52px; left: 0; border-width: 0 0 2px 2px; }
 #corner-br { bottom: 52px; right: 0; border-width: 0 2px 2px 0; }
 </style>
@@ -330,6 +352,22 @@ html, body {
   <button class="area-btn" data-area="hokkaido"          onclick="filterArea('hokkaido')"   style="--ac:#00E5FF">🐻 北海道</button>
   <button class="area-btn" data-area="chugoku"           onclick="filterArea('chugoku')"    style="--ac:#FFEA00">🦌 中国</button>
   <button class="area-btn" data-area="shikoku"           onclick="filterArea('shikoku')"    style="--ac:#FF6D00">🍊 四国</button>
+</div>
+
+<!-- 種別フィルター -->
+<div id="type-bar">
+  <button class="type-btn active" data-type="all" onclick="filterType('all',this)">🗾 全種別</button>
+  <button class="type-btn" data-type="castle"   onclick="filterType('castle',this)"  style="--tc:#4488FF">🏯 城</button>
+  <button class="type-btn" data-type="shrine"   onclick="filterType('shrine',this)"  style="--tc:#FF4455">⛩️ 神社</button>
+  <button class="type-btn" data-type="temple"   onclick="filterType('temple',this)"  style="--tc:#FF8822">🛕 寺院</button>
+  <button class="type-btn" data-type="tomb"     onclick="filterType('tomb',this)"    style="--tc:#AA55FF">🪦 墓・古墳</button>
+  <button class="type-btn" data-type="battle"   onclick="filterType('battle',this)"  style="--tc:#FF2233">⚔️ 古戦場</button>
+  <button class="type-btn" data-type="museum"   onclick="filterType('museum',this)"  style="--tc:#22CCAA">🏛️ 博物館</button>
+  <button class="type-btn" data-type="park"     onclick="filterType('park',this)"    style="--tc:#44BB44">🌳 公園</button>
+  <button class="type-btn" data-type="garden"   onclick="filterType('garden',this)"  style="--tc:#FF88AA">🌸 庭園</button>
+  <button class="type-btn" data-type="house"    onclick="filterType('house',this)"   style="--tc:#FFAA33">🏠 屋敷</button>
+  <button class="type-btn" data-type="port"     onclick="filterType('port',this)"    style="--tc:#00BBFF">⚓ 港</button>
+  <button class="type-btn" data-type="monument" onclick="filterType('monument',this)" style="--tc:#AAAAAA">🗿 石碑</button>
 </div>
 
 <!-- 地図 -->
@@ -411,48 +449,61 @@ function getArea(id) {
   return { key, ...AREAS[key] };
 }
 
-/* ── スポット名からアイコン絵文字を判定 ── */
-function getSpotEmoji(id, name) {
-  // IDベースの判定（優先）
-  if (/castle/.test(id))          return '🏯';
-  if (/shrine/.test(id))          return '⛩️';
-  if (/temple|ji$|dera$/.test(id)) return '🛕';
-  if (/tomb|grave|mausoleum/.test(id)) return '🪦';
-  if (/battle|battlefield|ancient_battle/.test(id)) return '⚔️';
-  if (/museum/.test(id))          return '🏛️';
-  if (/park/.test(id))            return '🌳';
-  if (/garden/.test(id))          return '🌸';
-  if (/memorial|monument/.test(id)) return '🗿';
-  // 名前ベースの判定
-  if (/城跡|城址/.test(name))      return '🏯';
-  if (/城/.test(name))             return '🏯';
-  if (/神社|大社|天満宮|八幡宮|稲荷|権現|明神/.test(name)) return '⛩️';
-  if (/寺|院$|庵$|堂$|坊$/.test(name)) return '🛕';
-  if (/古墳|陵|御陵|塚/.test(name)) return '🪦';
-  if (/墓|廟/.test(name))          return '🪦';
-  if (/古戦場|戦跡|合戦/.test(name)) return '⚔️';
-  if (/博物館|資料館|記念館/.test(name)) return '🏛️';
-  if (/公園/.test(name))           return '🌳';
-  if (/庭園|苑/.test(name))        return '🌸';
-  if (/屋敷|邸|館/.test(name))     return '🏠';
-  if (/港|湊/.test(name))          return '⚓';
-  if (/石碑|碑|跡$/.test(name))    return '🗿';
-  return '📍';
+/* ── スポット種別システム ── */
+const TYPE_META = {
+  castle:   { emoji:'🏯', color:'#4488FF', label:'城' },
+  shrine:   { emoji:'⛩️', color:'#FF4455', label:'神社' },
+  temple:   { emoji:'🛕', color:'#FF8822', label:'寺院' },
+  tomb:     { emoji:'🪦', color:'#AA55FF', label:'墓・古墳' },
+  battle:   { emoji:'⚔️', color:'#FF2233', label:'古戦場' },
+  museum:   { emoji:'🏛️', color:'#22CCAA', label:'博物館' },
+  park:     { emoji:'🌳', color:'#44BB44', label:'公園' },
+  garden:   { emoji:'🌸', color:'#FF88AA', label:'庭園' },
+  house:    { emoji:'🏠', color:'#FFAA33', label:'屋敷・邸' },
+  port:     { emoji:'⚓', color:'#00BBFF', label:'港・湊' },
+  monument: { emoji:'🗿', color:'#AAAAAA', label:'石碑・跡' },
+  other:    { emoji:'📍', color:'#888888', label:'その他' },
+};
+
+function getSpotType(id, name) {
+  if (/castle/.test(id))               return 'castle';
+  if (/shrine/.test(id))               return 'shrine';
+  if (/temple|ji$|dera$/.test(id))     return 'temple';
+  if (/tomb|grave|mausoleum/.test(id)) return 'tomb';
+  if (/battle|battlefield/.test(id))   return 'battle';
+  if (/museum/.test(id))               return 'museum';
+  if (/park/.test(id))                 return 'park';
+  if (/garden/.test(id))               return 'garden';
+  if (/memorial|monument/.test(id))    return 'monument';
+  if (/城跡|城址|城/.test(name))        return 'castle';
+  if (/神社|大社|天満宮|八幡宮|稲荷/.test(name)) return 'shrine';
+  if (/寺|院$|庵$|堂$/.test(name))     return 'temple';
+  if (/古墳|陵|御陵|塚|墓|廟/.test(name)) return 'tomb';
+  if (/古戦場|戦跡|合戦/.test(name))   return 'battle';
+  if (/博物館|資料館|記念館/.test(name)) return 'museum';
+  if (/公園/.test(name))               return 'park';
+  if (/庭園|苑/.test(name))            return 'garden';
+  if (/屋敷|邸/.test(name))            return 'house';
+  if (/港|湊/.test(name))              return 'port';
+  if (/石碑|碑|跡$/.test(name))        return 'monument';
+  return 'other';
 }
+function getSpotEmoji(id, name) { return TYPE_META[getSpotType(id, name)].emoji; }
+function getTypeColor(id, name) { return TYPE_META[getSpotType(id, name)].color; }
 
 /* ── ドット絵ピクセルマーカーSVG生成 ── */
-function makePixelMarkerSVG(color, emoji) {
-  const c = encodeURIComponent(color);
-  const dark = '#000000';
-  // DQ風のミニキャラクター的な宝箱アイコン
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' width='30' height='30'>
+function makePixelMarkerSVG(color, emoji, size=28, visited=false) {
+  const c = encodeURIComponent(visited ? '#444455' : color);
+  const eo = visited ? '0.4' : '1';
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' width='${size}' height='${size}'>
     <rect x='1' y='1' width='18' height='18' fill='${c}' rx='0'/>
     <rect x='0' y='0' width='20' height='2'  fill='white' opacity='0.6'/>
     <rect x='0' y='0' width='2'  height='20' fill='white' opacity='0.6'/>
-    <rect x='18' y='0' width='2' height='20' fill='${dark}' opacity='0.4'/>
-    <rect x='0' y='18' width='20' height='2' fill='${dark}' opacity='0.4'/>
+    <rect x='18' y='0' width='2' height='20' fill='#000000' opacity='0.4'/>
+    <rect x='0' y='18' width='20' height='2' fill='#000000' opacity='0.4'/>
     <rect x='2' y='2' width='16' height='16' fill='none' stroke='white' stroke-width='1' opacity='0.3'/>
-    <text x='10' y='14' text-anchor='middle' font-size='11'>${emoji}</text>
+    <text x='10' y='14' text-anchor='middle' font-size='11' opacity='${eo}'>${emoji}</text>
+    ${visited ? `<text x='15' y='7' text-anchor='middle' font-size='8'>✓</text>` : ''}
   </svg>`;
   return `data:image/svg+xml,${svg}`;
 }
@@ -473,28 +524,86 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+/* ── 訪問済み管理 ── */
+const VISITED_KEY = 'visited_spots_v1';
+function getVisited() { try { return new Set(JSON.parse(localStorage.getItem(VISITED_KEY)||'[]')); } catch(e){ return new Set(); } }
+function saveVisited(s) { localStorage.setItem(VISITED_KEY, JSON.stringify([...s])); }
+let visitedSet = getVisited();
+
+function markVisited(id) {
+  visitedSet.add(id);
+  saveVisited(visitedSet);
+  refreshMarker(id);
+  playPikon();
+  const btn = document.getElementById('visited-btn-'+id);
+  if (btn) { btn.textContent = '✓ 訪問済み'; btn.style.background='#444455'; btn.style.color='#88AAFF'; }
+}
+
+function refreshMarker(id) {
+  const spot = SPOTS[id];
+  if (!spot || !markers[id]) return;
+  const type = getSpotType(id, spot.name||'');
+  const meta = TYPE_META[type];
+  const size = (spot.figures&&spot.figures.length>=3) ? 34 : 24;
+  const visited = visitedSet.has(id);
+  const iconUrl = makePixelMarkerSVG(meta.color, meta.emoji, size, visited);
+  markers[id].marker.setIcon(L.icon({ iconUrl, iconSize:[size,size], iconAnchor:[size/2,size/2], popupAnchor:[0,-size/2-4] }));
+}
+
+/* ── DQピコン音 ── */
+function playPikon() {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    [[880,0,0.08],[1320,0.08,0.08],[1760,0.16,0.12]].forEach(([freq,start,dur])=>{
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='square'; o.frequency.value=freq;
+      g.gain.setValueAtTime(0.15, ctx.currentTime+start);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+start+dur);
+      o.start(ctx.currentTime+start); o.stop(ctx.currentTime+start+dur+0.01);
+    });
+  } catch(e){}
+}
+
 /* ── マーカー生成 ── */
 const markers = {};
 
 Object.entries(SPOTS).forEach(([id, spot]) => {
   const area = getArea(id);
-  const spotEmoji = getSpotEmoji(id, spot.name || '');
-  const iconUrl = makePixelMarkerSVG(area.color, spotEmoji);
-  const icon = L.icon({
-    iconUrl,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-    popupAnchor: [0, -18]
-  });
+  const type = getSpotType(id, spot.name||'');
+  const meta = TYPE_META[type];
+  const size = (spot.figures&&spot.figures.length>=3) ? 34 : 24;
+  const visited = visitedSet.has(id);
+  const iconUrl = makePixelMarkerSVG(meta.color, meta.emoji, size, visited);
+  const icon = L.icon({ iconUrl, iconSize:[size,size], iconAnchor:[size/2,size/2], popupAnchor:[0,-size/2-4] });
   const marker = L.marker([spot.lat, spot.lon], { icon }).addTo(map);
+  const isVisited = visitedSet.has(id);
   marker.bindPopup(`
-    <div class="popup-name">${spot.name}</div>
+    <div class="popup-name">${meta.emoji} ${spot.name}</div>
     <div class="popup-era">${spot.era}</div>
     <div class="popup-highlight">${spot.highlight}</div>
     <a class="popup-btn" href="/spot/${id}">▶ 音声解説を聞く</a>
-  `, { maxWidth: 250 });
-  markers[id] = { marker, areaKey: area.key };
+    <button class="popup-btn" id="visited-btn-${id}" onclick="markVisited('${id}')" style="margin-top:6px;background:${isVisited?'#444455':'#1a1a5e'};color:${isVisited?'#88AAFF':'#AAAAFF'};border-color:${isVisited?'#6666AA':'rgba(255,255,255,0.4)'}">
+      ${isVisited?'✓ 訪問済み':'＋ 訪問済みにする'}
+    </button>
+  `, { maxWidth: 260 });
+  marker.on('click', () => playPikon());
+  markers[id] = { marker, areaKey: area.key, type };
 });
+
+/* ── 種別フィルター ── */
+let currentType = 'all';
+function filterType(type, btn) {
+  currentType = type;
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = ''; b.style.borderColor = ''; b.style.color = '';
+  });
+  btn.classList.add('active');
+  const color = type === 'all' ? '#5c9cf5' : (TYPE_META[type]?.color || '#5c9cf5');
+  btn.style.background = color; btn.style.borderColor = color; btn.style.color = '#000030';
+  applyFilters();
+}
 
 /* ── エリアフィルター ── */
 let currentArea = 'all';
@@ -505,71 +614,100 @@ function filterArea(areaKey) {
     b.classList.toggle('active', isActive);
     if (isActive) {
       const color = areaKey === 'all' ? '#5c9cf5' : AREAS[areaKey]?.color || '#5c9cf5';
-      b.style.background = color;
-      b.style.borderColor = color;
-      b.style.color = '#000030';
-    } else {
-      b.style.background = '';
-      b.style.borderColor = '';
-      b.style.color = '';
-    }
+      b.style.background = color; b.style.borderColor = color; b.style.color = '#000030';
+    } else { b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; }
   });
+  applyFilters();
+}
 
+function applyFilters() {
   const bounds = [];
-  Object.entries(markers).forEach(([id, { marker, areaKey: mk }]) => {
-    const show = areaKey === 'all' || mk === areaKey;
-    if (show) { marker.addTo(map); bounds.push([SPOTS[id].lat, SPOTS[id].lon]); }
-    else       { marker.remove(); }
+  Object.entries(markers).forEach(([id, { marker, areaKey: mk, type }]) => {
+    const areaOk = currentArea === 'all' || mk === currentArea;
+    const typeOk  = currentType === 'all' || type === currentType;
+    if (areaOk && typeOk) { marker.addTo(map); bounds.push([SPOTS[id].lat, SPOTS[id].lon]); }
+    else                  { marker.remove(); }
   });
-
-  if (bounds.length > 0 && areaKey !== 'all') {
-    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
-  } else if (areaKey === 'all') {
-    map.setView([36.5, 136.5], 5);
+  if (bounds.length > 0 && currentArea !== 'all') {
+    map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
+  } else if (currentArea === 'all' && currentType === 'all') {
+    map.setView([36.5,136.5], 5);
+  } else if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
   }
-  buildList(areaKey);
+  buildList(currentArea);
 }
 
 /* 初期ボタンスタイル */
 const allBtn = document.querySelector('[data-area="all"]');
-allBtn.style.background = '#5c9cf5';
-allBtn.style.borderColor = '#5c9cf5';
-allBtn.style.color = '#000030';
+allBtn.style.background = '#5c9cf5'; allBtn.style.borderColor = '#5c9cf5'; allBtn.style.color = '#000030';
+const allTypeBtn = document.querySelector('[data-type="all"]');
+allTypeBtn.style.background = '#5c9cf5'; allTypeBtn.style.borderColor = '#5c9cf5'; allTypeBtn.style.color = '#000030';
+
+/* ── 距離計算（km） ── */
+let userLat = null, userLon = null;
+function haversine(lat1,lon1,lat2,lon2) {
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
 
 /* ── リスト生成 ── */
 function buildList(areaKey) {
   const container = document.getElementById('list-content');
   container.innerHTML = '';
-  const filtered = Object.entries(SPOTS).filter(([id]) => areaKey === 'all' || SPOT_AREA[id] === areaKey);
-  const grouped = {};
-  filtered.forEach(([id, spot]) => {
-    const aKey = SPOT_AREA[id] || 'kumamoto';
-    if (!grouped[aKey]) grouped[aKey] = [];
-    grouped[aKey].push([id, spot]);
+  let filtered = Object.entries(SPOTS).filter(([id,spot]) => {
+    const areaOk = areaKey === 'all' || SPOT_AREA[id] === areaKey;
+    const typeOk  = currentType === 'all' || getSpotType(id, spot.name||'') === currentType;
+    return areaOk && typeOk;
   });
-  Object.entries(grouped).forEach(([aKey, spots]) => {
-    const area = AREAS[aKey];
-    if (!area) return;
-    const header = document.createElement('div');
-    header.className = 'list-area-header';
-    header.style.color = area.color;
-    header.textContent = `${area.emoji} ${area.name}（${spots.length}）`;
-    container.appendChild(header);
-    spots.forEach(([id, spot]) => {
-      const card = document.createElement('a');
-      card.href = `/spot/${id}`;
-      card.className = 'spot-card';
-      card.innerHTML = `
-        <div class="spot-icon-box" style="background:${area.color}33">${area.emoji}</div>
-        <div class="spot-info">
-          <div class="spot-name">${spot.name}</div>
-          <div class="spot-kana">${spot.kana || ''}</div>
-          <div class="spot-era">${spot.era}</div>
-        </div>
-        <div class="arrow">▶</div>`;
-      container.appendChild(card);
+
+  // GPS取得済みなら距離順、そうでなければエリアグループ
+  if (userLat !== null) {
+    filtered.sort(([,a],[,b]) => haversine(userLat,userLon,a.lat,a.lon) - haversine(userLat,userLon,b.lat,b.lon));
+    const nearLabel = document.createElement('div');
+    nearLabel.className = 'list-area-header';
+    nearLabel.style.color = '#FFD700';
+    nearLabel.textContent = `📍 近い順（${filtered.length}件）`;
+    container.appendChild(nearLabel);
+    filtered.forEach(([id,spot]) => appendSpotCard(container, id, spot));
+  } else {
+    const grouped = {};
+    filtered.forEach(([id,spot]) => {
+      const aKey = SPOT_AREA[id] || 'kumamoto';
+      if (!grouped[aKey]) grouped[aKey] = [];
+      grouped[aKey].push([id,spot]);
     });
-  });
+    Object.entries(grouped).forEach(([aKey,spots]) => {
+      const area = AREAS[aKey]; if (!area) return;
+      const header = document.createElement('div');
+      header.className = 'list-area-header';
+      header.style.color = area.color;
+      header.textContent = `${area.emoji} ${area.name}（${spots.length}）`;
+      container.appendChild(header);
+      spots.forEach(([id,spot]) => appendSpotCard(container, id, spot));
+    });
+  }
+}
+
+function appendSpotCard(container, id, spot) {
+  const type = getSpotType(id, spot.name||'');
+  const meta = TYPE_META[type];
+  const visited = visitedSet.has(id);
+  const dist = userLat !== null ? ` · ${haversine(userLat,userLon,spot.lat,spot.lon).toFixed(1)}km` : '';
+  const card = document.createElement('a');
+  card.href = `/spot/${id}`;
+  card.className = 'spot-card';
+  if (visited) card.style.opacity = '0.5';
+  card.innerHTML = `
+    <div class="spot-icon-box" style="background:${meta.color}33;border-color:${meta.color}66">${meta.emoji}</div>
+    <div class="spot-info">
+      <div class="spot-name">${visited?'✓ ':''}${spot.name}</div>
+      <div class="spot-kana">${spot.kana||''}${dist}</div>
+      <div class="spot-era">${spot.era}</div>
+    </div>
+    <div class="arrow">▶</div>`;
+  container.appendChild(card);
 }
 buildList('all');
 
@@ -585,8 +723,10 @@ function switchTab(tab) {
 /* ── GPS ── */
 let userMarker = null;
 function setGPS(lat, lon, label) {
+  userLat = lat; userLon = lon;
   document.getElementById('gpsDot').className = 'gps-dot active';
   document.getElementById('gpsLabel').textContent = label;
+  buildList(currentArea);
   if (userMarker) map.removeLayer(userMarker);
   const playerIcon = L.divIcon({
     className: '',

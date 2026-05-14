@@ -4,154 +4,300 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="熊本歴史音声ガイド">
-<title>熊本歴史音声ガイド</title>
+<title>歴史音声ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+/* ═══════════════════════════════════════
+   ドット絵・ピクセルアートスタイル
+   ═══════════════════════════════════════ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-serif; background: #1a1a2e; color: white; overflow: hidden; }
+html, body {
+  height: 100%;
+  font-family: 'DotGothic16', 'Hiragino Sans', monospace;
+  background: #000050;
+  color: #FFFFFF;
+  overflow: hidden;
+}
 
-/* ── ヘッダー ── */
+/* ── マップタイルをドット絵化 ── */
+.leaflet-tile {
+  image-rendering: pixelated !important;
+  image-rendering: crisp-edges !important;
+}
+.leaflet-tile-pane {
+  filter: saturate(195%) contrast(108%) brightness(90%) hue-rotate(-8deg);
+}
+/* ドット感を強調するグリッドオーバーレイ */
+#map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,30,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,30,0.07) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 400;
+}
+
+/* ── ヘッダー（DQウィンドウ風） ── */
 #header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  background: linear-gradient(135deg, #16213e, #0f3460);
-  padding: 10px 16px 8px;
+  background: #000060;
+  padding: 8px 10px 7px;
   display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  border-bottom: 4px solid #FFFFFF;
+  box-shadow: 0 4px 0 #000030, inset 0 -1px 0 #8888FF;
 }
-#header h1 { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
-#header p  { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+#header h1 {
+  font-size: 14px; font-weight: 400;
+  color: #FFD700;
+  text-shadow: 2px 2px 0 #000000, -1px -1px 0 #AA6600;
+  letter-spacing: .06em;
+}
+#header p { font-size: 9px; color: #8888CC; margin-top: 2px; letter-spacing: .04em; }
+
+/* DQ風ボタン共通 */
+.dq-btn {
+  display: inline-block;
+  background: #000070;
+  border: 2px solid #FFFFFF;
+  box-shadow: 2px 2px 0 #000000, inset 1px 1px 0 #6666AA;
+  padding: 4px 10px;
+  font-size: 11px; font-weight: 400;
+  color: #FFD700;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  font-family: 'DotGothic16', monospace;
+  letter-spacing: .04em;
+  transition: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.dq-btn:active { transform: translate(2px,2px); box-shadow: none; }
+
 .gps-badge {
   display: flex; align-items: center; gap: 5px;
-  background: rgba(255,255,255,0.08); border-radius: 20px;
-  padding: 5px 10px; font-size: 11px; cursor: pointer;
-  flex-shrink: 0;
+  background: #000070;
+  border: 2px solid #FFFFFF;
+  box-shadow: 2px 2px 0 #000000;
+  padding: 4px 8px; font-size: 10px; cursor: pointer;
+  font-family: 'DotGothic16', monospace; color: #FFFFFF;
+  -webkit-tap-highlight-color: transparent;
 }
-.gps-dot { width: 7px; height: 7px; border-radius: 50%; background: #8e8e93; }
-.gps-dot.active  { background: #34c759; animation: pulse 1.5s infinite; }
-.gps-dot.error   { background: #ff3b30; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.gps-dot { width: 6px; height: 6px; flex-shrink: 0; background: #555555; }
+.gps-dot.active { background: #00FF00; animation: pixblink 1.2s steps(1) infinite; }
+.gps-dot.error  { background: #FF2222; }
+@keyframes pixblink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* ── エリアフィルター ── */
+/* ── エリアフィルターバー ── */
 #area-bar {
-  position: fixed; top: 60px; left: 0; right: 0; z-index: 999;
-  background: rgba(22,33,62,0.97);
-  backdrop-filter: blur(10px);
-  padding: 8px 12px;
-  display: flex; gap: 7px; overflow-x: auto;
-  scrollbar-width: none; border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: fixed; top: 55px; left: 0; right: 0; z-index: 999;
+  background: #000050;
+  padding: 5px 8px;
+  display: flex; gap: 5px; overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 3px solid #FFFFFF;
+  box-shadow: 0 3px 0 #000030;
 }
 #area-bar::-webkit-scrollbar { display: none; }
 .area-btn {
   flex-shrink: 0;
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.06);
-  color: white; font-size: 12px; font-weight: 600;
+  padding: 4px 10px;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: rgba(0,0,80,0.9);
+  color: rgba(255,255,255,0.65);
+  font-size: 10px; font-weight: 400;
   cursor: pointer; white-space: nowrap;
-  transition: all .15s;
+  font-family: 'DotGothic16', monospace;
+  box-shadow: 1px 1px 0 #000000;
+  -webkit-tap-highlight-color: transparent;
 }
-.area-btn.active { color: white; border-color: transparent; }
+.area-btn.active { color: #000030; border-color: transparent; box-shadow: 1px 1px 0 #000000; }
 
 /* ── 地図 ── */
 #map {
   position: fixed;
-  top: 106px; bottom: 52px; left: 0; right: 0;
+  top: 102px; bottom: 52px; left: 0; right: 0;
   z-index: 1;
 }
 
-/* ── タブ ── */
+/* ── タブバー ── */
 #tab-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
-  background: rgba(22,33,62,0.98);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255,255,255,0.1);
+  background: #000060;
+  border-top: 4px solid #FFFFFF;
+  box-shadow: 0 -2px 0 #000030;
   display: flex; height: 52px;
 }
 .tab-btn {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 2px; cursor: pointer;
-  font-size: 10px; color: rgba(255,255,255,0.45);
+  font-size: 10px; color: rgba(255,255,255,0.4);
   border: none; background: none;
-  transition: color .15s;
+  font-family: 'DotGothic16', monospace;
+  border-right: 2px solid rgba(255,255,255,0.15);
+  -webkit-tap-highlight-color: transparent;
 }
-.tab-btn .tab-icon { font-size: 20px; }
-.tab-btn.active { color: #5c9cf5; }
+.tab-btn:last-child { border-right: none; }
+.tab-btn .tab-icon { font-size: 18px; }
+.tab-btn.active { color: #FFD700; background: rgba(255,215,0,0.08); }
 
 /* ── リストビュー ── */
 #list-view {
   display: none;
   position: fixed;
-  top: 106px; bottom: 52px; left: 0; right: 0;
+  top: 102px; bottom: 52px; left: 0; right: 0;
   z-index: 2; overflow-y: auto;
-  background: #1a1a2e;
-  padding: 12px;
+  background: #000040;
+  padding: 10px;
+  -webkit-overflow-scrolling: touch;
 }
 #list-view.show { display: block; }
-.spot-card {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px; padding: 14px 16px;
-  text-decoration: none; color: white;
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 10px; transition: background .15s;
-  -webkit-tap-highlight-color: transparent;
+
+.list-area-header {
+  font-size: 12px; font-weight: 400;
+  padding: 6px 4px 5px;
+  border-bottom: 2px solid currentColor;
+  margin-bottom: 7px; margin-top: 14px;
+  letter-spacing: .06em;
+  font-family: 'DotGothic16', monospace;
+  text-shadow: 1px 1px 0 #000000;
 }
-.spot-card:active { background: rgba(255,255,255,0.12); }
+
+.spot-card {
+  background: #000060;
+  border: 2px solid rgba(255,255,255,0.45);
+  box-shadow: 2px 2px 0 #000000;
+  padding: 10px 12px;
+  text-decoration: none; color: white;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 7px;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'DotGothic16', monospace;
+}
+.spot-card:active { transform: translate(2px,2px); box-shadow: none; background: #000080; }
 .spot-icon-box {
-  width: 44px; height: 44px; border-radius: 12px;
+  width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px; flex-shrink: 0;
+  font-size: 18px; flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.25);
 }
 .spot-info { flex: 1; min-width: 0; }
-.spot-name { font-size: 15px; font-weight: 700; }
-.spot-kana { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
-.spot-era  { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 3px; }
-.spot-area-tag {
-  display: inline-block; font-size: 10px; font-weight: 700;
-  padding: 1px 8px; border-radius: 8px; margin-top: 4px;
-  color: white;
-}
-.arrow { font-size: 16px; color: rgba(255,255,255,0.25); }
+.spot-name { font-size: 12px; font-weight: 400; }
+.spot-kana { font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+.spot-era  { font-size: 10px; color: #88CCFF; margin-top: 2px; }
+.arrow { font-size: 14px; color: #FFD700; flex-shrink: 0; }
 
-/* ── Leafletカスタム ── */
+/* ── Leafletポップアップ（DQダイアログ風） ── */
 .leaflet-popup-content-wrapper {
-  background: #1e2d5a; color: white; border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  background: #000060 !important;
+  color: white !important;
+  border-radius: 0 !important;
+  border: 3px solid #FFFFFF !important;
+  box-shadow: 3px 3px 0 #000000, 0 0 0 1px #FFFFFF,
+              inset 1px 1px 0 #8888CC !important;
 }
-.leaflet-popup-tip { background: #1e2d5a; }
-.leaflet-popup-content { margin: 14px 16px; }
-.popup-name { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
-.popup-era  { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
-.popup-highlight { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 10px; }
+.leaflet-popup-tip-container { display: none !important; }
+.leaflet-popup-content {
+  margin: 12px 14px !important;
+  font-family: 'DotGothic16', monospace !important;
+}
+.popup-name {
+  font-size: 14px; font-weight: 400;
+  margin-bottom: 4px; color: #FFD700;
+  text-shadow: 1px 1px 0 #000000;
+  letter-spacing: .04em;
+}
+.popup-era  { font-size: 10px; color: #88CCFF; margin-bottom: 5px; }
+.popup-highlight {
+  font-size: 11px; color: rgba(255,255,255,0.85);
+  line-height: 1.65; margin-bottom: 10px;
+}
 .popup-btn {
   display: block; text-align: center;
-  background: #5c9cf5; color: white;
-  border-radius: 10px; padding: 7px 14px;
-  text-decoration: none; font-size: 13px; font-weight: 700;
+  background: #FFD700; color: #000040;
+  border: 2px solid #FFFFFF;
+  box-shadow: 2px 2px 0 #000000;
+  padding: 6px 12px;
+  text-decoration: none; font-size: 12px; font-weight: 400;
+  font-family: 'DotGothic16', monospace;
+  letter-spacing: .04em;
+  -webkit-tap-highlight-color: transparent;
 }
-.marker-icon {
-  border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.45);
-  border: 2px solid rgba(255,255,255,0.8);
-  font-size: 13px; line-height: 1;
+.popup-btn:active { transform: translate(2px,2px); box-shadow: none; }
+
+/* ── ピクセルアートマーカー ── */
+.pix-marker {
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.9);
+  font-size: 11px; line-height: 1;
+  image-rendering: pixelated;
 }
+
+/* ── ズームコントロール ── */
+.leaflet-control-zoom a {
+  background: #000060 !important;
+  color: #FFD700 !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 0 !important;
+  font-family: 'DotGothic16', monospace !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  width: 28px !important; height: 28px !important;
+  line-height: 24px !important;
+}
+.leaflet-control-zoom a:hover { background: #000080 !important; }
+.leaflet-control-zoom { border: none !important; box-shadow: none !important; }
+
+/* ── GPS現在地マーカー ── */
+.player-icon {
+  font-size: 22px;
+  animation: playerbob 0.8s steps(2) infinite;
+  filter: drop-shadow(2px 2px 0 #000000);
+}
+@keyframes playerbob { 0%{transform:translateY(0)} 50%{transform:translateY(-2px)} 100%{transform:translateY(0)} }
+
+/* ── スキャンライン（ブラウン管テレビ風） ── */
+#scanlines {
+  position: fixed; inset: 0;
+  z-index: 500; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px
+  );
+}
+/* ── コーナーフレーム装飾 ── */
+#corner-tl, #corner-tr, #corner-bl, #corner-br {
+  position: fixed; z-index: 501; pointer-events: none;
+  width: 12px; height: 12px;
+  border-color: rgba(255,255,255,0.2);
+  border-style: solid;
+}
+#corner-tl { top: 102px; left: 0; border-width: 2px 0 0 2px; }
+#corner-tr { top: 102px; right: 0; border-width: 2px 2px 0 0; }
+#corner-bl { bottom: 52px; left: 0; border-width: 0 0 2px 2px; }
+#corner-br { bottom: 52px; right: 0; border-width: 0 2px 2px 0; }
 </style>
 </head>
 <body>
 
+<div id="scanlines"></div>
+<div id="corner-tl"></div>
+<div id="corner-tr"></div>
+<div id="corner-bl"></div>
+<div id="corner-br"></div>
+
 <!-- ヘッダー -->
 <div id="header">
   <div>
-    <h1>🏯 熊本歴史音声ガイド</h1>
-    <p>史跡をタップして音声解説を聞く</p>
+    <h1>⚔ 歴史音声ガイド</h1>
+    <p>▶ 史跡をタップして音声解説</p>
   </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <a href="/figures" style="background:rgba(233,69,96,0.25);border:1px solid rgba(233,69,96,0.5);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:white;text-decoration:none;white-space:nowrap;-webkit-tap-highlight-color:transparent">⚔️ 人物</a>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="/figures" class="dq-btn">⚔ 人物</a>
     <div class="gps-badge" onclick="retryGPS()">
       <div class="gps-dot" id="gpsDot"></div>
       <span id="gpsLabel">GPS</span>
@@ -161,22 +307,29 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
 
 <!-- エリアフィルター -->
 <div id="area-bar">
-  <button class="area-btn active" data-area="all" onclick="filterArea('all')">🗾 全て</button>
-  <button class="area-btn" data-area="kumamoto"   onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
-  <button class="area-btn" data-area="tabaruzaka" onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部・田原坂</button>
-  <button class="area-btn" data-area="kikuchi"    onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池・山鹿</button>
-  <button class="area-btn" data-area="tamana"     onclick="filterArea('tamana')"     style="--ac:#FF9800">🌊 玉名</button>
-  <button class="area-btn" data-area="yatsushiro" onclick="filterArea('yatsushiro')" style="--ac:#009688">⛪ 八代・天草</button>
-  <button class="area-btn" data-area="aso"        onclick="filterArea('aso')"        style="--ac:#4CAF50">🌋 阿蘇・東部</button>
-  <button class="area-btn" data-area="hitoyoshi"  onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉・球磨</button>
-  <button class="area-btn" data-area="kamimashiki"onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
-  <button class="area-btn" data-area="oguni"      onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
-  <button class="area-btn" data-area="oita"       onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
-  <button class="area-btn" data-area="nagasaki"  onclick="filterArea('nagasaki')"  style="--ac:#FF6B6B">⛪ 長崎</button>
-  <button class="area-btn" data-area="fukuoka"   onclick="filterArea('fukuoka')"   style="--ac:#FF9800">🏮 福岡</button>
-  <button class="area-btn" data-area="kagoshima" onclick="filterArea('kagoshima')" style="--ac:#8BC34A">🌋 鹿児島</button>
-  <button class="area-btn" data-area="miyazaki"  onclick="filterArea('miyazaki')"  style="--ac:#4CAF50">🌄 宮崎</button>
-  <button class="area-btn" data-area="saga"      onclick="filterArea('saga')"      style="--ac:#9C27B0">🏺 佐賀</button>
+  <button class="area-btn active" data-area="all"        onclick="filterArea('all')">🗾 全て</button>
+  <button class="area-btn" data-area="kumamoto"          onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
+  <button class="area-btn" data-area="tabaruzaka"        onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部</button>
+  <button class="area-btn" data-area="kikuchi"           onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池</button>
+  <button class="area-btn" data-area="tamana"            onclick="filterArea('tamana')"     style="--ac:#FF9800">🌊 玉名</button>
+  <button class="area-btn" data-area="yatsushiro"        onclick="filterArea('yatsushiro')" style="--ac:#009688">⛪ 八代</button>
+  <button class="area-btn" data-area="aso"               onclick="filterArea('aso')"        style="--ac:#4CAF50">🌋 阿蘇</button>
+  <button class="area-btn" data-area="hitoyoshi"         onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉</button>
+  <button class="area-btn" data-area="kamimashiki"       onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
+  <button class="area-btn" data-area="oguni"             onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
+  <button class="area-btn" data-area="oita"              onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
+  <button class="area-btn" data-area="nagasaki"          onclick="filterArea('nagasaki')"   style="--ac:#FF6B6B">⛪ 長崎</button>
+  <button class="area-btn" data-area="fukuoka"           onclick="filterArea('fukuoka')"    style="--ac:#FF9800">🏮 福岡</button>
+  <button class="area-btn" data-area="kagoshima"         onclick="filterArea('kagoshima')"  style="--ac:#8BC34A">🌋 鹿児島</button>
+  <button class="area-btn" data-area="miyazaki"          onclick="filterArea('miyazaki')"   style="--ac:#4CAF50">🌄 宮崎</button>
+  <button class="area-btn" data-area="saga"              onclick="filterArea('saga')"       style="--ac:#9C27B0">🏺 佐賀</button>
+  <button class="area-btn" data-area="kanto"             onclick="filterArea('kanto')"      style="--ac:#3F51B5">🗼 関東</button>
+  <button class="area-btn" data-area="kinki"             onclick="filterArea('kinki')"      style="--ac:#E040FB">🏯 近畿</button>
+  <button class="area-btn" data-area="chubu"             onclick="filterArea('chubu')"      style="--ac:#00BCD4">🗻 中部</button>
+  <button class="area-btn" data-area="tohoku"            onclick="filterArea('tohoku')"     style="--ac:#76FF03">❄️ 東北</button>
+  <button class="area-btn" data-area="hokkaido"          onclick="filterArea('hokkaido')"   style="--ac:#00E5FF">🐻 北海道</button>
+  <button class="area-btn" data-area="chugoku"           onclick="filterArea('chugoku')"    style="--ac:#FFEA00">🦌 中国</button>
+  <button class="area-btn" data-area="shikoku"           onclick="filterArea('shikoku')"    style="--ac:#FF6D00">🍊 四国</button>
 </div>
 
 <!-- 地図 -->
@@ -190,7 +343,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
 <!-- タブバー -->
 <div id="tab-bar">
   <button class="tab-btn active" id="tab-map"  onclick="switchTab('map')">
-    <span class="tab-icon">🗺️</span>地図
+    <span class="tab-icon">🗺️</span>ちず
   </button>
   <button class="tab-btn" id="tab-list" onclick="switchTab('list')">
     <span class="tab-icon">📋</span>リスト
@@ -200,85 +353,55 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
 <script>
 const SPOTS = {{ spots | tojson }};
 
-/* ── 地区定義 ── */
+/* ── エリア定義 ── */
 const AREAS = {
   kumamoto:    { name:'熊本市',       emoji:'🏯', color:'#2196F3',
-    ids:['kumamoto_castle','kato_shrine','suizenji','honmyoji',
-         'higo_kokufu','kojo_park','kengun_jinja_kessho',
-         'shinpuren_ran','kawashiri_kosenjo','kumamoto_ikki_hi'] },
+    ids:['kumamoto_castle','kato_shrine','suizenji','honmyoji','higo_kokufu','kojo_park','kengun_jinja_kessho','shinpuren_ran','kawashiri_kosenjo','kumamoto_ikki_hi'] },
   tabaruzaka:  { name:'北部・田原坂', emoji:'⚔️', color:'#F44336',
-    ids:['tabaruzaka','kimeru_honei','yokohira_kosenjo',
-         'hankouzan_yoshijitoge','shonenji_dankon','koba_kosenjo',
-         'seinan_sensou_museum','joyama_kosenjo_seinan'] },
+    ids:['tabaruzaka','kimeru_honei','yokohira_kosenjo','hankouzan_yoshijitoge','shonenji_dankon','koba_kosenjo','seinan_sensou_museum','joyama_kosenjo_seinan'] },
   kikuchi:     { name:'菊池・山鹿',   emoji:'⚜️', color:'#9C27B0',
-    ids:['kikuchi_shrine','kikuchi_takemitsu','kikuchijo','seiseifu_kikuchi',
-         'kikuchi_castle_ruins','kikuchi_takejiro_kessho','ohara_kosenjo_1359',
-         'jokoji_kikuchi','kikuchi_dankon_seinan','kikuchi_takeshige_hi',
-         'tsukahara_kofun','chibusan_kofun','sokokan',
-         'yamaga_kosenjo_seinan','nankan_kosenjo'] },
+    ids:['kikuchi_shrine','kikuchi_takemitsu','kikuchijo','seiseifu_kikuchi','kikuchi_castle_ruins','kikuchi_takejiro_kessho','ohara_kosenjo_1359','jokoji_kikuchi','kikuchi_dankon_seinan','kikuchi_takeshige_hi','tsukahara_kofun','chibusan_kofun','sokokan','yamaga_kosenjo_seinan','nankan_kosenjo'] },
   tamana:      { name:'玉名',         emoji:'🌊', color:'#FF9800',
-    ids:['saigo_kohei_hi','shigemine_hachimangu_dankon',
-         'takase_kosenjo','etafunayana_kofun','koama_onsen',
-         'takase_komezo','takase_megane_bridge','yokoshima_kattaku'] },
+    ids:['saigo_kohei_hi','shigemine_hachimangu_dankon','takase_kosenjo','etafunayana_kofun','koama_onsen','takase_komezo','takase_megane_bridge','yokoshima_kattaku'] },
   yatsushiro:  { name:'八代・天草',   emoji:'⛪', color:'#009688',
-    ids:['yatsushiro_miya','yatsushiro_castle_konishi',
-         'hinagu_joriku_hi','sakitsu','misumi_port','uto_nanbokucho',
-         'amakusa_kirishitan_museum','amakusa_shiro_museum','amakusa_collegio',
-         'shiki_castle','oe_tenshudo','suzuki_shigenari'] },
+    ids:['yatsushiro_miya','yatsushiro_castle_konishi','hinagu_joriku_hi','sakitsu','misumi_port','uto_nanbokucho','amakusa_kirishitan_museum','amakusa_shiro_museum','amakusa_collegio','shiki_castle','oe_tenshudo','suzuki_shigenari'] },
   aso:         { name:'阿蘇・東部',   emoji:'🌋', color:'#4CAF50',
     ids:['aso_shrine_nanbokucho','ozu_kosenjo'] },
   hitoyoshi:   { name:'人吉・球磨',   emoji:'🏔️', color:'#795548',
-    ids:['eikokuji','hitoyoshi_castle','gokasho_heike',
-         'kureko','momiki','itsuki','shiibaru',
-         'aoi_aso_shrine','ganjoji_temple'] },
+    ids:['eikokuji','hitoyoshi_castle','gokasho_heike','kureko','momiki','itsuki','shiibaru','aoi_aso_shrine','ganjoji_temple'] },
   kamimashiki: { name:'上益城',       emoji:'🌉', color:'#FF5722',
-    ids:['tsujunbashi','mifune_kosenjo','kiyama_kosenjo',
-         'yamato_kosenjo_seinan','yabe_castle_aso'] },
+    ids:['tsujunbashi','mifune_kosenjo','kiyama_kosenjo','yamato_kosenjo_seinan','yabe_castle_aso'] },
   oguni:       { name:'小国',         emoji:'🌲', color:'#00BCD4',
     ids:['oguni_shrine','oshitoishi_hill','tsue_tate_onsen','oguni_sugi_culture'] },
   oita:        { name:'大分',         emoji:'🏮', color:'#E91E63',
-    ids:['usa_jingu','oka_castle','usuki_sekibutsu','fukiji_temple',
-         'oita_castle','yusuhara_hachimangu','ryosonji','nakatsu_castle',
-         'kumano_magaibutsu','otomo_ruins',
-         'kitsuki_castle','fukuzawa_yukichi','hita_mameda','beppu_onsen_hist',
-         'yufuin_hist','harajiri_falls','saiki_castle','hiji_castle',
-         'nata_shrine','funai_xavier','tenjinyama_kofun','rokugo_manzan',
-         'kusu_morijinja','kuju_sangaku','bungo_ono_ruins','himeshima_history',
-         'usa_mirokuji','yamakuni_history','bungotakada_manyo','taketa_jokamachi'] },
+    ids:['usa_jingu','oka_castle','usuki_sekibutsu','fukiji_temple','oita_castle','yusuhara_hachimangu','ryosonji','nakatsu_castle','kumano_magaibutsu','otomo_ruins','kitsuki_castle','fukuzawa_yukichi','hita_mameda','beppu_onsen_hist','yufuin_hist','harajiri_falls','saiki_castle','hiji_castle','nata_shrine','funai_xavier','tenjinyama_kofun','rokugo_manzan','kusu_morijinja','kuju_sangaku','bungo_ono_ruins','himeshima_history','usa_mirokuji','yamakuni_history','bungotakada_manyo','taketa_jokamachi'] },
   nagasaki:    { name:'長崎',         emoji:'⛪', color:'#FF6B6B',
-    ids:['nagasaki_atomic_bomb_museum','nagasaki_peace_park','urakami_cathedral',
-         'glover_garden','oura_cathedral','dejima','nishizaka_martyrs',
-         'meganebashi','sofukuji','nagasaki_hollander_slope',
-         'shimabara_castle','hara_castle','hirado_castle','hirado_xavier_church',
-         'goto_dozan_church','kashiragashima_church','tsushima_kaneda_castle',
-         'izuhara_banshoin','nagasaki_bugyosho','matsuura_museum'] },
+    ids:['nagasaki_atomic_bomb_museum','nagasaki_peace_park','urakami_cathedral','glover_garden','oura_cathedral','dejima','nishizaka_martyrs','meganebashi','sofukuji','nagasaki_hollander_slope','shimabara_castle','hara_castle','hirado_castle','hirado_xavier_church','goto_dozan_church','kashiragashima_church','tsushima_kaneda_castle','izuhara_banshoin','nagasaki_bugyosho','matsuura_museum'] },
   fukuoka:     { name:'福岡',         emoji:'🏮', color:'#FF9800',
-    ids:['dazaifu_tenmangu','dazaifu_ruins','mizuki_wall','fukuoka_castle',
-         'kushida_shrine','shofukuji_hakata','tochoji_hakata','genko_boruei',
-         'shikano_island','munakata_taisha','akizuki_castle','yanagawa',
-         'kokura_castle','yahata_seitetsu','itoshima_ito_koku','ono_castle',
-         'fukuoka_museum','nanzoin','jotenji_hakata','sumiyoshi_shrine_hakata'] },
+    ids:['dazaifu_tenmangu','dazaifu_ruins','mizuki_wall','fukuoka_castle','kushida_shrine','shofukuji_hakata','tochoji_hakata','genko_boruei','shikano_island','munakata_taisha','akizuki_castle','yanagawa','kokura_castle','yahata_seitetsu','itoshima_ito_koku','ono_castle','fukuoka_museum','nanzoin','jotenji_hakata','sumiyoshi_shrine_hakata'] },
   kagoshima:   { name:'鹿児島',       emoji:'🌋', color:'#8BC34A',
-    ids:['tsurumaru_castle','sengan_en','shiroyama_kagoshima','nanshu_cemetery',
-         'chiran_peace','chiran_bukeyashiki','kirishima_jingu','sakurajima_history',
-         'tanegashima_teppo','yakushima_jomon','amami_saigo','bonotsu_port',
-         'izumi_bukeyashiki','kagoshima_spinning','sekiya_sosui','terayama_charcoal',
-         'satsuma_students','nitta_shrine','kagoshima_jingu','ibusuki_hasimuregawa'] },
+    ids:['tsurumaru_castle','sengan_en','shiroyama_kagoshima','nanshu_cemetery','chiran_peace','chiran_bukeyashiki','kirishima_jingu','sakurajima_history','tanegashima_teppo','yakushima_jomon','amami_saigo','bonotsu_port','izumi_bukeyashiki','kagoshima_spinning','sekiya_sosui','terayama_charcoal','satsuma_students','nitta_shrine','kagoshima_jingu','ibusuki_hasimuregawa'] },
   miyazaki:    { name:'宮崎',         emoji:'🌄', color:'#4CAF50',
-    ids:['takachiho_gorge','amanoiwato_shrine','takachiho_shrine','miyazaki_jingu',
-         'udo_shrine','aoshima_shrine','saito_kofun','obi_castle',
-         'hyuga_misaki','nobeoka_castle','miyakonojo_shimazu','kushima_toi',
-         'heguri_shrine','tsuma_shrine','ebino_kogen','nango_baekje',
-         'heiwadai_park','hososhima_port','sadowara_castle','kirishima_higashi'] },
+    ids:['takachiho_gorge','amanoiwato_shrine','takachiho_shrine','miyazaki_jingu','udo_shrine','aoshima_shrine','saito_kofun','obi_castle','hyuga_misaki','nobeoka_castle','miyakonojo_shimazu','kushima_toi','heguri_shrine','tsuma_shrine','ebino_kogen','nango_baekje','heiwadai_park','hososhima_port','sadowara_castle','kirishima_higashi'] },
   saga:        { name:'佐賀',         emoji:'🏺', color:'#9C27B0',
-    ids:['yoshinogari','saga_castle','karatsu_castle','nagoya_castle_saga',
-         'arita_porcelain_town','yobuko_asaichi','yutoku_inari','nijino_matsubara',
-         'takeo_onsen','taku_seibyo','okawachiyama','nanatsugama',
-         'hamanourano_tanada','ureshino_onsen','mifuneyama_rakuen','hagakure_saga',
-         'karatsu_kunchi','hizen_koku_cho','saga_nabeshima_blast','kabe_island_tajima'] }
+    ids:['yoshinogari','saga_castle','karatsu_castle','nagoya_castle_saga','arita_porcelain_town','yobuko_asaichi','yutoku_inari','nijino_matsubara','takeo_onsen','taku_seibyo','okawachiyama','nanatsugama','hamanourano_tanada','ureshino_onsen','mifuneyama_rakuen','hagakure_saga','karatsu_kunchi','hizen_koku_cho','saga_nabeshima_blast','kabe_island_tajima'] },
+  kanto:       { name:'関東',         emoji:'🗼', color:'#3F51B5',
+    ids:['mito_kodokan','mito_kairakuen','kashima_jingu','tsukuba_shrine','satake_ota_castle','nishiyamasou_mitsukuni','ibaraki_tsuchiura_castle','hitachi_kokubunji','yuki_castle','kasama_castle','nikko_toshogu','ashikaga_school','nasu_yoichi_shrine','oyama_meeting_site','utsunomiya_castle','karasawayama_castle','nikko_futarasan','mashiko_pottery','nikko_taiyuin','shimotsuke_kokubunji','tomioka_seishi','numata_castle_sanada','kanayama_castle','minowajyo_nagano','serada_toshogu','kusatsu_onsen_history','agatsuma_nakasendo','ogo_castle_uesugi','kannonyama_kofun','akagi_shrine_gunma','kawagoe_castle','oshi_castle_mizuseme','hachigata_castle','sugaya_yakata_hatakeyama','mitsumine_shrine','chichibu_shrine','yoshimi_hyakuana','komagome_koma_shrine','kitain_kawagoe','musashi_kokubunji','chiba_castle_chiba_clan','tateyama_satomi_castle','narita_naritasan','katori_shrine','sakura_castle_hotta','odaira_masako_chiba','sekiyado_castle_chiba','boso_peninsula_ancient','sawara_town_chiba','inohana_castle_edo','edo_castle_honmaru','sensoji_asakusa','kanda_myojin_masakado','yanaka_cemetery_history','ueno_hill_shogitai','shiba_zojoji_temple','rikugien_garden','hachioji_castle','sengakuji_ako_ronin','koishikawa_korakuen','kamakura_daibutsu','tsurugaoka_hachimangu','yoritomo_tomb_kamakura','hakone_sekisho','kamakura_hokoji','nitta_yoshisada_inamuragasaki','yokohama_kaiko_kinenkan','perry_kurihama_monument','miura_clan_kinugasa','ishiobashi_yoritomo','mamiya_rinzo_memorial','tanaka_shozo_museum','hanawa_hokiichi_honjo','ogino_ginko_kumagaya','ishikawajima_yoseba','yasuda_garden_sumida','zenshoan_tesshu','zojoji_kazunomiya','katsu_kaishu_zenpukuji','soseki_museum_shinjuku','nogi_shrine_aoyama','koishikawa_mito_yashiki','john_manjiro_tosa_nakahama','yoshinaka_birthplace_musashino','nichiren_tanjoji'] },
+  kinki:       { name:'近畿',         emoji:'🏯', color:'#E040FB',
+    ids:['honnoji_ruins','miburo_kyoto','toji_in_kyoto','iwakura_residence_kyoto','hojoji_ruins_kyoto','urasenke_kyoto','tanabe_castle_hosokawa','tekijuku_osaka','godai_osaka_exchange','shitenoji_osaka','ishiyama_honganji','chausuyama_osaka','akashi_castle','ikuta_shrine_kobe','miki_castle','koka_shinobi','kannoji_castle','negoroji','kamimachi_wakayama_castle','kamo_mabuchi_hamamatsu','takataya_kahei_awaji','minakata_kumagusu_tanabe','doshisha_niijima','yamazaki_battlefield','shizugatake_battlefield','zuishinin_ono_komachi','gichuji_yoshinaka','yosano_akiko_sakai','yanagita_kunio_fukusaki','kagawa_toyohiko_kobe','rai_sanyo_hiroshima'] },
+  chubu:       { name:'中部',         emoji:'🗻', color:'#00BCD4',
+    ids:['okazaki_castle','okehazama_battlefield','gifu_castle','bodaisan_castle_gifu','nagashino_battlefield','ueda_castle','kasugayama_castle','takeda_tsutsujigasaki','toyoda_sakichi_museum','motoori_norinaga_matsusaka','basho_iga_ueno','sawayama_castle_ishida','odani_castle_azai','hikone_castle_ii','senkoji_enkubutsu','tsu_castle_todo','imabari_castle_todo','kanazawa_castle','sugita_genpaku_obama','hashimoto_sanai_fukui','yuri_kimasa_fukui','hiraga_gennai_sanuki','ryokan_goan','kawai_tsugunosuke_nagaoka','shimazaki_toson_magome'] },
+  tohoku:      { name:'東北',         emoji:'❄️', color:'#76FF03',
+    ids:['sendai_castle','hiraizumi_chusonji','goryokaku_hakodate','wakamatsu_tsurugajo','yamagata_castle','yonezawa_uesugi_shrine','munakata_shiko_museum','doi_bansui_residence','yoshino_sakuzo_furukawa','saito_mokichi_museum','nitobe_inazo_morioka','hirata_atsutane_akita','ishikawa_rikino_daisen','mogami_tokunai_murayama','hara_takashi_birthplace','miyazawa_kenji_hanamaki','noguchi_hideyo_inawashiro','osamu_dazai_kanagi','soma_nakamura_castle','kaminoyama_castle_shingen'] },
+  hokkaido:    { name:'北海道',       emoji:'🐻', color:'#00E5FF',
+    ids:['matsuura_monument','yoda_obihiro'] },
+  chugoku:     { name:'中国',         emoji:'🦌', color:'#FFEA00',
+    ids:['dannoura_battlefield','akama_jingu','dannoura_heike_ruins','rai_sanyo_hiroshima','inukai_tsuyoshi_museum','kodama_gentaro_memorial','matsue_castle','ganryujima_shimonoseki','oshiro_castle','oni_no_shiro','bitchu_matsuyama','toba_castle','mizusawa_goto','siebold_narutaki'] },
+  shikoku:     { name:'四国',         emoji:'🍊', color:'#FF6D00',
+    ids:['tokushima_castle_hachisuka','katsuzui_castle_awa','ichinomiya_castle_awa','bando_furyo_camp','naruto_uzushio','oboke_gorge_history','ryuoji_temple_awa','awa_jurobe_yashiki','wakimachi_udatsu','awa_kokubunji','bizan_tokushima','marugame_castle','yashima_battlefield','zentsuji_kukai','kotohira_shrine','mannogike_kukai','shirogamineji_sutoku','hiketa_castle','takamatsu_castle','shido_temple_fujiwara','kagawa_salt_history','matsuyama_castle_shiki','matsuyama_city_history','imabari_castle_todo','ozu_castle','uwajima_castle','dogo_onsen_history','noshima_murakami_navy','kawano_clan_yuzuki','akehama_history','saijo_daimyo_history','mishima_yukashima_village','okao_castle_kochi','kochi_castle_tosa','ryoma_nakaoka_kochi','john_manjiro_tosa_nakahama','uradu_castle_chosokabe','ryoma_birthplace_kochi','takechi_zuizan_dojo','nakaoka_shintaro_birthplace','yamauchi_kochi_domain','tosa_han_gakko_chidokan','shimanto_river_history','aki_chosokabe_birthplace','itagaki_memorial_kochi','ozaki_hosai_shodoshima','hiraga_gennai_sanuki','kikuchi_kan_takamatsu','takamatsu_castle_siege'] },
 };
 
-/* spot_id → エリア のルックアップ */
+/* spot_id → エリア ルックアップ */
 const SPOT_AREA = {};
 Object.entries(AREAS).forEach(([aKey, a]) => {
   a.ids.forEach(id => { SPOT_AREA[id] = aKey; });
@@ -288,37 +411,58 @@ function getArea(id) {
   return { key, ...AREAS[key] };
 }
 
-/* ── Leaflet マップ初期化 ── */
-const map = L.map('map', { zoomControl: false }).setView([32.5, 130.7], 7);
+/* ── ドット絵ピクセルマーカーSVG生成 ── */
+function makePixelMarkerSVG(color, emoji) {
+  const c = encodeURIComponent(color);
+  const dark = '#000000';
+  // DQ風のミニキャラクター的な宝箱アイコン
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' width='30' height='30'>
+    <rect x='1' y='1' width='18' height='18' fill='${c}' rx='0'/>
+    <rect x='0' y='0' width='20' height='2'  fill='white' opacity='0.6'/>
+    <rect x='0' y='0' width='2'  height='20' fill='white' opacity='0.6'/>
+    <rect x='18' y='0' width='2' height='20' fill='${dark}' opacity='0.4'/>
+    <rect x='0' y='18' width='20' height='2' fill='${dark}' opacity='0.4'/>
+    <rect x='2' y='2' width='16' height='16' fill='none' stroke='white' stroke-width='1' opacity='0.3'/>
+    <text x='10' y='14' text-anchor='middle' font-size='11'>${emoji}</text>
+  </svg>`;
+  return `data:image/svg+xml,${svg}`;
+}
 
+/* ── Leaflet 初期化 ── */
+const map = L.map('map', {
+  zoomControl: false,
+  attributionControl: true
+}).setView([36.5, 136.5], 5);
+
+/* ピクセルアートタイル：tileSize=512+zoomOffset=-1 で低解像度タイルを拡大表示 */
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors',
-  maxZoom: 18
+  attribution: '© OpenStreetMap',
+  tileSize: 512,
+  zoomOffset: -1,
+  className: 'pixel-tile'
 }).addTo(map);
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
 /* ── マーカー生成 ── */
-const markers = {};   // id → { marker, areaKey }
+const markers = {};
 
 Object.entries(SPOTS).forEach(([id, spot]) => {
   const area = getArea(id);
-  const icon = L.divIcon({
-    className: '',
-    html: `<div class="marker-icon" style="width:30px;height:30px;background:${area.color}">${area.emoji}</div>`,
+  const iconUrl = makePixelMarkerSVG(area.color, area.emoji);
+  const icon = L.icon({
+    iconUrl,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
-    popupAnchor: [0, -16]
+    popupAnchor: [0, -18]
   });
-
   const marker = L.marker([spot.lat, spot.lon], { icon }).addTo(map);
   marker.bindPopup(`
     <div class="popup-name">${spot.name}</div>
     <div class="popup-era">${spot.era}</div>
     <div class="popup-highlight">${spot.highlight}</div>
-    <a class="popup-btn" href="/spot/${id}">🎵 音声解説を聞く</a>
-  `, { maxWidth: 240 });
-
+    <a class="popup-btn" href="/spot/${id}">▶ 音声解説を聞く</a>
+  `, { maxWidth: 250 });
   markers[id] = { marker, areaKey: area.key };
 });
 
@@ -333,9 +477,11 @@ function filterArea(areaKey) {
       const color = areaKey === 'all' ? '#5c9cf5' : AREAS[areaKey]?.color || '#5c9cf5';
       b.style.background = color;
       b.style.borderColor = color;
+      b.style.color = '#000030';
     } else {
       b.style.background = '';
       b.style.borderColor = '';
+      b.style.color = '';
     }
   });
 
@@ -347,71 +493,54 @@ function filterArea(areaKey) {
   });
 
   if (bounds.length > 0 && areaKey !== 'all') {
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
   } else if (areaKey === 'all') {
-    map.setView([32.5, 130.7], 7);
+    map.setView([36.5, 136.5], 5);
   }
-
-  // リストも更新
   buildList(areaKey);
 }
 
 /* 初期ボタンスタイル */
-document.querySelector('[data-area="all"]').style.background = '#5c9cf5';
-document.querySelector('[data-area="all"]').style.borderColor = '#5c9cf5';
+const allBtn = document.querySelector('[data-area="all"]');
+allBtn.style.background = '#5c9cf5';
+allBtn.style.borderColor = '#5c9cf5';
+allBtn.style.color = '#000030';
 
 /* ── リスト生成 ── */
 function buildList(areaKey) {
   const container = document.getElementById('list-content');
   container.innerHTML = '';
-
-  const filtered = Object.entries(SPOTS).filter(([id]) => {
-    return areaKey === 'all' || SPOT_AREA[id] === areaKey;
-  });
-
-  // エリアでグループ化
+  const filtered = Object.entries(SPOTS).filter(([id]) => areaKey === 'all' || SPOT_AREA[id] === areaKey);
   const grouped = {};
   filtered.forEach(([id, spot]) => {
     const aKey = SPOT_AREA[id] || 'kumamoto';
     if (!grouped[aKey]) grouped[aKey] = [];
     grouped[aKey].push([id, spot]);
   });
-
   Object.entries(grouped).forEach(([aKey, spots]) => {
     const area = AREAS[aKey];
     if (!area) return;
-
     const header = document.createElement('div');
-    header.style.cssText = `
-      font-size:13px; font-weight:800; color:${area.color};
-      padding:8px 4px 6px; letter-spacing:.06em;
-      border-bottom:1px solid ${area.color}44; margin-bottom:8px; margin-top:12px;
-    `;
+    header.className = 'list-area-header';
+    header.style.color = area.color;
     header.textContent = `${area.emoji} ${area.name}（${spots.length}）`;
     container.appendChild(header);
-
     spots.forEach(([id, spot]) => {
       const card = document.createElement('a');
       card.href = `/spot/${id}`;
       card.className = 'spot-card';
       card.innerHTML = `
-        <div class="spot-icon-box" style="background:${area.color}33;">${area.emoji}</div>
+        <div class="spot-icon-box" style="background:${area.color}33">${area.emoji}</div>
         <div class="spot-info">
           <div class="spot-name">${spot.name}</div>
-          <div class="spot-kana">${spot.kana}</div>
+          <div class="spot-kana">${spot.kana || ''}</div>
           <div class="spot-era">${spot.era}</div>
         </div>
-        <div class="arrow">›</div>
-      `;
-      // マップへのリンク
-      card.addEventListener('click', e => {
-        // map viewならマーカーへ移動
-      });
+        <div class="arrow">▶</div>`;
       container.appendChild(card);
     });
   });
 }
-
 buildList('all');
 
 /* ── タブ切り替え ── */
@@ -425,18 +554,18 @@ function switchTab(tab) {
 
 /* ── GPS ── */
 let userMarker = null;
-
 function setGPS(lat, lon, label) {
   document.getElementById('gpsDot').className = 'gps-dot active';
   document.getElementById('gpsLabel').textContent = label;
-
   if (userMarker) map.removeLayer(userMarker);
-  userMarker = L.circleMarker([lat, lon], {
-    radius: 9, fillColor: '#5c9cf5', color: 'white',
-    weight: 2, fillOpacity: 1
-  }).addTo(map).bindPopup('📍 現在地');
+  const playerIcon = L.divIcon({
+    className: '',
+    html: '<div class="player-icon">🧙</div>',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+  userMarker = L.marker([lat, lon], { icon: playerIcon }).addTo(map).bindPopup('▶ 現在地');
 }
-
 function retryGPS() {
   document.getElementById('gpsDot').className = 'gps-dot';
   document.getElementById('gpsLabel').textContent = '取得中';
@@ -448,15 +577,12 @@ function retryGPS() {
     );
   } else { tryIPLocation(); }
 }
-
 function tryIPLocation() {
   fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
     if (d.latitude) setGPS(d.latitude, d.longitude, '概算');
-    else { document.getElementById('gpsDot').className='gps-dot error'; document.getElementById('gpsLabel').textContent='取得失敗'; }
+    else { document.getElementById('gpsDot').className='gps-dot error'; document.getElementById('gpsLabel').textContent='失敗'; }
   }).catch(()=>{ document.getElementById('gpsDot').className='gps-dot error'; });
 }
-
-// 起動時GPS
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     p => setGPS(p.coords.latitude, p.coords.longitude, 'GPS'),

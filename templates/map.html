@@ -560,18 +560,6 @@ html, body {
     setTimeout(() => { op.classList.remove('flash'); op.classList.add('fadeout'); }, 120);
     setTimeout(() => { op.style.display = 'none'; BGM.field(); }, 750);
   };
-
-  window.toggleBGM = function() {
-    const on = BGM.toggle();
-    document.getElementById('bgm-btn').textContent = on ? '🎵 BGM' : '🔇 BGM';
-    document.getElementById('bgm-btn').style.color = on ? '' : 'rgba(255,255,255,0.4)';
-  };
-
-  // 初期BGMボタン状態
-  if (!BGM.isOn()) {
-    document.getElementById('bgm-btn').textContent = '🔇 BGM';
-    document.getElementById('bgm-btn').style.color = 'rgba(255,255,255,0.4)';
-  }
 })();
 
 const SPOTS = {{ spots | tojson }};
@@ -847,6 +835,18 @@ const BGM = (() => {
     isOn: () => on,
   };
 })();
+
+/* ── BGMトグル ── */
+function toggleBGM() {
+  const on = BGM.toggle();
+  const btn = document.getElementById('bgm-btn');
+  btn.textContent = on ? '🎵 BGM' : '🔇 BGM';
+  btn.style.color  = on ? '' : 'rgba(255,255,255,0.4)';
+}
+if (!BGM.isOn()) {
+  document.getElementById('bgm-btn').textContent = '🔇 BGM';
+  document.getElementById('bgm-btn').style.color = 'rgba(255,255,255,0.4)';
+}
 
 /* ── 訪問済み管理 ── */
 const VISITED_KEY = 'visited_spots_v1';

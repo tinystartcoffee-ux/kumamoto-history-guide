@@ -138,10 +138,35 @@ html, body {
 }
 .type-btn.active { color: #000030; border-color: transparent; }
 
+/* ── ドリルダウンバー共通 ── */
+.drill-bar {
+  display: none;
+  position: fixed; left: 0; right: 0; z-index: 996;
+  background: #00002a;
+  padding: 4px 8px; gap: 4px; overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+.drill-bar.show { display: flex; }
+.drill-bar::-webkit-scrollbar { display: none; }
+.drill-btn {
+  flex-shrink: 0; padding: 3px 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,55,0.85);
+  color: rgba(255,255,255,0.6);
+  font-size: 10px; cursor: pointer; white-space: nowrap;
+  font-family: 'DotGothic16', monospace;
+  -webkit-tap-highlight-color: transparent;
+}
+.drill-btn:active { transform:translate(1px,1px); }
+.drill-btn.active { color: #000030; border-color: transparent; }
+.drill-btn.back { color: #FFD700; border-color: rgba(255,215,0,0.4); margin-right: 4px; }
+
 /* ── 地図 ── */
+:root { --map-top: 133px; }
 #map {
   position: fixed;
-  top: 133px; bottom: 52px; left: 0; right: 0;
+  top: var(--map-top); bottom: 52px; left: 0; right: 0;
   z-index: 1;
 }
 
@@ -171,7 +196,7 @@ html, body {
 #list-view {
   display: none;
   position: fixed;
-  top: 133px; bottom: 52px; left: 0; right: 0;
+  top: var(--map-top); bottom: 52px; left: 0; right: 0;
   z-index: 2; overflow-y: auto;
   background: #000040;
   padding: 10px;
@@ -392,8 +417,8 @@ html, body {
   border-color: rgba(255,255,255,0.2);
   border-style: solid;
 }
-#corner-tl { top: 133px; left: 0; border-width: 2px 0 0 2px; }
-#corner-tr { top: 133px; right: 0; border-width: 2px 2px 0 0; }
+#corner-tl { top: var(--map-top); left: 0; border-width: 2px 0 0 2px; }
+#corner-tr { top: var(--map-top); right: 0; border-width: 2px 2px 0 0; }
 #corner-bl { bottom: 52px; left: 0; border-width: 0 0 2px 2px; }
 #corner-br { bottom: 52px; right: 0; border-width: 0 2px 2px 0; }
 </style>
@@ -474,6 +499,11 @@ html, body {
   <button class="type-btn" data-type="port"     onclick="filterType('port',this)"    style="--tc:#00BBFF">⚓ 港</button>
   <button class="type-btn" data-type="monument" onclick="filterType('monument',this)" style="--tc:#AAAAAA">🗿 石碑</button>
 </div>
+
+<!-- 都道府県バー -->
+<div class="drill-bar" id="pref-bar" style="top:133px"></div>
+<!-- 市町村エリアバー -->
+<div class="drill-bar" id="city-bar" style="top:171px"></div>
 
 <!-- 地図 -->
 <div id="map"></div>
@@ -745,6 +775,208 @@ Object.entries(SPOTS).forEach(([id, spot]) => {
   markers[id] = { marker, areaKey: area.key, type };
 });
 
+/* ── 都道府県データ ── */
+const PREF_DATA = {
+  kanto: [
+    { key:'tokyo',    name:'東京都', emoji:'🗼', center:[35.69,139.69], zoom:12, sw:[35.52,138.94], ne:[35.90,139.92] },
+    { key:'kanagawa', name:'神奈川', emoji:'🌊', center:[35.45,139.40], zoom:10, sw:[35.10,138.93], ne:[35.72,139.78] },
+    { key:'saitama',  name:'埼玉',   emoji:'🌸', center:[36.01,139.32], zoom:10, sw:[35.73,138.71], ne:[36.40,139.92] },
+    { key:'chiba',    name:'千葉',   emoji:'🥜', center:[35.57,140.10], zoom:10, sw:[34.98,139.72], ne:[35.93,140.93] },
+    { key:'ibaraki',  name:'茨城',   emoji:'🌾', center:[36.35,140.45], zoom:9,  sw:[35.73,139.69], ne:[36.95,140.87] },
+    { key:'tochigi',  name:'栃木',   emoji:'🍓', center:[36.57,139.88], zoom:9,  sw:[36.20,139.33], ne:[37.16,140.36] },
+    { key:'gunma',    name:'群馬',   emoji:'⛰️', center:[36.48,139.06], zoom:9,  sw:[36.13,138.41], ne:[37.00,139.69] },
+  ],
+  kinki: [
+    { key:'osaka',    name:'大阪府', emoji:'🏙️', center:[34.69,135.50], zoom:11, sw:[34.33,135.10], ne:[34.91,135.73] },
+    { key:'kyoto',    name:'京都府', emoji:'⛩️', center:[35.02,135.75], zoom:10, sw:[34.69,135.09], ne:[35.77,135.90] },
+    { key:'hyogo',    name:'兵庫',   emoji:'🏯', center:[34.91,134.88], zoom:9,  sw:[34.09,134.25], ne:[35.67,135.47] },
+    { key:'nara',     name:'奈良',   emoji:'🦌', center:[34.49,135.83], zoom:10, sw:[33.86,135.57], ne:[35.01,136.21] },
+    { key:'wakayama', name:'和歌山', emoji:'🍊', center:[33.93,135.37], zoom:10, sw:[33.44,135.02], ne:[34.37,135.92] },
+    { key:'shiga',    name:'滋賀',   emoji:'🏞️', center:[35.00,136.00], zoom:10, sw:[34.83,135.77], ne:[35.57,136.36] },
+    { key:'mie',      name:'三重',   emoji:'🦞', center:[34.49,136.29], zoom:9,  sw:[33.72,135.77], ne:[35.28,136.66] },
+  ],
+  chubu: [
+    { key:'aichi',    name:'愛知',   emoji:'🏭', center:[35.07,137.00], zoom:10, sw:[34.56,136.67], ne:[35.45,137.60] },
+    { key:'shizuoka', name:'静岡',   emoji:'🗻', center:[34.97,138.38], zoom:9,  sw:[34.59,137.48], ne:[35.40,139.17] },
+    { key:'nagano',   name:'長野',   emoji:'🏔️', center:[36.21,137.97], zoom:8,  sw:[35.22,137.04], ne:[37.02,138.79] },
+    { key:'gifu',     name:'岐阜',   emoji:'🏯', center:[35.65,137.06], zoom:9,  sw:[35.09,136.13], ne:[36.44,137.73] },
+    { key:'niigata',  name:'新潟',   emoji:'🌾', center:[37.46,138.85], zoom:8,  sw:[36.75,137.55], ne:[38.55,139.93] },
+    { key:'toyama',   name:'富山',   emoji:'🌷', center:[36.70,137.21], zoom:10, sw:[36.28,136.77], ne:[36.98,137.72] },
+    { key:'ishikawa', name:'石川',   emoji:'⚗️', center:[36.59,136.62], zoom:9,  sw:[36.00,136.25], ne:[37.31,137.02] },
+    { key:'fukui',    name:'福井',   emoji:'🦕', center:[35.90,136.22], zoom:10, sw:[35.42,135.75], ne:[36.36,136.88] },
+    { key:'yamanashi',name:'山梨',   emoji:'🍇', center:[35.62,138.57], zoom:10, sw:[35.20,138.19], ne:[35.98,138.87] },
+  ],
+  tohoku: [
+    { key:'miyagi',   name:'宮城',   emoji:'🏯', center:[38.27,140.87], zoom:9,  sw:[37.77,140.28], ne:[39.00,141.67] },
+    { key:'fukushima',name:'福島',   emoji:'🌸', center:[37.45,140.18], zoom:8,  sw:[36.77,139.24], ne:[37.97,141.05] },
+    { key:'iwate',    name:'岩手',   emoji:'🌿', center:[39.52,141.13], zoom:8,  sw:[38.73,140.64], ne:[40.45,141.78] },
+    { key:'yamagata', name:'山形',   emoji:'🍒', center:[38.47,140.33], zoom:9,  sw:[37.87,139.53], ne:[39.10,140.83] },
+    { key:'akita',    name:'秋田',   emoji:'🍚', center:[39.72,140.28], zoom:8,  sw:[38.83,139.73], ne:[40.60,141.22] },
+    { key:'aomori',   name:'青森',   emoji:'🍎', center:[40.82,140.74], zoom:8,  sw:[40.18,139.77], ne:[41.55,141.72] },
+  ],
+  hokkaido: [
+    { key:'hokkaido', name:'北海道', emoji:'🐻', center:[43.46,142.94], zoom:7,  sw:[41.35,141.18], ne:[45.54,145.82] },
+  ],
+  chugoku: [
+    { key:'hiroshima',name:'広島',   emoji:'🕊️', center:[34.52,132.74], zoom:9,  sw:[34.02,131.80], ne:[35.08,133.40] },
+    { key:'yamaguchi',name:'山口',   emoji:'🐡', center:[34.09,131.48], zoom:9,  sw:[33.77,130.77], ne:[34.73,132.28] },
+    { key:'okayama',  name:'岡山',   emoji:'🍑', center:[34.90,133.90], zoom:9,  sw:[34.46,133.17], ne:[35.48,134.47] },
+    { key:'shimane',  name:'島根',   emoji:'⛩️', center:[35.18,132.56], zoom:9,  sw:[34.26,131.65], ne:[35.78,133.73] },
+    { key:'tottori',  name:'鳥取',   emoji:'🌊', center:[35.51,133.91], zoom:9,  sw:[35.09,133.18], ne:[35.78,134.45] },
+  ],
+  shikoku: [
+    { key:'tokushima',name:'徳島',   emoji:'🌀', center:[34.07,134.54], zoom:10, sw:[33.52,133.81], ne:[34.43,134.89] },
+    { key:'kagawa',   name:'香川',   emoji:'🍜', center:[34.26,133.97], zoom:10, sw:[33.97,133.49], ne:[34.44,134.43] },
+    { key:'ehime',    name:'愛媛',   emoji:'🍊', center:[33.84,132.77], zoom:9,  sw:[32.96,132.03], ne:[34.27,133.69] },
+    { key:'kochi',    name:'高知',   emoji:'🐟', center:[33.40,133.55], zoom:9,  sw:[32.70,132.73], ne:[34.01,134.33] },
+  ],
+};
+
+const BROAD_REGIONS = new Set(['kanto','kinki','chubu','tohoku','hokkaido','chugoku','shikoku']);
+let currentBounds = null;
+let currentDrillRegion = null;
+
+function setMapTop(px) {
+  document.documentElement.style.setProperty('--map-top', px + 'px');
+  setTimeout(() => map.invalidateSize(), 50);
+}
+
+function findPref(prefKey) {
+  for (const prefs of Object.values(PREF_DATA)) {
+    const p = prefs.find(p => p.key === prefKey);
+    if (p) return p;
+  }
+  return null;
+}
+
+/* ── 都道府県バーを表示 ── */
+function showPrefBar(regionKey) {
+  currentDrillRegion = regionKey;
+  const prefs = PREF_DATA[regionKey];
+  const bar = document.getElementById('pref-bar');
+  bar.innerHTML = '';
+
+  // ← 戻るボタン
+  const back = document.createElement('button');
+  back.className = 'drill-btn back';
+  back.textContent = '← 全エリア';
+  back.onclick = () => { hidePrefBar(); filterArea('all'); };
+  bar.appendChild(back);
+
+  prefs.forEach(pref => {
+    const btn = document.createElement('button');
+    btn.className = 'drill-btn';
+    btn.textContent = `${pref.emoji} ${pref.name}`;
+    btn.onclick = () => filterPref(pref);
+    bar.appendChild(btn);
+  });
+
+  bar.classList.add('show');
+  hideCityBar();
+  setMapTop(171);
+}
+
+function hidePrefBar() {
+  document.getElementById('pref-bar').classList.remove('show');
+  hideCityBar();
+  currentBounds = null;
+  currentDrillRegion = null;
+  setMapTop(133);
+}
+
+/* ── 都道府県で絞り込み ── */
+function filterPref(pref) {
+  // ボタンのアクティブ状態
+  document.querySelectorAll('#pref-bar .drill-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  event.target.style.background = '#5c9cf5';
+  event.target.style.color = '#000030';
+
+  currentBounds = { sw: pref.sw, ne: pref.ne };
+  map.setView(pref.center, pref.zoom, { animate: true });
+  applyFilters();
+  buildList(currentArea);
+
+  // 市町村クラスター表示
+  const clusters = getClusters(pref);
+  showCityBar(clusters);
+  setMapTop(209);
+  playPikon();
+}
+
+/* ── スポットを0.3°グリッドでクラスタリング ── */
+function getClusters(pref) {
+  const inPref = Object.entries(SPOTS).filter(([id, s]) =>
+    s.lat >= pref.sw[0] && s.lat <= pref.ne[0] &&
+    s.lon >= pref.sw[1] && s.lon <= pref.ne[1]
+  );
+  if (inPref.length === 0) return [];
+
+  const grid = {};
+  inPref.forEach(([id, s]) => {
+    const gk = `${Math.round(s.lat / 0.25) * 0.25}_${Math.round(s.lon / 0.25) * 0.25}`;
+    if (!grid[gk]) grid[gk] = { spots: [], latSum: 0, lonSum: 0 };
+    grid[gk].spots.push([id, s]);
+    grid[gk].latSum += s.lat;
+    grid[gk].lonSum += s.lon;
+  });
+
+  return Object.values(grid).map(g => {
+    const n = g.spots.length;
+    const top = [...g.spots].sort((a, b) => (b[1].figures||[]).length - (a[1].figures||[]).length)[0];
+    const label = top[1].name.length > 6 ? top[1].name.slice(0, 6) + '…' : top[1].name;
+    return { lat: g.latSum / n, lon: g.lonSum / n, count: n, label, bounds: g.spots };
+  }).sort((a, b) => b.count - a.count);
+}
+
+/* ── 市町村エリアバー表示 ── */
+function showCityBar(clusters) {
+  const bar = document.getElementById('city-bar');
+  bar.innerHTML = '';
+  if (clusters.length === 0) { bar.classList.remove('show'); return; }
+
+  const all = document.createElement('button');
+  all.className = 'drill-btn active';
+  all.style.cssText = 'background:#5c9cf5;color:#000030;border-color:transparent';
+  all.textContent = '🗺️ 全域';
+  all.onclick = () => {
+    currentBounds = null; // ← pref bounds に戻す（filterPref内で保持）
+    document.querySelectorAll('#city-bar .drill-btn').forEach(b => { b.style.background=''; b.style.color=''; b.classList.remove('active'); });
+    all.classList.add('active');
+    all.style.cssText = 'background:#5c9cf5;color:#000030;border-color:transparent';
+    // 県レベルに戻す
+    const activePref = document.querySelector('#pref-bar .drill-btn.active');
+    if (activePref) activePref.click();
+  };
+  bar.appendChild(all);
+
+  clusters.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'drill-btn';
+    btn.textContent = `${c.label}（${c.count}）`;
+    btn.onclick = () => {
+      document.querySelectorAll('#city-bar .drill-btn').forEach(b => { b.style.background=''; b.style.color=''; b.classList.remove('active'); });
+      btn.classList.add('active');
+      btn.style.cssText = 'background:#FFD700;color:#000030;border-color:transparent';
+      currentBounds = {
+        sw: [c.lat - 0.15, c.lon - 0.15],
+        ne: [c.lat + 0.15, c.lon + 0.15]
+      };
+      map.setView([c.lat, c.lon], 13, { animate: true });
+      applyFilters();
+      buildList(currentArea);
+      playPikon();
+    };
+    bar.appendChild(btn);
+  });
+
+  bar.classList.add('show');
+}
+
+function hideCityBar() {
+  document.getElementById('city-bar').classList.remove('show');
+}
+
 /* ── 種別フィルター ── */
 let currentType = 'all';
 function filterType(type, btn) {
@@ -763,6 +995,7 @@ function filterType(type, btn) {
 let currentArea = 'all';
 function filterArea(areaKey) {
   currentArea = areaKey;
+  currentBounds = null;
   document.querySelectorAll('.area-btn').forEach(b => {
     const isActive = b.dataset.area === areaKey;
     b.classList.toggle('active', isActive);
@@ -771,23 +1004,38 @@ function filterArea(areaKey) {
       b.style.background = color; b.style.borderColor = color; b.style.color = '#000030';
     } else { b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; }
   });
+
+  if (areaKey !== 'all' && BROAD_REGIONS.has(areaKey) && PREF_DATA[areaKey]) {
+    showPrefBar(areaKey);
+  } else {
+    hidePrefBar();
+  }
   applyFilters();
 }
 
 function applyFilters() {
   const bounds = [];
   Object.entries(markers).forEach(([id, { marker, areaKey: mk, type }]) => {
-    const areaOk = currentArea === 'all' || mk === currentArea;
-    const typeOk  = currentType === 'all' || type === currentType;
-    if (areaOk && typeOk) { marker.addTo(map); bounds.push([SPOTS[id].lat, SPOTS[id].lon]); }
+    const spot = SPOTS[id];
+    let areaOk;
+    if (currentBounds) {
+      areaOk = spot.lat >= currentBounds.sw[0] && spot.lat <= currentBounds.ne[0] &&
+               spot.lon >= currentBounds.sw[1] && spot.lon <= currentBounds.ne[1];
+    } else {
+      areaOk = currentArea === 'all' || mk === currentArea;
+    }
+    const typeOk = currentType === 'all' || type === currentType;
+    if (areaOk && typeOk) { marker.addTo(map); bounds.push([spot.lat, spot.lon]); }
     else                  { marker.remove(); }
   });
-  if (bounds.length > 0 && currentArea !== 'all') {
-    map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
-  } else if (currentArea === 'all' && currentType === 'all') {
-    map.setView([36.5,136.5], 5);
-  } else if (bounds.length > 0) {
-    map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
+  if (!currentBounds) {
+    if (bounds.length > 0 && currentArea !== 'all') {
+      map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
+    } else if (currentArea === 'all' && currentType === 'all') {
+      map.setView([36.5,136.5], 5);
+    } else if (bounds.length > 0) {
+      map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
+    }
   }
   buildList(currentArea);
 }

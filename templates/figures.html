@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>歴史人物ガイド — 歴史音声ガイド</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, 'Hiragino Sans', sans-serif;
+  background: #1a1a2e; color: white;
+  display: flex; flex-direction: column;
+}
+header {
+  background: linear-gradient(135deg, #16213e, #0f3460);
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.back { font-size: 28px; color: rgba(255,255,255,0.7); text-decoration: none; line-height: 1; }
+header h1 { font-size: 18px; font-weight: 700; }
+.scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 40px; }
+
+/* タブ */
+.tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+}
+.tab-btn {
+  flex-shrink: 0;
+  padding: 12px 18px;
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-family: inherit; white-space: nowrap;
+}
+.tab-btn.active { color: white; border-bottom-color: #e94560; }
+
+/* 人物カード */
+.section { padding: 16px; }
+.section-title {
+  font-size: 12px; color: rgba(255,255,255,0.4);
+  font-weight: 600; letter-spacing: 0.1em;
+  margin-bottom: 12px; padding: 0 4px;
+}
+.figure-grid {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.figure-card {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 14px; padding: 14px 16px;
+  text-decoration: none; color: white;
+  border: 1px solid rgba(255,255,255,0.08);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.figure-card:active { background: rgba(255,255,255,0.12); }
+.rank-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #533483, #e94560);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.rank-badge.gold { background: linear-gradient(135deg, #b8860b, #ffd700); color: #1a1a2e; }
+.rank-badge.silver { background: linear-gradient(135deg, #708090, #c0c0c0); color: #1a1a2e; }
+.rank-badge.bronze { background: linear-gradient(135deg, #8b4513, #cd853f); color: white; }
+.figure-info { flex: 1; min-width: 0; }
+.figure-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.figure-kana { font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
+.figure-era {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px; padding: 2px 8px;
+  font-size: 11px; color: rgba(255,255,255,0.6);
+}
+.figure-desc {
+  font-size: 12px; color: rgba(255,255,255,0.55);
+  line-height: 1.5; margin-top: 6px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.arrow { font-size: 18px; color: rgba(255,255,255,0.3); flex-shrink: 0; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="/">‹</a>
+  <h1>⚔️ 歴史人物から探す</h1>
+</header>
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" onclick="switchTab('popular',this)">🏆 人気ランキング</button>
+  <button class="tab-btn" onclick="switchTab('expert',this)">🎓 玄人ランキング</button>
+  <button class="tab-btn" onclick="switchTab('taiga',this)">📺 大河ドラマ</button>
+  <button class="tab-btn" onclick="switchTab('great',this)">💡 実は凄かった</button>
+  <button class="tab-btn" onclick="switchTab('all',this)">📋 全員</button>
+  <button class="tab-btn" onclick="switchTab('era',this)">🕰️ 時代別</button>
+</div>
+
+<!-- 時代サブフィルター -->
+<div id="era-filter" style="display:none;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(0,0,0,0.2);">
+  <div style="display:flex;gap:0;padding:0 4px;">
+    <button class="era-sub-btn active" onclick="switchEra('all',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">全時代</button>
+    <button class="era-sub-btn" onclick="switchEra('古代',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">古代</button>
+    <button class="era-sub-btn" onclick="switchEra('飛鳥・奈良',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">飛鳥・奈良</button>
+    <button class="era-sub-btn" onclick="switchEra('平安',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">平安</button>
+    <button class="era-sub-btn" onclick="switchEra('鎌倉・南北朝',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">鎌倉</button>
+    <button class="era-sub-btn" onclick="switchEra('室町・戦国',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">室町・戦国</button>
+    <button class="era-sub-btn" onclick="switchEra('安土桃山',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">安土桃山</button>
+    <button class="era-sub-btn" onclick="switchEra('江戸',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">江戸</button>
+    <button class="era-sub-btn" onclick="switchEra('幕末・明治',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">幕末・明治</button>
+    <button class="era-sub-btn" onclick="switchEra('大正・昭和前期',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">大正・昭和</button>
+    <button class="era-sub-btn" onclick="switchEra('昭和以降',this)" style="flex-shrink:0;padding:8px 14px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;">昭和以降</button>
+  </div>
+</div>
+
+<div class="scrollable">
+
+{% macro figure_card(fid, f, rank) %}
+<a class="figure-card" href="/figure/{{ fid }}">
+  <div class="rank-badge {% if rank == 1 %}gold{% elif rank == 2 %}silver{% elif rank == 3 %}bronze{% endif %}">
+    {% if rank > 0 %}{{ rank }}{% else %}—{% endif %}
+  </div>
+  <div class="figure-info">
+    <div class="figure-name">{{ f.name }}</div>
+    <div class="figure-kana">{{ f.kana }}</div>
+    <div class="figure-era">{{ f.era }}</div>
+    <div class="figure-desc">{{ f.desc }}</div>
+  </div>
+  <div class="arrow">›</div>
+</a>
+{% endmacro %}
+
+<!-- 人気ランキング -->
+<div class="tab-content active" id="tab-popular">
+  <div class="section">
+    <div class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">日本の歴史人物 人気TOP20</div>
+    <div class="figure-grid">
+      {% for fid, f in figures.items() if f.rank_popular > 0 %}
+        {% set sorted_list = figures.items()|selectattr('1.rank_popular','gt',0)|sort(attribute='1.rank_popular') %}
+      {% endfor %}
+      {% for fid, f in figures.items()|sort(attribute='1.rank_popular') if f.rank_popular > 0 %}
+        {{ figure_card(fid, f, f.rank_popular) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- 玄人ランキング -->
+<div class="tab-content" id="tab-expert">
+  <div class="section">
+    <div class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">玄人が好む歴史人物 TOP28</div>
+    <div class="figure-grid">
+      {% for fid, f in figures.items()|sort(attribute='1.rank_expert') if f.rank_expert > 0 %}
+        {{ figure_card(fid, f, f.rank_expert) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- 大河ドラマ -->
+<div class="tab-content" id="tab-taiga">
+  <div class="section">
+    <div class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">大河ドラマになった人物 TOP30</div>
+    <div class="figure-grid">
+      {% for fid, f in figures.items()|sort(attribute='1.rank_taiga') if f.rank_taiga > 0 %}
+        {{ figure_card(fid, f, f.rank_taiga) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- 実は凄かった -->
+<div class="tab-content" id="tab-great">
+  <div class="section">
+    <div class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">実は歴史的に凄かった人物 TOP30</div>
+    <div class="figure-grid">
+      {% for fid, f in figures.items()|sort(attribute='1.rank_great') if f.rank_great > 0 %}
+        {{ figure_card(fid, f, f.rank_great) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- 全員 -->
+<div class="tab-content" id="tab-all">
+  <div class="section">
+    <div class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">全 {{ figures|length }} 人</div>
+    <div class="figure-grid">
+      {% for fid, f in figures.items()|sort(attribute='1.name') %}
+        {{ figure_card(fid, f, 0) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- 時代別 -->
+<div class="tab-content" id="tab-era">
+  <div class="section">
+    <div id="era-section-label" class="section-label" style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:.1em;margin-bottom:12px;">全時代</div>
+    <div class="figure-grid" id="era-figure-grid">
+      {% for fid, f in figures.items()|sort(attribute='1.birth_year') %}
+        <div class="era-card-wrap" data-era="{{ f.era_category }}">
+          {{ figure_card(fid, f, 0) }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+</div><!-- /scrollable -->
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  const eraFilter = document.getElementById('era-filter');
+  if (id === 'era') {
+    eraFilter.style.display = 'block';
+    switchEra('all', eraFilter.querySelector('.era-sub-btn'));
+  } else {
+    eraFilter.style.display = 'none';
+  }
+}
+
+function switchEra(era, btn) {
+  document.querySelectorAll('.era-sub-btn').forEach(el => {
+    el.classList.remove('active');
+    el.style.color = 'rgba(255,255,255,0.5)';
+    el.style.borderBottomColor = 'transparent';
+  });
+  btn.classList.add('active');
+  btn.style.color = 'white';
+  btn.style.borderBottomColor = '#e94560';
+
+  const cards = document.querySelectorAll('.era-card-wrap');
+  let count = 0;
+  cards.forEach(wrap => {
+    if (era === 'all' || wrap.dataset.era === era) {
+      wrap.style.display = 'block';
+      count++;
+    } else {
+      wrap.style.display = 'none';
+    }
+  });
+  const label = document.getElementById('era-section-label');
+  if (era === 'all') {
+    label.textContent = '全時代 — ' + count + '人';
+  } else {
+    label.textContent = era + ' — ' + count + '人';
+  }
+}
+</script>
+</body>
+</html>

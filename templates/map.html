@@ -150,9 +150,12 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
     <h1>🏯 熊本歴史音声ガイド</h1>
     <p>史跡をタップして音声解説を聞く</p>
   </div>
-  <div class="gps-badge" onclick="retryGPS()">
-    <div class="gps-dot" id="gpsDot"></div>
-    <span id="gpsLabel">GPS</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="/figures" style="background:rgba(233,69,96,0.25);border:1px solid rgba(233,69,96,0.5);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:white;text-decoration:none;white-space:nowrap;-webkit-tap-highlight-color:transparent">⚔️ 人物</a>
+    <div class="gps-badge" onclick="retryGPS()">
+      <div class="gps-dot" id="gpsDot"></div>
+      <span id="gpsLabel">GPS</span>
+    </div>
   </div>
 </div>
 

@@ -1,11 +1,16 @@
 import os, json, threading, time
 from urllib import request as urlreq
-from flask import Flask, render_template, jsonify, send_file
+from flask import Flask, render_template, jsonify, send_file, abort
 
 app = Flask(__name__)
 
 SPOTS_FILE = os.path.join(os.path.dirname(__file__), "spots.json")
+FIGURES_FILE = os.path.join(os.path.dirname(__file__), "figures.json")
 AUDIO_DIR = os.path.join(os.path.dirname(__file__), "audio")
+
+def load_figures():
+    with open(FIGURES_FILE, encoding="utf-8") as f:
+        return json.load(f)
 
 def load_spots():
     with open(SPOTS_FILE, encoding="utf-8") as f:
@@ -30,6 +35,21 @@ def audio(spot_id):
     if not os.path.exists(audio_path):
         return "音声ファイルが見つかりません", 404
     return send_file(audio_path, mimetype="audio/mpeg")
+
+@app.route("/figures")
+def figures_list():
+    figures = load_figures()
+    return render_template("figures.html", figures=figures)
+
+@app.route("/figure/<figure_id>")
+def figure_detail(figure_id):
+    figures = load_figures()
+    if figure_id not in figures:
+        abort(404)
+    spots = load_spots()
+    figure = figures[figure_id]
+    related = {sid: s for sid, s in spots.items() if figure_id in s.get("figures", [])}
+    return render_template("figure_detail.html", figure=figure, figure_id=figure_id, spots=related)
 
 @app.route("/api/spots")
 def api_spots():

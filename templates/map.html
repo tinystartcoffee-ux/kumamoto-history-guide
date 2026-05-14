@@ -411,6 +411,35 @@ function getArea(id) {
   return { key, ...AREAS[key] };
 }
 
+/* ── スポット名からアイコン絵文字を判定 ── */
+function getSpotEmoji(id, name) {
+  // IDベースの判定（優先）
+  if (/castle/.test(id))          return '🏯';
+  if (/shrine/.test(id))          return '⛩️';
+  if (/temple|ji$|dera$/.test(id)) return '🛕';
+  if (/tomb|grave|mausoleum/.test(id)) return '🪦';
+  if (/battle|battlefield|ancient_battle/.test(id)) return '⚔️';
+  if (/museum/.test(id))          return '🏛️';
+  if (/park/.test(id))            return '🌳';
+  if (/garden/.test(id))          return '🌸';
+  if (/memorial|monument/.test(id)) return '🗿';
+  // 名前ベースの判定
+  if (/城跡|城址/.test(name))      return '🏯';
+  if (/城/.test(name))             return '🏯';
+  if (/神社|大社|天満宮|八幡宮|稲荷|権現|明神/.test(name)) return '⛩️';
+  if (/寺|院$|庵$|堂$|坊$/.test(name)) return '🛕';
+  if (/古墳|陵|御陵|塚/.test(name)) return '🪦';
+  if (/墓|廟/.test(name))          return '🪦';
+  if (/古戦場|戦跡|合戦/.test(name)) return '⚔️';
+  if (/博物館|資料館|記念館/.test(name)) return '🏛️';
+  if (/公園/.test(name))           return '🌳';
+  if (/庭園|苑/.test(name))        return '🌸';
+  if (/屋敷|邸|館/.test(name))     return '🏠';
+  if (/港|湊/.test(name))          return '⚓';
+  if (/石碑|碑|跡$/.test(name))    return '🗿';
+  return '📍';
+}
+
 /* ── ドット絵ピクセルマーカーSVG生成 ── */
 function makePixelMarkerSVG(color, emoji) {
   const c = encodeURIComponent(color);
@@ -449,7 +478,8 @@ const markers = {};
 
 Object.entries(SPOTS).forEach(([id, spot]) => {
   const area = getArea(id);
-  const iconUrl = makePixelMarkerSVG(area.color, area.emoji);
+  const spotEmoji = getSpotEmoji(id, spot.name || '');
+  const iconUrl = makePixelMarkerSVG(area.color, spotEmoji);
   const icon = L.icon({
     iconUrl,
     iconSize: [30, 30],

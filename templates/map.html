@@ -424,6 +424,7 @@ html, body {
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <a href="/figures" class="dq-btn">⚔ 人物</a>
+    <div class="dq-btn" onclick="zoomToMe()" style="font-size:12px">📍 現在地</div>
     <div class="gps-badge" onclick="retryGPS()">
       <div class="gps-dot" id="gpsDot"></div>
       <span id="gpsLabel">GPS</span>
@@ -889,6 +890,16 @@ function setGPS(lat, lon, label) {
   });
   userMarker = L.marker([lat, lon], { icon: playerIcon }).addTo(map).bindPopup('▶ 現在地');
 }
+function zoomToMe() {
+  if (userLat !== null) {
+    map.setView([userLat, userLon], 13, { animate: true });
+    playPikon();
+  } else {
+    document.getElementById('gpsLabel').textContent = '取得中';
+    retryGPS();
+  }
+}
+
 function retryGPS() {
   document.getElementById('gpsDot').className = 'gps-dot';
   document.getElementById('gpsLabel').textContent = '取得中';

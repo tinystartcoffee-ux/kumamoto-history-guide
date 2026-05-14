@@ -16,10 +16,28 @@ def load_spots():
     with open(SPOTS_FILE, encoding="utf-8") as f:
         return json.load(f)
 
+def compute_spot_sizes(spots, figures):
+    sizes = {}
+    for sid, s in spots.items():
+        best = 999
+        for fid in s.get("figures", []):
+            r = figures.get(fid, {}).get("rank_popular", 0)
+            if r > 0 and r < best:
+                best = r
+        if best <= 5:
+            sizes[sid] = 38
+        elif best <= 20:
+            sizes[sid] = 28
+        else:
+            sizes[sid] = 20
+    return sizes
+
 @app.route("/")
 def index():
     spots = load_spots()
-    return render_template("map.html", spots=spots)
+    figures = load_figures()
+    spot_sizes = compute_spot_sizes(spots, figures)
+    return render_template("map.html", spots=spots, spot_sizes=spot_sizes)
 
 @app.route("/spot/<spot_id>")
 def spot(spot_id):

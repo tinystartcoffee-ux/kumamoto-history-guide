@@ -390,6 +390,7 @@ html, body {
 
 <script>
 const SPOTS = {{ spots | tojson }};
+const SPOT_SIZES = {{ spot_sizes | tojson }};
 
 /* ── エリア定義 ── */
 const AREAS = {
@@ -548,7 +549,7 @@ function refreshMarker(id) {
   if (!spot || !markers[id]) return;
   const type = getSpotType(id, spot.name||'');
   const meta = TYPE_META[type];
-  const size = (spot.figures&&spot.figures.length>=3) ? 34 : 24;
+  const size = SPOT_SIZES[id] || 20;
   const visited = visitedSet.has(id);
   markers[id].marker.setIcon(L.divIcon({
     className: '', html: makeMarkerHTML(meta.color, meta.emoji, size, visited),
@@ -578,7 +579,7 @@ Object.entries(SPOTS).forEach(([id, spot]) => {
   const area = getArea(id);
   const type = getSpotType(id, spot.name||'');
   const meta = TYPE_META[type];
-  const size = (spot.figures&&spot.figures.length>=3) ? 34 : 24;
+  const size = SPOT_SIZES[id] || 20;
   const visited = visitedSet.has(id);
   const icon = L.divIcon({
     className: '', html: makeMarkerHTML(meta.color, meta.emoji, size, visited),

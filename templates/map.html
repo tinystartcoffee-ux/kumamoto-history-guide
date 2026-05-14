@@ -449,6 +449,7 @@ html, body {
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <a href="/figures" class="dq-btn">⚔ 人物</a>
+    <button class="dq-btn" id="bgm-btn" onclick="toggleBGM()" style="font-size:12px">🎵 BGM</button>
     <div class="dq-btn" onclick="zoomToMe()" style="font-size:12px">📍 現在地</div>
     <div class="gps-badge" onclick="retryGPS()">
       <div class="gps-dot" id="gpsDot"></div>
@@ -554,14 +555,23 @@ html, body {
   }
 
   window.startAdventure = function() {
-    playFanfare();
+    BGM.title();
     op.classList.add('flash');
-    setTimeout(() => {
-      op.classList.remove('flash');
-      op.classList.add('fadeout');
-    }, 120);
-    setTimeout(() => { op.style.display = 'none'; }, 750);
+    setTimeout(() => { op.classList.remove('flash'); op.classList.add('fadeout'); }, 120);
+    setTimeout(() => { op.style.display = 'none'; BGM.field(); }, 750);
   };
+
+  window.toggleBGM = function() {
+    const on = BGM.toggle();
+    document.getElementById('bgm-btn').textContent = on ? '🎵 BGM' : '🔇 BGM';
+    document.getElementById('bgm-btn').style.color = on ? '' : 'rgba(255,255,255,0.4)';
+  };
+
+  // 初期BGMボタン状態
+  if (!BGM.isOn()) {
+    document.getElementById('bgm-btn').textContent = '🔇 BGM';
+    document.getElementById('bgm-btn').style.color = 'rgba(255,255,255,0.4)';
+  }
 })();
 
 const SPOTS = {{ spots | tojson }};
@@ -703,6 +713,140 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+/* ════════════════════════════════════
+   チップチューン BGM エンジン
+   ════════════════════════════════════ */
+const BGM = (() => {
+  let ctx = null, master = null;
+  let nodes = [], timer = null, tid = null;
+  let on = localStorage.getItem('bgm') !== '0';
+
+  const boot = () => {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0.18;
+    master.connect(ctx.destination);
+  };
+
+  const playN = (hz, t, dur, type = 'square', v = 0.5) => {
+    boot();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(master);
+    o.type = type; o.frequency.value = hz;
+    const t0 = ctx.currentTime + t;
+    g.gain.setValueAtTime(v, t0);
+    g.gain.setValueAtTime(v * 0.4, t0 + dur * 0.65);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    o.start(t0); o.stop(t0 + dur + 0.02);
+    nodes.push(o);
+  };
+
+  const stopAll = () => {
+    clearTimeout(timer); tid = null;
+    nodes.forEach(x => { try { x.stop(); x.disconnect(); } catch(e) {} });
+    nodes = [];
+  };
+
+  // 音名→周波数（例: hz('G',5) = 783.99 Hz）
+  const hz = (name, oct = 5) => {
+    const i = ['C','Cs','D','Ds','E','F','Fs','G','Gs','A','As','B'].indexOf(name);
+    return 440 * Math.pow(2, (i + (oct - 4) * 12 - 9) / 12);
+  };
+
+  // テンポ BPM=126
+  const Q = 60/126, E = Q/2, H = Q*2, DT = Q*1.5;
+
+  /* ── タイトルファンファーレ（オリジナルDQ風） ── */
+  const FANFARE = [
+    // 冒頭アルペジオ（上昇）
+    [hz('C',5), 0,         E,  'square', .55],
+    [hz('E',5), E,         E,  'square', .55],
+    [hz('G',5), E*2,       E,  'square', .55],
+    [hz('C',6), E*3,       DT, 'square', .65],
+    [hz('B',5), E*3+DT,    E,  'square', .55],
+    [hz('G',5), Q*2+E,     E,  'square', .5 ],
+    [hz('E',5), Q*2+E*2,   Q,  'square', .5 ],
+    // 第二句
+    [hz('D',5), Q*3+E*2,   E,  'square', .5 ],
+    [hz('F',5), Q*3+E*3,   E,  'square', .5 ],
+    [hz('A',5), Q*3+E*4,   E,  'square', .5 ],
+    [hz('D',6), Q*3+E*5,   DT, 'square', .6 ],
+    [hz('C',6), Q*3+E*5+DT,E,  'square', .55],
+    [hz('A',5), Q*4+E*4+DT,E,  'square', .5 ],
+    [hz('F',5), Q*4+E*5+DT,Q,  'square', .5 ],
+    // クライマックス
+    [hz('E',5), Q*5+E*5+DT,E,  'square', .6 ],
+    [hz('G',5), Q*5+E*6+DT,E,  'square', .6 ],
+    [hz('B',5), Q*5+E*7+DT,E,  'square', .6 ],
+    [hz('E',6), Q*6+E*6+DT,H,  'square', .7 ],
+    // 解決
+    [hz('G',5), Q*6+E*6+DT+H,  E, 'square', .55],
+    [hz('E',5), Q*6+E*7+DT+H,  E, 'square', .55],
+    [hz('C',5), Q*7+E*6+DT+H,  H+Q,'square',.6 ],
+  ];
+  const FANFARE_BASS = [
+    [hz('C',3), 0,    Q,'triangle',.3],[hz('G',3), Q,    Q,'triangle',.3],
+    [hz('C',3), Q*2,  Q,'triangle',.3],[hz('G',2), Q*3,  Q,'triangle',.3],
+    [hz('D',3), Q*4,  Q,'triangle',.3],[hz('A',3), Q*5,  Q,'triangle',.3],
+    [hz('G',2), Q*6,  Q,'triangle',.3],[hz('C',3), Q*7,  Q,'triangle',.3],
+    [hz('G',2), Q*8,  H,'triangle',.3],[hz('C',3), Q*8+H,H+Q,'triangle',.3],
+  ];
+
+  /* ── フィールドBGM（8小節ループ・オリジナル） ── */
+  const L = Q * 16; // 16拍でループ
+  const FIELD = [
+    // A句
+    [hz('G',5),0,E],[hz('A',5),E,E],[hz('B',5),E*2,Q],
+    [hz('C',6),E*2+Q,E],[hz('B',5),E*3+Q,E],[hz('A',5),Q*2+E,Q],
+    [hz('G',5),Q*3+E,E],[hz('E',5),Q*3+E*2,E],[hz('D',5),Q*3+E*3,Q],
+    [hz('C',5),Q*4+E*3,Q],[hz('D',5),Q*5+E*3,E],[hz('E',5),Q*5+E*4,E],
+    // B句
+    [hz('F',5),Q*6+E*3,E],[hz('G',5),Q*6+E*4,E],[hz('A',5),Q*6+E*5,Q],
+    [hz('B',5),Q*7+E*4,E],[hz('A',5),Q*7+E*5,E],[hz('G',5),Q*8+E*4,E],
+    [hz('F',5),Q*8+E*5,E],[hz('E',5),Q*9+E*4,Q],
+    [hz('D',5),Q*10+E*4,E],[hz('E',5),Q*10+E*5,E],
+    [hz('C',5),Q*11+E*4,Q],
+    // C句（解決）
+    [hz('G',5),Q*12,E],[hz('A',5),Q*12+E,E],
+    [hz('C',6),Q*12+E*2,E],[hz('E',5),Q*12+E*3,E],
+    [hz('G',5),Q*13,Q],[hz('F',5),Q*13+Q,E],[hz('E',5),Q*13+Q+E,E],
+    [hz('D',5),Q*14,Q],[hz('C',5),Q*14+Q,H],
+  ];
+  const FIELD_BASS = [
+    [hz('C',3),0,Q],[hz('C',3),Q,Q],[hz('G',3),Q*2,Q],[hz('G',3),Q*3,Q],
+    [hz('F',3),Q*4,Q],[hz('F',3),Q*5,Q],[hz('G',3),Q*6,Q],[hz('C',3),Q*7,Q],
+    [hz('A',3),Q*8,Q],[hz('A',3),Q*9,Q],[hz('F',3),Q*10,Q],[hz('F',3),Q*11,Q],
+    [hz('G',3),Q*12,Q],[hz('G',3),Q*13,Q],[hz('C',3),Q*14,H],
+  ];
+
+  const play = (mel, bass, loop, id) => {
+    if (!on) return;
+    stopAll(); tid = id;
+    const run = () => {
+      if (tid !== id) return;
+      mel.forEach(([f,t,d,tp,v]) => playN(f, t, d, tp||'square', v||0.5));
+      if (bass) bass.forEach(([f,t,d,tp,v]) => playN(f, t, d, tp||'triangle', v||0.28));
+      if (loop) timer = setTimeout(run, L * 1000 - 60);
+    };
+    run();
+  };
+
+  return {
+    title:  ()  => play(FANFARE, FANFARE_BASS, false, 'title'),
+    field:  (ms=1200) => setTimeout(() => play(FIELD, FIELD_BASS, true, 'field'), ms),
+    stop:   stopAll,
+    toggle() {
+      on = !on;
+      localStorage.setItem('bgm', on ? '1' : '0');
+      if (!on) { stopAll(); return false; }
+      play(FIELD, FIELD_BASS, true, 'field');
+      return true;
+    },
+    isOn: () => on,
+  };
+})();
 
 /* ── 訪問済み管理 ── */
 const VISITED_KEY = 'visited_spots_v1';

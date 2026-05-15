@@ -426,13 +426,13 @@ html, body {
 <body>
 
 <!-- オープニング画面 -->
-<div id="opening" onclick="startAdventure()">
+<div id="opening">
   <div id="op-logo">🏯</div>
   <div id="op-title">HISTORY QUEST</div>
   <div id="op-subtitle">～ 歴史音声ガイド ～</div>
   <div id="op-sep">◆ ◆ ◆ ◆ ◆</div>
   <div id="op-btn">▼ ぼうけんをはじめる ▼</div>
-  <div id="op-hint">画面をタップしてください</div>
+  <div id="op-hint">画面をタップして音楽を開始</div>
 </div>
 
 <div id="scanlines"></div>
@@ -539,27 +539,31 @@ html, body {
     op.appendChild(s);
   }
 
-  // DQ風ファンファーレ
-  function playFanfare() {
-    try {
-      const ctx = new (window.AudioContext||window.webkitAudioContext)();
-      [[523,0,0.15],[659,0.15,0.15],[784,0.3,0.15],[1047,0.45,0.4]].forEach(([f,t,d])=>{
-        const o=ctx.createOscillator(), g=ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type='square'; o.frequency.value=f;
-        g.gain.setValueAtTime(0.12, ctx.currentTime+t);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+d);
-        o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+d+0.01);
-      });
-    } catch(e){}
+  // ステージ管理：0=無音, 1=音楽中
+  let stage = 0;
+  const hint = document.getElementById('op-hint');
+
+  function startMusic() {
+    if (stage > 0) return;
+    stage = 1;
+    BGM.title();
+    hint.textContent = '▼ ぼうけんをはじめる を押してください';
   }
 
-  window.startAdventure = function() {
-    BGM.title();
+  function doAdventure() {
     op.classList.add('flash');
     setTimeout(() => { op.classList.remove('flash'); op.classList.add('fadeout'); }, 120);
     setTimeout(() => { op.style.display = 'none'; BGM.field(); }, 750);
-  };
+  }
+
+  // 画面どこでも最初のタップ→音楽開始
+  op.addEventListener('click', function(e) {
+    if (stage === 0) { startMusic(); return; }
+    // 音楽中にボタンを押したら冒険開始
+    if (e.target.closest('#op-btn')) doAdventure();
+  });
+
+  window.startAdventure = doAdventure;
 })();
 
 const SPOTS = {{ spots | tojson }};
@@ -711,7 +715,10 @@ const BGM = (() => {
   let on = localStorage.getItem('bgm') !== '0';
 
   const boot = () => {
-    if (ctx) return;
+    if (ctx) {
+      if (ctx.state === 'suspended') ctx.resume();
+      return;
+    }
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain();
     master.gain.value = 0.18;
@@ -839,6 +846,8 @@ const BGM = (() => {
 
   const play = (mel, bass, loop, id) => {
     if (!on) return;
+    boot();
+    if (ctx.state === 'suspended') ctx.resume();
     stopAll(); tid = id;
     const run = () => {
       if (tid !== id) return;

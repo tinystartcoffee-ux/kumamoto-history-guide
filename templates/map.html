@@ -745,8 +745,8 @@ const BGM = (() => {
 
   // ファンファーレ専用テンポ BPM=96（重厚）
   const FQ = 60/96, FE = FQ/2, FH = FQ*2;
-  // フィールドBGM テンポ BPM=126
-  const Q = 60/126, E = Q/2, H = Q*2, DT = Q*1.5;
+  // フィールドBGM テンポ BPM=108（ゆったり浮遊感）
+  const Q = 60/108, E = Q/2, H = Q*2, DT = Q*1.5;
 
   /* ── タイトルファンファーレ（矩形波ベース主役・三角波メロディ） ── */
   // メロディ：三角波（やわらかく上に浮かぶ）
@@ -796,31 +796,45 @@ const BGM = (() => {
     [hz('C',2), 8.750, 1.875, 'square', .68],  // 重厚なフィニッシュ
   ];
 
-  /* ── フィールドBGM（8小節ループ・オリジナル） ── */
-  const L = Q * 16; // 16拍でループ
+  /* ── フィールドBGM（三角波・大空をとぶ） ── */
+  const L = Q * 16;
   const FIELD = [
-    // A句
-    [hz('G',5),0,E],[hz('A',5),E,E],[hz('B',5),E*2,Q],
-    [hz('C',6),E*2+Q,E],[hz('B',5),E*3+Q,E],[hz('A',5),Q*2+E,Q],
-    [hz('G',5),Q*3+E,E],[hz('E',5),Q*3+E*2,E],[hz('D',5),Q*3+E*3,Q],
-    [hz('C',5),Q*4+E*3,Q],[hz('D',5),Q*5+E*3,E],[hz('E',5),Q*5+E*4,E],
-    // B句
-    [hz('F',5),Q*6+E*3,E],[hz('G',5),Q*6+E*4,E],[hz('A',5),Q*6+E*5,Q],
-    [hz('B',5),Q*7+E*4,E],[hz('A',5),Q*7+E*5,E],[hz('G',5),Q*8+E*4,E],
-    [hz('F',5),Q*8+E*5,E],[hz('E',5),Q*9+E*4,Q],
-    [hz('D',5),Q*10+E*4,E],[hz('E',5),Q*10+E*5,E],
-    [hz('C',5),Q*11+E*4,Q],
-    // C句（解決）
-    [hz('G',5),Q*12,E],[hz('A',5),Q*12+E,E],
-    [hz('C',6),Q*12+E*2,E],[hz('E',5),Q*12+E*3,E],
-    [hz('G',5),Q*13,Q],[hz('F',5),Q*13+Q,E],[hz('E',5),Q*13+Q+E,E],
-    [hz('D',5),Q*14,Q],[hz('C',5),Q*14+Q,H],
+    // 第1句：ゆったり上昇してソアリング
+    [hz('E',5), Q*0,   Q,   'triangle', .50],
+    [hz('G',5), Q*1,   DT,  'triangle', .54],  // 付点で伸ばし→浮遊感
+    [hz('A',5), Q*2.5, Q,   'triangle', .52],
+    [hz('C',6), Q*3.5, H,   'triangle', .58],  // 二分音符・頂点！保持
+    [hz('B',5), Q*5.5, E,   'triangle', .48],
+    [hz('A',5), Q*6,   E,   'triangle', .46],
+    [hz('G',5), Q*6.5, Q,   'triangle', .46],
+    [hz('E',5), Q*7.5, Q,   'triangle', .44],
+    // 第2句：さらに高い空へ
+    [hz('F',5), Q*8.5, Q,   'triangle', .48],
+    [hz('A',5), Q*9.5, DT,  'triangle', .53],
+    [hz('C',6), Q*11,  Q,   'triangle', .55],
+    [hz('E',6), Q*12,  H,   'triangle', .63],  // 最高点！！長く保持
+    [hz('D',6), Q*14,  E,   'triangle', .50],
+    [hz('C',6), Q*14.5,E,   'triangle', .48],
+    [hz('G',5), Q*15,  Q,   'triangle', .46],  // ループへ戻る
   ];
   const FIELD_BASS = [
-    [hz('C',3),0,Q],[hz('C',3),Q,Q],[hz('G',3),Q*2,Q],[hz('G',3),Q*3,Q],
-    [hz('F',3),Q*4,Q],[hz('F',3),Q*5,Q],[hz('G',3),Q*6,Q],[hz('C',3),Q*7,Q],
-    [hz('A',3),Q*8,Q],[hz('A',3),Q*9,Q],[hz('F',3),Q*10,Q],[hz('F',3),Q*11,Q],
-    [hz('G',3),Q*12,Q],[hz('G',3),Q*13,Q],[hz('C',3),Q*14,H],
+    // 三角波・ハープ風アルペジオ（軽く、邪魔しない）
+    [hz('C',3), Q*0,  Q, 'triangle', .20],
+    [hz('E',3), Q*1,  Q, 'triangle', .18],
+    [hz('G',3), Q*2,  Q, 'triangle', .18],
+    [hz('E',3), Q*3,  Q, 'triangle', .17],
+    [hz('C',3), Q*4,  Q, 'triangle', .19],
+    [hz('G',3), Q*5,  Q, 'triangle', .18],
+    [hz('C',4), Q*6,  Q, 'triangle', .17],
+    [hz('E',3), Q*7,  Q, 'triangle', .17],
+    [hz('F',3), Q*8,  Q, 'triangle', .19],
+    [hz('A',3), Q*9,  Q, 'triangle', .18],
+    [hz('C',4), Q*10, Q, 'triangle', .19],
+    [hz('A',3), Q*11, Q, 'triangle', .17],
+    [hz('G',3), Q*12, Q, 'triangle', .21],
+    [hz('B',3), Q*13, Q, 'triangle', .19],
+    [hz('D',4), Q*14, Q, 'triangle', .19],
+    [hz('G',3), Q*15, Q, 'triangle', .19],
   ];
 
   const play = (mel, bass, loop, id) => {

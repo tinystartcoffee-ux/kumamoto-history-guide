@@ -12933,7 +12933,9 @@
         "walk": "徒歩1分"
       }
     ],
-    "figures": []
+    "figures": [
+      "hojo_ujiyasu"
+    ]
   },
   "odawara_hojo_ruins": {
     "name": "小田原城・北条氏政墓所",
@@ -13027,7 +13029,9 @@
         "walk": "徒歩10分"
       }
     ],
-    "figures": []
+    "figures": [
+      "hojo_ujiyasu"
+    ]
   },
   "edo_ryogoku_ edo_museum": {
     "name": "両国・江戸東京博物館",
@@ -13326,7 +13330,9 @@
         "walk": "徒歩20分"
       }
     ],
-    "figures": []
+    "figures": [
+      "ito_hirobumi"
+    ]
   },
   "hiroshima_miyajima_history": {
     "name": "宮島・大聖院と戦国の歴史",
@@ -13344,7 +13350,9 @@
         "walk": "徒歩10分"
       }
     ],
-    "figures": []
+    "figures": [
+      "taira_kiyomori"
+    ]
   },
   "okayama_korakuen": {
     "name": "後楽園・岡山城",

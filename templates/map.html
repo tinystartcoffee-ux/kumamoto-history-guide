@@ -488,6 +488,7 @@ html, body {
   <div style="display:flex;align-items:center;gap:8px">
     <a href="/figures" class="dq-btn">⚔ 人物</a>
     <button class="dq-btn" id="bgm-btn" onclick="toggleBGM()" style="font-size:12px">🎵 BGM</button>
+    <button class="dq-btn" id="bgm-track-btn" onclick="cycleBGMTrack()" style="font-size:12px" title="曲を切替">🏘️ 街</button>
     <div class="dq-btn" onclick="zoomToMe()" style="font-size:12px">📍 現在地</div>
     <div class="gps-badge" onclick="retryGPS()">
       <div class="gps-dot" id="gpsDot"></div>
@@ -1015,7 +1016,7 @@ const BGM = (() => {
   const L = BAR * 32;   // ループ長 = 60.95秒
 
   // ── 第1声：主旋律（三角波・木管の歌うような旋律）
-  const FIELD = [
+  const FIELD_TOWN = [
     // ＝＝ A. 主題提示（小節1-8） ＝＝
     // 小節1: F5-G5-A5-C6-Bb5-A5（街に出るような明るい歩み）
     [hz('F',5), BAR*0+FE2*0, FE2, 'triangle', .52],
@@ -1217,7 +1218,7 @@ const BGM = (() => {
   ];
 
   // ── 第2声：対旋律（矩形波・バロック風の独立した動く声部）
-  const FIELD_HARM = [
+  const FIELD_TOWN_HARM = [
     // A部分（小節1-8）F-C-F-C / Bb-F / Dm-Am / Bb-C
     [hz('F',4), BAR*0+FQ2*0, FQ2, 'square', .22],
     [hz('A',4), BAR*0+FQ2*1, FQ2, 'square', .22],
@@ -1346,7 +1347,7 @@ const BGM = (() => {
   ];
 
   // ── 第3声：ベース（矩形波低音・アルベルティ風の歩く伴奏）
-  const FIELD_BASS = [
+  const FIELD_TOWN_BASS = [
     // A部分（小節1-8）
     [hz('F',2), BAR*0+FQ2*0, FQ2*.9, 'square', .40],
     [hz('C',3), BAR*0+FQ2*1, FQ2*.9, 'square', .36],
@@ -1480,6 +1481,422 @@ const BGM = (() => {
     [hz('C',3), BAR*31+FQ2*3, FQ2*.9, 'square', .40],
   ];
 
+  /* ══════════════════════════════════════════════════════
+     フィールドBGM2「果てしなき世界」(すぎやまDQ2フィールド風)
+     D minor / BPM=126 / 32小節（約61秒ループ）
+     A(8 d-moll)→B(8 F-dur)→A'(8 d-moll装飾)→Coda(8 d-moll終止)
+     ══════════════════════════════════════════════════════ */
+
+  // ── 第1声：主旋律（三角波・哀愁のメロディ）
+  const FIELD_JOURNEY = [
+    // ＝＝ A. 主題提示（小節1-8・D minor 哀愁の旅立ち） ＝＝
+    [hz('D',5), BAR*0+FQ2*0, FQ2, 'triangle', .52],
+    [hz('F',5), BAR*0+FQ2*1, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*0+FQ2*2, FQ2, 'triangle', .58],
+    [hz('G',5), BAR*0+FQ2*3, FQ2, 'triangle', .52],
+    [hz('F',5), BAR*1+FQ2*0, FQ2, 'triangle', .54],
+    [hz('E',5), BAR*1+FQ2*1, FDQ2,'triangle', .50],
+    [hz('D',5), BAR*1+FQ2*2+FE2, FE2,'triangle', .46],
+    [hz('E',5), BAR*1+FQ2*3, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*2+FQ2*0, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*2+FQ2*1, FQ2, 'triangle', .58],
+    [hz('D',6), BAR*2+FQ2*2, FQ2, 'triangle', .62],
+    [hz('C',6), BAR*2+FQ2*3, FQ2, 'triangle', .56],
+    [hz('As',5),BAR*3+FQ2*0, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*3+FQ2*1, FDQ2,'triangle', .52],
+    [hz('G',5), BAR*3+FQ2*2+FE2, FE2,'triangle', .46],
+    [hz('A',5), BAR*3+FQ2*3, FQ2, 'triangle', .50],
+    [hz('A',5), BAR*4+FQ2*0, FQ2, 'triangle', .54],
+    [hz('C',6), BAR*4+FQ2*1, FQ2, 'triangle', .58],
+    [hz('E',6), BAR*4+FQ2*2, FQ2, 'triangle', .64],
+    [hz('D',6), BAR*4+FQ2*3, FQ2, 'triangle', .58],
+    [hz('C',6), BAR*5+FQ2*0, FQ2, 'triangle', .54],
+    [hz('As',5),BAR*5+FQ2*1, FDQ2,'triangle', .52],
+    [hz('A',5), BAR*5+FQ2*2+FE2, FE2,'triangle', .48],
+    [hz('G',5), BAR*5+FQ2*3, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*6+FQ2*0, FQ2, 'triangle', .52],
+    [hz('G',5), BAR*6+FQ2*1, FQ2, 'triangle', .50],
+    [hz('A',5), BAR*6+FQ2*2, FQ2, 'triangle', .54],
+    [hz('G',5), BAR*6+FQ2*3, FQ2, 'triangle', .50],
+    [hz('F',5), BAR*7+FQ2*0, FDQ2,'triangle', .52],
+    [hz('E',5), BAR*7+FQ2*1+FE2, FE2,'triangle', .46],
+    [hz('D',5), BAR*7+FQ2*2, FH2, 'triangle', .54],
+
+    // ＝＝ B. 派生（小節9-16・F major 平行長調で明るく開ける） ＝＝
+    [hz('F',5), BAR*8+FQ2*0, FQ2, 'triangle', .52],
+    [hz('A',5), BAR*8+FQ2*1, FQ2, 'triangle', .56],
+    [hz('C',6), BAR*8+FQ2*2, FQ2, 'triangle', .58],
+    [hz('A',5), BAR*8+FQ2*3, FQ2, 'triangle', .54],
+    [hz('As',5),BAR*9+FQ2*0, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*9+FQ2*1, FQ2, 'triangle', .52],
+    [hz('G',5), BAR*9+FQ2*2, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*9+FQ2*3, FQ2, 'triangle', .50],
+    [hz('G',5), BAR*10+FQ2*0, FQ2, 'triangle', .50],
+    [hz('As',5),BAR*10+FQ2*1, FQ2, 'triangle', .54],
+    [hz('D',6), BAR*10+FQ2*2, FQ2, 'triangle', .60],
+    [hz('C',6), BAR*10+FQ2*3, FQ2, 'triangle', .56],
+    [hz('As',5),BAR*11+FQ2*0, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*11+FQ2*1, FDQ2,'triangle', .50],
+    [hz('G',5), BAR*11+FQ2*2+FE2, FE2,'triangle', .46],
+    [hz('A',5), BAR*11+FQ2*3, FQ2, 'triangle', .50],
+    [hz('D',6), BAR*12+FQ2*0, FQ2, 'triangle', .60],
+    [hz('C',6), BAR*12+FQ2*1, FQ2, 'triangle', .56],
+    [hz('As',5),BAR*12+FQ2*2, FQ2, 'triangle', .52],
+    [hz('A',5), BAR*12+FQ2*3, FQ2, 'triangle', .50],
+    [hz('G',5), BAR*13+FQ2*0, FQ2, 'triangle', .50],
+    [hz('F',5), BAR*13+FQ2*1, FDQ2,'triangle', .50],
+    [hz('E',5), BAR*13+FQ2*2+FE2, FE2,'triangle', .46],
+    [hz('F',5), BAR*13+FQ2*3, FQ2, 'triangle', .50],
+    [hz('G',5), BAR*14+FQ2*0, FQ2, 'triangle', .50],
+    [hz('A',5), BAR*14+FQ2*1, FQ2, 'triangle', .52],
+    [hz('As',5),BAR*14+FQ2*2, FQ2, 'triangle', .54],
+    [hz('A',5), BAR*14+FQ2*3, FQ2, 'triangle', .50],
+    [hz('C',6), BAR*15+FQ2*0, FH2, 'triangle', .58],
+    [hz('C',5), BAR*15+FQ2*2, FH2, 'triangle', .50],
+
+    // ＝＝ A'. 主題再現（小節17-24・装飾豊かに） ＝＝
+    [hz('D',5), BAR*16+FQ2*0, FE2, 'triangle', .52],
+    [hz('F',5), BAR*16+FQ2*0+FE2, FE2, 'triangle', .52],
+    [hz('A',5), BAR*16+FQ2*1, FE2, 'triangle', .56],
+    [hz('D',6), BAR*16+FQ2*1+FE2, FE2, 'triangle', .60],
+    [hz('C',6), BAR*16+FQ2*2, FQ2, 'triangle', .56],
+    [hz('A',5), BAR*16+FQ2*3, FQ2, 'triangle', .52],
+    [hz('F',5), BAR*17+FQ2*0, FE2, 'triangle', .50],
+    [hz('G',5), BAR*17+FQ2*0+FE2, FE2, 'triangle', .50],
+    [hz('A',5), BAR*17+FQ2*1, FE2, 'triangle', .52],
+    [hz('F',5), BAR*17+FQ2*1+FE2, FE2, 'triangle', .50],
+    [hz('E',5), BAR*17+FQ2*2, FQ2, 'triangle', .46],
+    [hz('D',5), BAR*17+FQ2*3, FQ2, 'triangle', .50],
+    [hz('F',5), BAR*18+FQ2*0, FE2, 'triangle', .52],
+    [hz('A',5), BAR*18+FQ2*0+FE2, FE2, 'triangle', .56],
+    [hz('D',6), BAR*18+FQ2*1, FE2, 'triangle', .60],
+    [hz('F',6), BAR*18+FQ2*1+FE2, FE2, 'triangle', .64],
+    [hz('E',6), BAR*18+FQ2*2, FQ2, 'triangle', .58],
+    [hz('C',6), BAR*18+FQ2*3, FQ2, 'triangle', .54],
+    [hz('D',6), BAR*19+FQ2*0, FE2, 'triangle', .58],
+    [hz('C',6), BAR*19+FQ2*0+FE2, FE2, 'triangle', .54],
+    [hz('As',5),BAR*19+FQ2*1, FE2, 'triangle', .52],
+    [hz('A',5), BAR*19+FQ2*1+FE2, FE2, 'triangle', .50],
+    [hz('G',5), BAR*19+FQ2*2, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*19+FQ2*3, FQ2, 'triangle', .50],
+    [hz('A',5), BAR*20+FQ2*0, FE2, 'triangle', .54],
+    [hz('C',6), BAR*20+FQ2*0+FE2, FE2, 'triangle', .58],
+    [hz('E',6), BAR*20+FQ2*1, FE2, 'triangle', .64],
+    [hz('G',6), BAR*20+FQ2*1+FE2, FE2, 'triangle', .68],
+    [hz('F',6), BAR*20+FQ2*2, FQ2, 'triangle', .62],
+    [hz('E',6), BAR*20+FQ2*3, FQ2, 'triangle', .58],
+    [hz('F',6), BAR*21+FQ2*0, FE2, 'triangle', .60],
+    [hz('E',6), BAR*21+FQ2*0+FE2, FE2, 'triangle', .56],
+    [hz('D',6), BAR*21+FQ2*1, FE2, 'triangle', .54],
+    [hz('C',6), BAR*21+FQ2*1+FE2, FE2, 'triangle', .52],
+    [hz('As',5),BAR*21+FQ2*2, FQ2, 'triangle', .52],
+    [hz('A',5), BAR*21+FQ2*3, FQ2, 'triangle', .50],
+    [hz('G',5), BAR*22+FQ2*0, FE2, 'triangle', .48],
+    [hz('A',5), BAR*22+FQ2*0+FE2, FE2, 'triangle', .50],
+    [hz('As',5),BAR*22+FQ2*1, FE2, 'triangle', .52],
+    [hz('A',5), BAR*22+FQ2*1+FE2, FE2, 'triangle', .50],
+    [hz('G',5), BAR*22+FQ2*2, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*22+FQ2*3, FQ2, 'triangle', .50],
+    [hz('A',5), BAR*23+FQ2*0, FDQ2,'triangle', .54],
+    [hz('G',5), BAR*23+FQ2*1+FE2, FE2,'triangle', .50],
+    [hz('F',5), BAR*23+FQ2*2, FH2, 'triangle', .56],
+
+    // ＝＝ Coda（小節25-32・盛り上がりからD minor終止） ＝＝
+    [hz('D',6), BAR*24+FQ2*0, FQ2, 'triangle', .60],
+    [hz('F',6), BAR*24+FQ2*1, FQ2, 'triangle', .64],
+    [hz('A',6), BAR*24+FQ2*2, FQ2, 'triangle', .70],
+    [hz('G',6), BAR*24+FQ2*3, FQ2, 'triangle', .62],
+    [hz('F',6), BAR*25+FQ2*0, FQ2, 'triangle', .60],
+    [hz('E',6), BAR*25+FQ2*1, FDQ2,'triangle', .56],
+    [hz('D',6), BAR*25+FQ2*2+FE2, FE2,'triangle', .52],
+    [hz('E',6), BAR*25+FQ2*3, FQ2, 'triangle', .54],
+    [hz('F',6), BAR*26+FQ2*0, FQ2, 'triangle', .60],
+    [hz('A',6), BAR*26+FQ2*1, FQ2, 'triangle', .68],
+    [hz('D',6), BAR*26+FQ2*2, FH2, 'triangle', .58],
+    [hz('A',5), BAR*27+FQ2*0, FQ2, 'triangle', .54],
+    [hz('C',6), BAR*27+FQ2*1, FQ2, 'triangle', .56],
+    [hz('E',6), BAR*27+FQ2*2, FQ2, 'triangle', .62],
+    [hz('D',6), BAR*27+FQ2*3, FQ2, 'triangle', .58],
+    [hz('C',6), BAR*28+FQ2*0, FQ2, 'triangle', .54],
+    [hz('As',5),BAR*28+FQ2*1, FQ2, 'triangle', .52],
+    [hz('A',5), BAR*28+FQ2*2, FQ2, 'triangle', .50],
+    [hz('G',5), BAR*28+FQ2*3, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*29+FQ2*0, FQ2, 'triangle', .52],
+    [hz('E',5), BAR*29+FQ2*1, FQ2, 'triangle', .48],
+    [hz('D',5), BAR*29+FQ2*2, FQ2, 'triangle', .50],
+    [hz('E',5), BAR*29+FQ2*3, FQ2, 'triangle', .48],
+    [hz('F',5), BAR*30+FQ2*0, FQ2, 'triangle', .52],
+    [hz('A',5), BAR*30+FQ2*1, FQ2, 'triangle', .56],
+    [hz('C',6), BAR*30+FQ2*2, FQ2, 'triangle', .58],
+    [hz('A',5), BAR*30+FQ2*3, FQ2, 'triangle', .52],
+    [hz('G',5), BAR*31+FQ2*0, FDQ2,'triangle', .50],
+    [hz('F',5), BAR*31+FQ2*1+FE2, FE2,'triangle', .48],
+    [hz('E',5), BAR*31+FQ2*2, FQ2, 'triangle', .46],
+    [hz('D',5), BAR*31+FQ2*3, FQ2, 'triangle', .54],
+  ];
+
+  // ── 第2声：対旋律（矩形波・第3度・第5度を主にした対位法）
+  const FIELD_JOURNEY_HARM = [
+    // A部分
+    [hz('A',4), BAR*0+FQ2*0, FQ2, 'square', .24],
+    [hz('C',5), BAR*0+FQ2*1, FQ2, 'square', .24],
+    [hz('D',5), BAR*0+FQ2*2, FQ2, 'square', .24],
+    [hz('C',5), BAR*0+FQ2*3, FQ2, 'square', .24],
+    [hz('D',5), BAR*1+FQ2*0, FQ2, 'square', .24],
+    [hz('C',5), BAR*1+FQ2*1, FQ2, 'square', .24],
+    [hz('As',4),BAR*1+FQ2*2, FQ2, 'square', .24],
+    [hz('C',5), BAR*1+FQ2*3, FQ2, 'square', .24],
+    [hz('D',5), BAR*2+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*2+FQ2*1, FQ2, 'square', .24],
+    [hz('A',5), BAR*2+FQ2*2, FQ2, 'square', .26],
+    [hz('G',5), BAR*2+FQ2*3, FQ2, 'square', .24],
+    [hz('G',5), BAR*3+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*3+FQ2*1, FQ2, 'square', .24],
+    [hz('E',5), BAR*3+FQ2*2, FQ2, 'square', .22],
+    [hz('F',5), BAR*3+FQ2*3, FQ2, 'square', .24],
+    [hz('F',5), BAR*4+FQ2*0, FQ2, 'square', .24],
+    [hz('A',5), BAR*4+FQ2*1, FQ2, 'square', .26],
+    [hz('C',6), BAR*4+FQ2*2, FQ2, 'square', .28],
+    [hz('As',5),BAR*4+FQ2*3, FQ2, 'square', .26],
+    [hz('A',5), BAR*5+FQ2*0, FQ2, 'square', .24],
+    [hz('G',5), BAR*5+FQ2*1, FQ2, 'square', .22],
+    [hz('F',5), BAR*5+FQ2*2, FQ2, 'square', .24],
+    [hz('E',5), BAR*5+FQ2*3, FQ2, 'square', .22],
+    [hz('D',5), BAR*6+FQ2*0, FQ2, 'square', .22],
+    [hz('E',5), BAR*6+FQ2*1, FQ2, 'square', .22],
+    [hz('F',5), BAR*6+FQ2*2, FQ2, 'square', .24],
+    [hz('E',5), BAR*6+FQ2*3, FQ2, 'square', .22],
+    [hz('D',5), BAR*7+FQ2*0, FDQ2,'square', .24],
+    [hz('C',5), BAR*7+FQ2*1+FE2, FE2,'square', .22],
+    [hz('As',4),BAR*7+FQ2*2, FH2, 'square', .24],
+    // B部分
+    [hz('C',5), BAR*8+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*8+FQ2*1, FQ2, 'square', .24],
+    [hz('A',5), BAR*8+FQ2*2, FQ2, 'square', .26],
+    [hz('F',5), BAR*8+FQ2*3, FQ2, 'square', .24],
+    [hz('D',5), BAR*9+FQ2*0, FQ2, 'square', .22],
+    [hz('F',5), BAR*9+FQ2*1, FQ2, 'square', .24],
+    [hz('E',5), BAR*9+FQ2*2, FQ2, 'square', .22],
+    [hz('D',5), BAR*9+FQ2*3, FQ2, 'square', .22],
+    [hz('E',5), BAR*10+FQ2*0, FQ2, 'square', .22],
+    [hz('G',5), BAR*10+FQ2*1, FQ2, 'square', .24],
+    [hz('As',5),BAR*10+FQ2*2, FQ2, 'square', .26],
+    [hz('A',5), BAR*10+FQ2*3, FQ2, 'square', .24],
+    [hz('G',5), BAR*11+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*11+FQ2*1, FQ2, 'square', .22],
+    [hz('E',5), BAR*11+FQ2*2, FQ2, 'square', .22],
+    [hz('F',5), BAR*11+FQ2*3, FQ2, 'square', .24],
+    [hz('A',5), BAR*12+FQ2*0, FQ2, 'square', .26],
+    [hz('F',5), BAR*12+FQ2*1, FQ2, 'square', .24],
+    [hz('G',5), BAR*12+FQ2*2, FQ2, 'square', .24],
+    [hz('F',5), BAR*12+FQ2*3, FQ2, 'square', .24],
+    [hz('E',5), BAR*13+FQ2*0, FQ2, 'square', .22],
+    [hz('C',5), BAR*13+FQ2*1, FQ2, 'square', .22],
+    [hz('C',5), BAR*13+FQ2*2, FQ2, 'square', .22],
+    [hz('C',5), BAR*13+FQ2*3, FQ2, 'square', .22],
+    [hz('E',5), BAR*14+FQ2*0, FQ2, 'square', .22],
+    [hz('F',5), BAR*14+FQ2*1, FQ2, 'square', .24],
+    [hz('D',5), BAR*14+FQ2*2, FQ2, 'square', .22],
+    [hz('F',5), BAR*14+FQ2*3, FQ2, 'square', .24],
+    [hz('G',5), BAR*15+FQ2*0, FH2, 'square', .26],
+    [hz('E',5), BAR*15+FQ2*2, FH2, 'square', .22],
+    // A'部分
+    [hz('A',4), BAR*16+FQ2*0, FQ2, 'square', .24],
+    [hz('C',5), BAR*16+FQ2*1, FQ2, 'square', .24],
+    [hz('D',5), BAR*16+FQ2*2, FQ2, 'square', .24],
+    [hz('C',5), BAR*16+FQ2*3, FQ2, 'square', .24],
+    [hz('D',5), BAR*17+FQ2*0, FQ2, 'square', .24],
+    [hz('C',5), BAR*17+FQ2*1, FQ2, 'square', .24],
+    [hz('As',4),BAR*17+FQ2*2, FQ2, 'square', .24],
+    [hz('C',5), BAR*17+FQ2*3, FQ2, 'square', .24],
+    [hz('D',5), BAR*18+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*18+FQ2*1, FQ2, 'square', .24],
+    [hz('A',5), BAR*18+FQ2*2, FQ2, 'square', .26],
+    [hz('G',5), BAR*18+FQ2*3, FQ2, 'square', .24],
+    [hz('G',5), BAR*19+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*19+FQ2*1, FQ2, 'square', .24],
+    [hz('E',5), BAR*19+FQ2*2, FQ2, 'square', .22],
+    [hz('F',5), BAR*19+FQ2*3, FQ2, 'square', .24],
+    [hz('F',5), BAR*20+FQ2*0, FQ2, 'square', .26],
+    [hz('A',5), BAR*20+FQ2*1, FQ2, 'square', .28],
+    [hz('C',6), BAR*20+FQ2*2, FQ2, 'square', .30],
+    [hz('As',5),BAR*20+FQ2*3, FQ2, 'square', .28],
+    [hz('A',5), BAR*21+FQ2*0, FQ2, 'square', .26],
+    [hz('G',5), BAR*21+FQ2*1, FQ2, 'square', .22],
+    [hz('F',5), BAR*21+FQ2*2, FQ2, 'square', .24],
+    [hz('E',5), BAR*21+FQ2*3, FQ2, 'square', .22],
+    [hz('D',5), BAR*22+FQ2*0, FQ2, 'square', .22],
+    [hz('E',5), BAR*22+FQ2*1, FQ2, 'square', .22],
+    [hz('F',5), BAR*22+FQ2*2, FQ2, 'square', .24],
+    [hz('E',5), BAR*22+FQ2*3, FQ2, 'square', .22],
+    [hz('F',5), BAR*23+FQ2*0, FDQ2,'square', .26],
+    [hz('E',5), BAR*23+FQ2*1+FE2, FE2,'square', .22],
+    [hz('D',5), BAR*23+FQ2*2, FH2, 'square', .26],
+    // Coda
+    [hz('A',5), BAR*24+FQ2*0, FQ2, 'square', .28],
+    [hz('D',6), BAR*24+FQ2*1, FQ2, 'square', .32],
+    [hz('F',6), BAR*24+FQ2*2, FQ2, 'square', .36],
+    [hz('E',6), BAR*24+FQ2*3, FQ2, 'square', .30],
+    [hz('D',6), BAR*25+FQ2*0, FQ2, 'square', .28],
+    [hz('C',6), BAR*25+FQ2*1, FDQ2,'square', .26],
+    [hz('As',5),BAR*25+FQ2*2+FE2, FE2,'square', .24],
+    [hz('C',6), BAR*25+FQ2*3, FQ2, 'square', .26],
+    [hz('A',5), BAR*26+FQ2*0, FQ2, 'square', .26],
+    [hz('C',6), BAR*26+FQ2*1, FQ2, 'square', .28],
+    [hz('A',5), BAR*26+FQ2*2, FH2, 'square', .24],
+    [hz('F',5), BAR*27+FQ2*0, FQ2, 'square', .24],
+    [hz('A',5), BAR*27+FQ2*1, FQ2, 'square', .26],
+    [hz('C',6), BAR*27+FQ2*2, FQ2, 'square', .28],
+    [hz('As',5),BAR*27+FQ2*3, FQ2, 'square', .26],
+    [hz('A',5), BAR*28+FQ2*0, FQ2, 'square', .24],
+    [hz('G',5), BAR*28+FQ2*1, FQ2, 'square', .22],
+    [hz('F',5), BAR*28+FQ2*2, FQ2, 'square', .24],
+    [hz('E',5), BAR*28+FQ2*3, FQ2, 'square', .22],
+    [hz('D',5), BAR*29+FQ2*0, FQ2, 'square', .22],
+    [hz('C',5), BAR*29+FQ2*1, FQ2, 'square', .22],
+    [hz('As',4),BAR*29+FQ2*2, FQ2, 'square', .22],
+    [hz('C',5), BAR*29+FQ2*3, FQ2, 'square', .22],
+    [hz('C',5), BAR*30+FQ2*0, FQ2, 'square', .24],
+    [hz('F',5), BAR*30+FQ2*1, FQ2, 'square', .24],
+    [hz('A',5), BAR*30+FQ2*2, FQ2, 'square', .26],
+    [hz('F',5), BAR*30+FQ2*3, FQ2, 'square', .24],
+    [hz('E',5), BAR*31+FQ2*0, FDQ2,'square', .22],
+    [hz('D',5), BAR*31+FQ2*1+FE2, FE2,'square', .22],
+    [hz('Cs',5),BAR*31+FQ2*2, FQ2, 'square', .22],
+    [hz('A',4), BAR*31+FQ2*3, FQ2, 'square', .26],
+  ];
+
+  // ── 第3声：ベース（矩形波低音・短調の哀愁を支える歩み）
+  const FIELD_JOURNEY_BASS = [
+    // A部分（Dm / Dm / Dm / Gm / Am / Dm / Gm / A7）
+    [hz('D',2), BAR*0+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('A',2), BAR*0+FQ2*1, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*0+FQ2*2, FQ2*.9, 'square', .42],
+    [hz('A',2), BAR*0+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('As',2),BAR*1+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('F',3), BAR*1+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*1+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',3), BAR*1+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('D',2), BAR*2+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('A',2), BAR*2+FQ2*1, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*2+FQ2*2, FQ2*.9, 'square', .42],
+    [hz('A',2), BAR*2+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('G',2), BAR*3+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('D',3), BAR*3+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*3+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*3+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*4+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('E',3), BAR*4+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*4+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('E',3), BAR*4+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('F',2), BAR*5+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('C',3), BAR*5+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('F',3), BAR*5+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('C',3), BAR*5+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*6+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('F',3), BAR*6+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*6+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',3), BAR*6+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*7+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('E',3), BAR*7+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',2), BAR*7+FQ2*2, FH2*.9, 'square', .46],
+    // B部分（F / Bb / Gm / C / Bb / C / Dm / G7）
+    [hz('F',2), BAR*8+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('C',3), BAR*8+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('F',3), BAR*8+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('C',3), BAR*8+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*9+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('F',3), BAR*9+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*9+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',3), BAR*9+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('G',2), BAR*10+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('D',3), BAR*10+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*10+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*10+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('C',3), BAR*11+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('G',2), BAR*11+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('C',3), BAR*11+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('G',2), BAR*11+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*12+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('A',2), BAR*12+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*12+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',2), BAR*12+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('C',3), BAR*13+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('G',2), BAR*13+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('C',3), BAR*13+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('G',2), BAR*13+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('F',2), BAR*14+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('C',3), BAR*14+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*14+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('A',2), BAR*14+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('C',2), BAR*15+FQ2*0, FH2*.9, 'square', .44],
+    [hz('C',3), BAR*15+FQ2*2, FH2*.9, 'square', .38],
+    // A'部分
+    [hz('D',2), BAR*16+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('A',2), BAR*16+FQ2*1, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*16+FQ2*2, FQ2*.9, 'square', .42],
+    [hz('A',2), BAR*16+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('As',2),BAR*17+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('F',3), BAR*17+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*17+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',3), BAR*17+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('D',2), BAR*18+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('A',2), BAR*18+FQ2*1, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*18+FQ2*2, FQ2*.9, 'square', .42],
+    [hz('A',2), BAR*18+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('G',2), BAR*19+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('D',3), BAR*19+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*19+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('D',3), BAR*19+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*20+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('E',3), BAR*20+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*20+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('E',3), BAR*20+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('F',2), BAR*21+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('C',3), BAR*21+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('F',3), BAR*21+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('C',3), BAR*21+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('As',2),BAR*22+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('F',3), BAR*22+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',3), BAR*22+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',3), BAR*22+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*23+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('E',3), BAR*23+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('D',2), BAR*23+FQ2*2, FH2*.9, 'square', .46],
+    // Coda（D盛り上がり→終止）
+    [hz('D',2), BAR*24+FQ2*0, FQ2*.9, 'square', .50],
+    [hz('A',2), BAR*24+FQ2*1, FQ2*.9, 'square', .44],
+    [hz('D',3), BAR*24+FQ2*2, FQ2*.9, 'square', .46],
+    [hz('A',2), BAR*24+FQ2*3, FQ2*.9, 'square', .44],
+    [hz('As',2),BAR*25+FQ2*0, FQ2*.9, 'square', .46],
+    [hz('F',3), BAR*25+FQ2*1, FQ2*.9, 'square', .42],
+    [hz('D',3), BAR*25+FQ2*2, FQ2*.9, 'square', .44],
+    [hz('F',3), BAR*25+FQ2*3, FQ2*.9, 'square', .42],
+    [hz('D',2), BAR*26+FQ2*0, FQ2*.9, 'square', .50],
+    [hz('A',2), BAR*26+FQ2*1, FQ2*.9, 'square', .44],
+    [hz('D',2), BAR*26+FQ2*2, FH2*.9, 'square', .48],
+    [hz('F',2), BAR*27+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('C',3), BAR*27+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('F',3), BAR*27+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('C',3), BAR*27+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*28+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('E',3), BAR*28+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*28+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('E',3), BAR*28+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('D',2), BAR*29+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('A',2), BAR*29+FQ2*1, FQ2*.9, 'square', .40],
+    [hz('As',2),BAR*29+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('F',2), BAR*29+FQ2*3, FQ2*.9, 'square', .40],
+    [hz('F',2), BAR*30+FQ2*0, FQ2*.9, 'square', .42],
+    [hz('C',3), BAR*30+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*30+FQ2*2, FQ2*.9, 'square', .40],
+    [hz('E',3), BAR*30+FQ2*3, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*31+FQ2*0, FQ2*.9, 'square', .44],
+    [hz('E',3), BAR*31+FQ2*1, FQ2*.9, 'square', .38],
+    [hz('A',2), BAR*31+FQ2*2, FQ2*.9, 'square', .44],
+    [hz('D',2), BAR*31+FQ2*3, FQ2*.9, 'square', .52],
+  ];
+
   const play = (mel, bass, loop, id, harm) => {
     if (!on) return;
     boot();
@@ -1495,17 +1912,28 @@ const BGM = (() => {
     run();
   };
 
+  let track = localStorage.getItem('bgm_track') || 'town';
+  const playField = () => {
+    if (track === 'journey') play(FIELD_JOURNEY, FIELD_JOURNEY_BASS, true, 'field', FIELD_JOURNEY_HARM);
+    else play(FIELD_TOWN, FIELD_TOWN_BASS, true, 'field', FIELD_TOWN_HARM);
+  };
   return {
     title:  ()  => play(FANFARE, FANFARE_BASS, false, 'title', FANFARE_HARM),
-    field:  (ms=1200) => setTimeout(() => play(FIELD, FIELD_BASS, true, 'field', FIELD_HARM), ms),
+    field:  (ms=1200) => setTimeout(playField, ms),
     stop:   stopAll,
     toggle() {
       on = !on;
       localStorage.setItem('bgm', on ? '1' : '0');
       if (!on) { stopAll(); return false; }
-      play(FIELD, FIELD_BASS, true, 'field', FIELD_HARM);
+      playField();
       return true;
     },
+    setTrack(t) {
+      track = t;
+      localStorage.setItem('bgm_track', t);
+      if (on && tid === 'field') playField();
+    },
+    getTrack: () => track,
     isOn: () => on,
   };
 })();
@@ -1521,6 +1949,19 @@ if (!BGM.isOn()) {
   document.getElementById('bgm-btn').textContent = '🔇 BGM';
   document.getElementById('bgm-btn').style.color = 'rgba(255,255,255,0.4)';
 }
+
+/* ── BGM曲切替（街↔旅） ── */
+function updateTrackBtn() {
+  const btn = document.getElementById('bgm-track-btn');
+  if (!btn) return;
+  btn.textContent = BGM.getTrack() === 'journey' ? '🌄 旅' : '🏘️ 街';
+}
+function cycleBGMTrack() {
+  const next = BGM.getTrack() === 'town' ? 'journey' : 'town';
+  BGM.setTrack(next);
+  updateTrackBtn();
+}
+updateTrackBtn();
 
 /* ── 訪問済み管理 ── */
 const VISITED_KEY = 'visited_spots_v1';

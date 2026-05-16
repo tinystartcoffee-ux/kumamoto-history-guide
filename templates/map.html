@@ -1912,9 +1912,12 @@ const BGM = (() => {
     run();
   };
 
-  let track = localStorage.getItem('bgm_track') || 'town';
+  let userTrack = localStorage.getItem('bgm_track') || 'town';
+  let override = null;
+  const currentTrack = () => override || userTrack;
   const playField = () => {
-    if (track === 'journey') play(FIELD_JOURNEY, FIELD_JOURNEY_BASS, true, 'field', FIELD_JOURNEY_HARM);
+    const t = currentTrack();
+    if (t === 'journey') play(FIELD_JOURNEY, FIELD_JOURNEY_BASS, true, 'field', FIELD_JOURNEY_HARM);
     else play(FIELD_TOWN, FIELD_TOWN_BASS, true, 'field', FIELD_TOWN_HARM);
   };
   return {
@@ -1929,11 +1932,21 @@ const BGM = (() => {
       return true;
     },
     setTrack(t) {
-      track = t;
+      userTrack = t;
       localStorage.setItem('bgm_track', t);
+      if (!override && on && tid === 'field') playField();
+    },
+    setOverride(t) {
+      if (override === t) return;
+      override = t;
       if (on && tid === 'field') playField();
     },
-    getTrack: () => track,
+    clearOverride() {
+      if (!override) return;
+      override = null;
+      if (on && tid === 'field') playField();
+    },
+    getTrack: () => userTrack,
     isOn: () => on,
   };
 })();
@@ -2032,6 +2045,8 @@ Object.entries(SPOTS).forEach(([id, spot]) => {
     </button>
   `, { maxWidth: 260 });
   marker.on('click', () => playPikon());
+  marker.on('popupopen', () => BGM.setOverride('town'));
+  marker.on('popupclose', () => BGM.clearOverride());
   markers[id] = { marker, areaKey: area.key, type };
 });
 

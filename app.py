@@ -37,7 +37,7 @@ def index():
     spots = load_spots()
     figures = load_figures()
     spot_sizes = compute_spot_sizes(spots, figures)
-    return render_template("map.html", spots=spots, spot_sizes=spot_sizes)
+    return render_template("map.html", spots=spots, spot_sizes=spot_sizes, figures=figures)
 
 @app.route("/spot/<spot_id>")
 def spot(spot_id):

@@ -204,6 +204,44 @@ html, body {
 }
 #list-view.show { display: block; }
 
+/* ── 検索ビュー ── */
+#search-view {
+  display: none;
+  position: fixed;
+  top: var(--map-top); bottom: 52px; left: 0; right: 0;
+  z-index: 2; flex-direction: column;
+  background: #000040;
+}
+#search-view.show { display: flex; }
+#search-input-wrap {
+  padding: 8px 10px;
+  background: #000060;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+#search-input {
+  width: 100%; padding: 8px 12px;
+  background: #000020; border: 2px solid #FFD700;
+  color: #FFD700; font-family: 'DotGothic16', monospace;
+  font-size: 14px; outline: none; letter-spacing: .04em;
+  box-shadow: inset 2px 2px 0 #000000;
+}
+#search-input::placeholder { color: rgba(255,215,0,0.3); }
+#search-results {
+  flex: 1; overflow-y: auto; padding: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+#search-hint {
+  text-align: center; padding: 40px 20px;
+  color: rgba(255,255,255,0.3); font-size: 12px; line-height: 2;
+}
+
+/* ── 訪問進捗バッジ ── */
+#progress-badge {
+  font-size: 9px; color: #88FF88; margin-top: 2px;
+  letter-spacing: .04em;
+}
+
 .list-area-header {
   font-size: 12px; font-weight: 400;
   padding: 6px 4px 5px;
@@ -445,7 +483,7 @@ html, body {
 <div id="header">
   <div>
     <h1>⚔ 歴史音声ガイド</h1>
-    <p>▶ 史跡をタップして音声解説</p>
+    <p id="progress-badge">▶ 史跡をタップして音声解説</p>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <a href="/figures" class="dq-btn">⚔ 人物</a>
@@ -514,6 +552,16 @@ html, body {
   <div id="list-content"></div>
 </div>
 
+<!-- 検索ビュー -->
+<div id="search-view">
+  <div id="search-input-wrap">
+    <input id="search-input" type="search" placeholder="🔍 史跡名・人物名で検索..." oninput="doSearch(this.value)" autocomplete="off">
+  </div>
+  <div id="search-results">
+    <div id="search-hint">史跡名や人物名を入力してください<br>例）「信長」「城」「江戸」</div>
+  </div>
+</div>
+
 <!-- タブバー -->
 <div id="tab-bar">
   <button class="tab-btn active" id="tab-map"  onclick="switchTab('map')">
@@ -521,6 +569,9 @@ html, body {
   </button>
   <button class="tab-btn" id="tab-list" onclick="switchTab('list')">
     <span class="tab-icon">📋</span>リスト
+  </button>
+  <button class="tab-btn" id="tab-search" onclick="switchTab('search')">
+    <span class="tab-icon">🔍</span>けんさく
   </button>
 </div>
 
@@ -896,6 +947,7 @@ function markVisited(id) {
   saveVisited(visitedSet);
   refreshMarker(id);
   playPikon();
+  updateProgress();
   const btn = document.getElementById('visited-btn-'+id);
   if (btn) { btn.textContent = '✓ 訪問済み'; btn.style.background='#444455'; btn.style.color='#88AAFF'; }
 }
@@ -1293,14 +1345,75 @@ function appendSpotCard(container, id, spot) {
   container.appendChild(card);
 }
 buildList('all');
+updateProgress();
 
 /* ── タブ切り替え ── */
 function switchTab(tab) {
-  const listView = document.getElementById('list-view');
   document.getElementById('tab-map').classList.toggle('active', tab === 'map');
   document.getElementById('tab-list').classList.toggle('active', tab === 'list');
-  listView.classList.toggle('show', tab === 'list');
+  document.getElementById('tab-search').classList.toggle('active', tab === 'search');
+  document.getElementById('list-view').classList.toggle('show', tab === 'list');
+  document.getElementById('search-view').classList.toggle('show', tab === 'search');
   if (tab === 'map') map.invalidateSize();
+  if (tab === 'search') setTimeout(() => document.getElementById('search-input').focus(), 100);
+}
+
+/* ── 検索 ── */
+const FIGURES_DATA = {{ figures | tojson }};
+
+function doSearch(query) {
+  const results = document.getElementById('search-results');
+  const hint    = document.getElementById('search-hint');
+  query = query.trim();
+  if (!query) {
+    results.innerHTML = '';
+    results.appendChild(hint);
+    hint.style.display = '';
+    return;
+  }
+  hint.style.display = 'none';
+  const q = query.toLowerCase();
+
+  // 人物名マッチ → その人物のスポットIDセット
+  const figMatchIds = new Set();
+  Object.entries(FIGURES_DATA).forEach(([fid, fig]) => {
+    if ((fig.name||'').includes(q) || (fig.kana||'').includes(q) || (fig.desc||'').includes(q)) {
+      Object.entries(SPOTS).forEach(([sid, s]) => {
+        if ((s.figures||[]).includes(fid)) figMatchIds.add(sid);
+      });
+    }
+  });
+
+  const matched = Object.entries(SPOTS).filter(([id, s]) => {
+    return (s.name||'').includes(q)
+        || (s.kana||'').includes(q)
+        || (s.era||'').includes(q)
+        || (s.highlight||'').includes(q)
+        || figMatchIds.has(id);
+  });
+
+  results.innerHTML = '';
+  if (!matched.length) {
+    results.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:12px;">「${query}」に一致する史跡が見つかりません</div>`;
+    return;
+  }
+  const label = document.createElement('div');
+  label.className = 'list-area-header';
+  label.style.color = '#FFD700';
+  label.textContent = `🔍 「${query}」— ${matched.length}件`;
+  results.appendChild(label);
+  matched.forEach(([id, spot]) => appendSpotCard(results, id, spot));
+}
+
+/* ── 訪問進捗 ── */
+function updateProgress() {
+  const total   = Object.keys(SPOTS).length;
+  const visited = visitedSet.size;
+  const pct     = Math.floor(visited / total * 100);
+  document.getElementById('progress-badge').textContent =
+    visited > 0
+      ? `🏆 ${visited} / ${total} 件訪問済み（${pct}%）`
+      : '▶ 史跡をタップして音声解説';
 }
 
 /* ── GPS ── */

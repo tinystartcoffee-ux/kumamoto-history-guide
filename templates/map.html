@@ -250,6 +250,69 @@ html, body {
   background: #000040;
 }
 #search-view.show { display: flex; }
+
+/* ── プランビュー ── */
+#plan-view {
+  display: none;
+  position: fixed;
+  top: var(--map-top); bottom: 52px; left: 0; right: 0;
+  z-index: 2; overflow-y: auto;
+  background: #000040;
+  -webkit-overflow-scrolling: touch;
+}
+#plan-view.show { display: block; }
+#plan-toolbar {
+  position: sticky; top: 0; z-index: 5;
+  background: #000060; padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.plan-mode-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.plan-mode-btn {
+  flex: 1; padding: 8px; font-size: 13px; font-weight: 700;
+  background: #1a1a5e; color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 6px;
+  cursor: pointer; font-family: inherit;
+}
+.plan-mode-btn.active { background: #5c9cf5; color: #000030; border-color: #5c9cf5; }
+#plan-summary {
+  font-size: 13px; color: #FFD700; line-height: 1.7; text-align: center;
+}
+.plan-nav-btn {
+  display: block; width: 100%; margin-top: 8px; padding: 11px;
+  background: #34c759; color: #002b10; font-weight: 700; font-size: 14px;
+  border: none; border-radius: 8px; cursor: pointer; font-family: inherit;
+  text-align: center; text-decoration: none;
+}
+.plan-nav-btn:active { opacity: 0.85; }
+.plan-list { padding: 10px; }
+.plan-leg {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  text-align: center; padding: 3px 0;
+}
+.plan-card {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 4px;
+}
+.plan-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #5c9cf5; color: #000030; font-weight: 700;
+  font-size: 13px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.plan-info { flex: 1; min-width: 0; }
+.plan-name { font-size: 14px; color: #fff; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plan-meta { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.plan-del {
+  background: none; border: none; color: #ff6b6b; font-size: 18px;
+  cursor: pointer; flex-shrink: 0; padding: 4px;
+}
+#plan-empty {
+  padding: 48px 24px; text-align: center;
+  color: rgba(255,255,255,0.6); line-height: 1.9; font-size: 14px;
+}
 #search-input-wrap {
   padding: 8px 10px;
   background: #000060;
@@ -609,6 +672,19 @@ html, body {
   </div>
 </div>
 
+<!-- プランビュー -->
+<div id="plan-view">
+  <div id="plan-toolbar">
+    <div class="plan-mode-row">
+      <button class="plan-mode-btn" id="pm-car" onclick="setPlanMode('car')">🚗 車</button>
+      <button class="plan-mode-btn" id="pm-transit" onclick="setPlanMode('transit')">🚃 公共交通</button>
+    </div>
+    <div id="plan-summary"></div>
+    <a class="plan-nav-btn" id="plan-nav" href="#" onclick="return openPlanNav()">🧭 Googleマップでナビ開始</a>
+  </div>
+  <div class="plan-list" id="plan-list"></div>
+</div>
+
 <!-- タブバー -->
 <div id="tab-bar">
   <button class="tab-btn active" id="tab-map"  onclick="switchTab('map')">
@@ -619,6 +695,9 @@ html, body {
   </button>
   <button class="tab-btn" id="tab-search" onclick="switchTab('search')">
     <span class="tab-icon">🔍</span>けんさく
+  </button>
+  <button class="tab-btn" id="tab-plan" onclick="switchTab('plan')">
+    <span class="tab-icon">🧭</span>プラン<span id="plan-badge" style="display:none;background:#e94560;border-radius:8px;font-size:10px;padding:0 5px;margin-left:3px"></span>
   </button>
 </div>
 
@@ -1858,6 +1937,152 @@ function cycleBGMTrack() {
 }
 updateTrackBtn();
 
+/* ── 周遊プラン管理 ── */
+const PLAN_KEY = 'plan_v1';
+let planMode = localStorage.getItem('plan_mode') || 'car';  // car | transit
+function getPlan() { try { return JSON.parse(localStorage.getItem(PLAN_KEY)||'[]'); } catch(e){ return []; } }
+function savePlan(a) { localStorage.setItem(PLAN_KEY, JSON.stringify(a)); updatePlanBadge(); }
+function inPlan(id) { return getPlan().includes(id); }
+
+function togglePlan(id) {
+  let p = getPlan();
+  const added = !p.includes(id);
+  p = added ? [...p, id] : p.filter(x => x !== id);
+  savePlan(p);
+  const btn = document.getElementById('plan-btn-' + id);
+  if (btn) {
+    btn.textContent = added ? '✓ プランに追加済み' : '🧭 プランに追加';
+    btn.style.background = added ? '#2a5a2a' : '#1a1a5e';
+    btn.style.color = added ? '#88FF88' : '#AAFFAA';
+    btn.style.borderColor = added ? '#55AA55' : 'rgba(255,255,255,0.4)';
+  }
+  playPikon();
+  if (document.getElementById('plan-view').classList.contains('show')) renderPlan();
+}
+
+function updatePlanBadge() {
+  const n = getPlan().length;
+  const b = document.getElementById('plan-badge');
+  if (b) { b.textContent = n; b.style.display = n ? 'inline-block' : 'none'; }
+}
+
+/* 道路補正込み移動時間（分）。直線×1.3、車40km/h・公共22km/h */
+function legMinutes(km) {
+  const road = km * 1.3;
+  const speed = planMode === 'car' ? 40 : 22;
+  return Math.max(2, Math.round(road / speed * 60));
+}
+
+/* 最近傍法で巡回順を最適化（現在地があれば起点に） */
+function optimizeRoute(ids) {
+  if (ids.length <= 2) return ids.slice();
+  const pts = ids.map(id => ({ id, lat:SPOTS[id].lat, lon:SPOTS[id].lon }));
+  const rest = pts.slice();
+  const route = [];
+  let cur;
+  if (userLat !== null) {
+    cur = { lat:userLat, lon:userLon };
+  } else {
+    cur = rest.shift(); route.push(cur);
+  }
+  while (rest.length) {
+    let bi = 0, bd = Infinity;
+    rest.forEach((p, i) => {
+      const d = haversine(cur.lat, cur.lon, p.lat, p.lon);
+      if (d < bd) { bd = d; bi = i; }
+    });
+    cur = rest.splice(bi, 1)[0];
+    route.push(cur);
+  }
+  return route.map(p => p.id);
+}
+
+function setPlanMode(m) {
+  planMode = m;
+  localStorage.setItem('plan_mode', m);
+  document.getElementById('pm-car').classList.toggle('active', m === 'car');
+  document.getElementById('pm-transit').classList.toggle('active', m === 'transit');
+  renderPlan();
+}
+
+function renderPlan() {
+  const list = document.getElementById('plan-list');
+  const summary = document.getElementById('plan-summary');
+  const navBtn = document.getElementById('plan-nav');
+  document.getElementById('pm-car').classList.toggle('active', planMode === 'car');
+  document.getElementById('pm-transit').classList.toggle('active', planMode === 'transit');
+
+  const ids = optimizeRoute(getPlan());
+  if (ids.length === 0) {
+    list.innerHTML = '<div id="plan-empty">🧭 まだプランが空です<br><br>地図のスポットをタップして<br>「🧭 プランに追加」を押すと<br>ここに巡回ルートが組まれます</div>';
+    summary.textContent = '';
+    navBtn.style.display = 'none';
+    return;
+  }
+  navBtn.style.display = 'block';
+
+  let html = '';
+  let moveMin = 0;
+  const STAY = 30;
+  // 現在地→最初の脚
+  if (userLat !== null) {
+    const d = haversine(userLat, userLon, SPOTS[ids[0]].lat, SPOTS[ids[0]].lon);
+    const m = legMinutes(d);
+    moveMin += m;
+    html += `<div class="plan-leg">📍 現在地 → 約${d.toFixed(1)}km / ${m}分</div>`;
+  }
+  ids.forEach((id, i) => {
+    const s = SPOTS[id];
+    if (i > 0) {
+      const prev = SPOTS[ids[i-1]];
+      const d = haversine(prev.lat, prev.lon, s.lat, s.lon);
+      const m = legMinutes(d);
+      moveMin += m;
+      html += `<div class="plan-leg">↓ 約${d.toFixed(1)}km / ${m}分</div>`;
+    }
+    html += `<div class="plan-card">
+      <div class="plan-num">${i+1}</div>
+      <div class="plan-info">
+        <div class="plan-name">${s.name}</div>
+        <div class="plan-meta">滞在 約${STAY}分 ・ ${s.era||''}</div>
+      </div>
+      <button class="plan-del" onclick="togglePlan('${id}')">✕</button>
+    </div>`;
+  });
+  list.innerHTML = html;
+
+  const stayMin = ids.length * STAY;
+  const total = moveMin + stayMin;
+  const h = Math.floor(total / 60), mm = total % 60;
+  const totalStr = (h ? h + '時間' : '') + (mm ? mm + '分' : (h ? '' : '0分'));
+  summary.innerHTML = `📍 ${ids.length}スポット ／ 移動 約${moveMin}分 ＋ 滞在 約${stayMin}分<br>` +
+    `<b style="font-size:15px">合計 約${totalStr}</b>（${planMode === 'car' ? '車' : '公共交通'}）`;
+}
+
+function openPlanNav() {
+  const ids = optimizeRoute(getPlan());
+  if (ids.length === 0) { alert('プランが空です'); return false; }
+  const mode = planMode === 'car' ? 'driving' : 'transit';
+  const pts = ids.map(id => `${SPOTS[id].lat},${SPOTS[id].lon}`);
+  let url;
+  if (userLat !== null) {
+    const wp = pts.slice(0, -1);
+    url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}` +
+          `&destination=${pts[pts.length-1]}` +
+          (wp.length ? `&waypoints=${wp.join('|')}` : '') +
+          `&travelmode=${mode}`;
+  } else {
+    const wp = pts.slice(1, -1);
+    url = `https://www.google.com/maps/dir/?api=1&origin=${pts[0]}` +
+          `&destination=${pts[pts.length-1]}` +
+          (wp.length ? `&waypoints=${wp.join('|')}` : '') +
+          `&travelmode=${mode}`;
+  }
+  if (ids.length > 10) alert('経由地が多いためGoogleマップ側で一部省略される場合があります（最大10程度）');
+  window.open(url, '_blank');
+  return false;
+}
+
 /* ── 訪問済み管理 ── */
 const VISITED_KEY = 'visited_spots_v1';
 function getVisited() { try { return new Set(JSON.parse(localStorage.getItem(VISITED_KEY)||'[]')); } catch(e){ return new Set(); } }
@@ -1924,6 +2149,9 @@ Object.entries(SPOTS).forEach(([id, spot]) => {
     <a class="popup-btn" href="/spot/${id}">▶ 音声解説を聞く</a>
     <button class="popup-btn" id="visited-btn-${id}" onclick="markVisited('${id}')" style="margin-top:6px;background:${isVisited?'#444455':'#1a1a5e'};color:${isVisited?'#88AAFF':'#AAAAFF'};border-color:${isVisited?'#6666AA':'rgba(255,255,255,0.4)'}">
       ${isVisited?'✓ 訪問済み':'＋ 訪問済みにする'}
+    </button>
+    <button class="popup-btn" id="plan-btn-${id}" onclick="togglePlan('${id}')" style="margin-top:6px;background:${inPlan(id)?'#2a5a2a':'#1a1a5e'};color:${inPlan(id)?'#88FF88':'#AAFFAA'};border-color:${inPlan(id)?'#55AA55':'rgba(255,255,255,0.4)'}">
+      ${inPlan(id)?'✓ プランに追加済み':'🧭 プランに追加'}
     </button>
   `, { maxWidth: 260 });
   marker.on('click', () => playPikon());
@@ -2318,16 +2546,18 @@ function appendSpotCard(container, id, spot) {
 }
 applyFilters();  // 初期は currentArea='none' → 全マーカー非表示＋案内表示
 updateProgress();
+updatePlanBadge();
 
 /* ── タブ切り替え ── */
 function switchTab(tab) {
-  document.getElementById('tab-map').classList.toggle('active', tab === 'map');
-  document.getElementById('tab-list').classList.toggle('active', tab === 'list');
-  document.getElementById('tab-search').classList.toggle('active', tab === 'search');
+  ['map','list','search','plan'].forEach(t =>
+    document.getElementById('tab-'+t).classList.toggle('active', tab === t));
   document.getElementById('list-view').classList.toggle('show', tab === 'list');
   document.getElementById('search-view').classList.toggle('show', tab === 'search');
+  document.getElementById('plan-view').classList.toggle('show', tab === 'plan');
   if (tab === 'map') map.invalidateSize();
   if (tab === 'search') setTimeout(() => document.getElementById('search-input').focus(), 100);
+  if (tab === 'plan') renderPlan();
 }
 
 /* ── 検索 ── */

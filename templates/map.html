@@ -170,6 +170,43 @@ html, body {
   z-index: 1;
 }
 
+/* 初期：地方選択を促すオーバーレイ */
+#region-prompt {
+  position: fixed;
+  top: var(--map-top); bottom: 52px; left: 0; right: 0;
+  z-index: 500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+#region-prompt .rp-box {
+  background: rgba(0,0,40,0.82);
+  border: 2px solid #5c9cf5;
+  border-radius: 18px;
+  padding: 26px 34px;
+  text-align: center;
+  box-shadow: 0 0 26px rgba(92,156,245,0.55);
+}
+#region-prompt .rp-arrow {
+  font-size: 42px; line-height: 1; color: #5c9cf5;
+  animation: rpbounce 1.1s ease-in-out infinite;
+}
+#region-prompt .rp-title {
+  font-size: 21px; font-weight: 700; color: #fff;
+  margin-top: 8px; letter-spacing: 0.05em;
+}
+#region-prompt .rp-sub {
+  font-size: 13px; color: rgba(255,255,255,0.72);
+  margin-top: 12px; line-height: 1.8;
+}
+@keyframes rpbounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+/* 初期：地方バーをふわっと強調 */
+#area-bar.prompt { animation: areaglow 1.6s ease-in-out infinite; }
+@keyframes areaglow {
+  0%,100% { box-shadow: inset 0 0 0 rgba(92,156,245,0); }
+  50%     { box-shadow: inset 0 -3px 10px rgba(92,156,245,0.45); }
+}
+
 /* ── タブバー ── */
 #tab-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
@@ -498,7 +535,7 @@ html, body {
 </div>
 
 <!-- エリアフィルター -->
-<div id="area-bar">
+<div id="area-bar" class="prompt">
   <button class="area-btn" data-area="all"        onclick="filterArea('all')">🗾 全て</button>
   <button class="area-btn" data-area="kumamoto"          onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
   <button class="area-btn" data-area="tabaruzaka"        onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部</button>
@@ -548,6 +585,14 @@ html, body {
 
 <!-- 地図 -->
 <div id="map"></div>
+
+<div id="region-prompt">
+  <div class="rp-box">
+    <div class="rp-arrow">⬆</div>
+    <div class="rp-title">地方を選んでください</div>
+    <div class="rp-sub">上のメニューから地方をタップ<br>🗾 全て で全国を一度に表示</div>
+  </div>
+</div>
 
 <!-- リストビュー -->
 <div id="list-view">
@@ -2108,6 +2153,9 @@ let currentArea = 'none';  // 初期は未選択（地方を選ぶまで非表�
 function filterArea(areaKey) {
   currentArea = areaKey;
   currentBounds = null;
+  const rp = document.getElementById('region-prompt');
+  if (rp) rp.style.display = 'none';
+  document.getElementById('area-bar').classList.remove('prompt');
   document.querySelectorAll('.area-btn').forEach(b => {
     const isActive = b.dataset.area === areaKey;
     b.classList.toggle('active', isActive);

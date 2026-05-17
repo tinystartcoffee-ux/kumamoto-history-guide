@@ -522,6 +522,7 @@ html, body {
   <button class="area-btn" data-area="hokkaido"          onclick="filterArea('hokkaido')"   style="--ac:#00E5FF">🐻 北海道</button>
   <button class="area-btn" data-area="chugoku"           onclick="filterArea('chugoku')"    style="--ac:#FFEA00">🦌 中国</button>
   <button class="area-btn" data-area="shikoku"           onclick="filterArea('shikoku')"    style="--ac:#FF6D00">🍊 四国</button>
+  <button class="area-btn" data-area="okinawa"           onclick="filterArea('okinawa')"    style="--ac:#FF4081">🌺 沖縄</button>
 </div>
 
 <!-- 種別フィルター -->
@@ -667,12 +668,43 @@ const AREAS = {
     ids:['dannoura_battlefield','akama_jingu','dannoura_heike_ruins','rai_sanyo_hiroshima','inukai_tsuyoshi_museum','kodama_gentaro_memorial','matsue_castle','ganryujima_shimonoseki','oshiro_castle','oni_no_shiro','bitchu_matsuyama','toba_castle','mizusawa_goto','siebold_narutaki'] },
   shikoku:     { name:'四国',         emoji:'🍊', color:'#FF6D00',
     ids:['tokushima_castle_hachisuka','katsuzui_castle_awa','ichinomiya_castle_awa','bando_furyo_camp','naruto_uzushio','oboke_gorge_history','ryuoji_temple_awa','awa_jurobe_yashiki','wakimachi_udatsu','awa_kokubunji','bizan_tokushima','marugame_castle','yashima_battlefield','zentsuji_kukai','kotohira_shrine','mannogike_kukai','shirogamineji_sutoku','hiketa_castle','takamatsu_castle','shido_temple_fujiwara','kagawa_salt_history','matsuyama_castle_shiki','matsuyama_city_history','imabari_castle_todo','ozu_castle','uwajima_castle','dogo_onsen_history','noshima_murakami_navy','kawano_clan_yuzuki','akehama_history','saijo_daimyo_history','mishima_yukashima_village','okao_castle_kochi','kochi_castle_tosa','ryoma_nakaoka_kochi','john_manjiro_tosa_nakahama','uradu_castle_chosokabe','ryoma_birthplace_kochi','takechi_zuizan_dojo','nakaoka_shintaro_birthplace','yamauchi_kochi_domain','tosa_han_gakko_chidokan','shimanto_river_history','aki_chosokabe_birthplace','itagaki_memorial_kochi','ozaki_hosai_shodoshima','hiraga_gennai_sanuki','kikuchi_kan_takamatsu','takamatsu_castle_siege'] },
+  okinawa:     { name:'沖縄',         emoji:'🌺', color:'#FF4081', ids:[] },
 };
 
-/* spot_id → エリア ルックアップ */
+/* 座標 → 地方キー 自動判定（手動ids未登録スポット用） */
+function regionByCoord(lat, lon) {
+  if (lat < 27.5) return 'okinawa';
+  if (lat >= 41.3) return 'hokkaido';
+  if (lat >= 37.0) return 'tohoku';
+  // 九州本土・離島は県庁最近傍で県を判定
+  if (lat <= 33.92 && lon <= 132.05 && lat > 30.2) {
+    const K = [
+      ['fukuoka',33.60,130.42],['saga',33.25,130.30],['nagasaki',32.75,129.87],
+      ['oita',33.24,131.60],['kumamoto',32.79,130.74],['miyazaki',31.91,131.42],
+      ['kagoshima',31.56,130.56]];
+    let best='kumamoto', bd=1e9;
+    for (const [k,la,lo] of K) {
+      const d=(lat-la)*(lat-la)+(lon-lo)*(lon-lo);
+      if (d<bd){ bd=d; best=k; }
+    }
+    return best;
+  }
+  if (lon >= 138.4 && lat >= 34.85) return 'kanto';
+  if (lon >= 135.0 && lon < 136.45 && lat < 35.85) return 'kinki';
+  if (lon >= 136.0) return 'chubu';
+  if (lat < 34.3 && lon >= 132.0 && lon < 134.9) return 'shikoku';
+  return 'chugoku';
+}
+
+/* spot_id → エリア ルックアップ（手動ids優先・未登録は座標で自動分類） */
 const SPOT_AREA = {};
 Object.entries(AREAS).forEach(([aKey, a]) => {
   a.ids.forEach(id => { SPOT_AREA[id] = aKey; });
+});
+Object.entries(SPOTS).forEach(([id, s]) => {
+  if (!SPOT_AREA[id] && s && typeof s.lat === 'number') {
+    SPOT_AREA[id] = regionByCoord(s.lat, s.lon);
+  }
 });
 function getArea(id) {
   const key = SPOT_AREA[id] || 'kumamoto';

@@ -15,18 +15,25 @@ _DIR = os.path.dirname(os.path.abspath(__file__))
 SPOTS_FILE = os.path.join(_DIR, "spots.json")
 AUDIO_DIR = os.path.join(_DIR, "audio")
 VOICE = "ja-JP-NanamiNeural"
+VOICE_EN = "en-US-AriaNeural"
 
 def load_spots():
     with open(SPOTS_FILE, encoding="utf-8") as f:
         return json.load(f)
 
-async def gen_one(sid, spot):
-    text = fix_reading(spot.get("text", ""))
+async def gen_one(sid, spot, lang="ja"):
+    suffix = "" if lang == "ja" else "_" + lang
+    if lang == "en":
+        text = (spot.get("text_en") or "").strip()
+        voice = VOICE_EN
+    else:
+        text = fix_reading(spot.get("text", ""))
+        voice = VOICE
     if not text:
         return False
-    audio_path = os.path.join(AUDIO_DIR, f"{sid}.mp3")
+    audio_path = os.path.join(AUDIO_DIR, f"{sid}{suffix}.mp3")
     try:
-        c = edge_tts.Communicate(text, VOICE)
+        c = edge_tts.Communicate(text, voice)
         await c.save(audio_path)
         return True
     except Exception as e:
@@ -37,6 +44,15 @@ async def main():
     args = sys.argv[1:]
     spots = load_spots()
     os.makedirs(AUDIO_DIR, exist_ok=True)
+
+    # 言語指定（--lang en）
+    lang = "ja"
+    if "--lang" in args:
+        i = args.index("--lang")
+        if i + 1 < len(args):
+            lang = args[i + 1]
+        args = [a for j, a in enumerate(args) if j not in (i, i + 1)]
+    suffix = "" if lang == "ja" else "_" + lang
 
     if "--list" in args:
         existing = set(f[:-4] for f in os.listdir(AUDIO_DIR) if f.endswith(".mp3"))
@@ -61,15 +77,17 @@ async def main():
         if miss:
             print(f"未知のID: {miss}")
     else:
-        existing = set(f[:-4] for f in os.listdir(AUDIO_DIR) if f.endswith(".mp3"))
-        targets = [sid for sid in spots if sid not in existing]
-        print(f"未生成: {len(targets)} 件")
+        all_mp3 = set(f[:-4] for f in os.listdir(AUDIO_DIR) if f.endswith(".mp3"))
+        targets = [sid for sid in spots
+                   if (sid + suffix) not in all_mp3]
+        print(f"[{lang}] 未生成: {len(targets)} 件")
 
     total = len(targets)
     ok = ng = 0
     for i, sid in enumerate(targets, 1):
-        print(f"[{i}/{total}] {sid}: {spots[sid].get('name','')}")
-        success = await gen_one(sid, spots[sid])
+        if i % 20 == 0 or i == total:
+            print(f"[{lang}][{i}/{total}] {sid}: {spots[sid].get('name','')}")
+        success = await gen_one(sid, spots[sid], lang)
         if success: ok += 1
         else: ng += 1
 

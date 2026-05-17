@@ -317,6 +317,9 @@ if (localStorage.getItem('lang') === 'en') {
     document.getElementById('sp-highlight').textContent = SPOT_I18N.highlight_en;
   if (SPOT_I18N.text_en)
     document.getElementById('sp-text').textContent = SPOT_I18N.text_en;
+  // 英語音声に切り替え
+  const _a = document.getElementById('audio');
+  if (_a) _a.src = '/audio/{{ spot_id }}?lang=en';
 }
 
 const audio = document.getElementById('audio');

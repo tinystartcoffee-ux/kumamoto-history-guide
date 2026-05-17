@@ -1,6 +1,6 @@
 import os, json, threading, time, asyncio
 from urllib import request as urlreq
-from flask import Flask, render_template, jsonify, send_file, abort
+from flask import Flask, render_template, jsonify, send_file, abort, request
 
 try:
     import edge_tts
@@ -15,24 +15,34 @@ SPOTS_FILE = os.path.join(os.path.dirname(__file__), "spots.json")
 FIGURES_FILE = os.path.join(os.path.dirname(__file__), "figures.json")
 AUDIO_DIR = os.path.join(os.path.dirname(__file__), "audio")
 TTS_VOICE = "ja-JP-NanamiNeural"
+TTS_VOICE_EN = "en-US-AriaNeural"
 
-def ensure_audio(spot_id, spot):
-    """音声ファイルが無ければ edge-tts で生成（読み仮名辞書で固有名詞補正）"""
-    audio_path = os.path.join(AUDIO_DIR, f"{spot_id}.mp3")
+def ensure_audio(spot_id, spot, lang="ja"):
+    """音声ファイルが無ければ edge-tts で生成。
+    ja: 読み仮名辞書で固有名詞補正 / en: text_en を英語音声で生成"""
+    suffix = "" if lang == "ja" else "_" + lang
+    audio_path = os.path.join(AUDIO_DIR, f"{spot_id}{suffix}.mp3")
     if os.path.exists(audio_path):
         return audio_path
     if not TTS_AVAILABLE:
         return None
     os.makedirs(AUDIO_DIR, exist_ok=True)
-    text = fix_reading(spot.get("text", ""))
+    if lang == "en":
+        text = (spot.get("text_en") or "").strip()
+        voice = TTS_VOICE_EN
+    else:
+        text = fix_reading(spot.get("text", ""))
+        voice = TTS_VOICE
+    if not text:
+        return None
     async def _gen():
-        c = edge_tts.Communicate(text, TTS_VOICE)
+        c = edge_tts.Communicate(text, voice)
         await c.save(audio_path)
     try:
         asyncio.run(_gen())
         return audio_path
     except Exception as e:
-        print(f"音声生成失敗 {spot_id}: {e}")
+        print(f"音声生成失敗 {spot_id} ({lang}): {e}")
         return None
 
 def load_figures():
@@ -76,13 +86,22 @@ def spot(spot_id):
 
 @app.route("/audio/<spot_id>")
 def audio(spot_id):
-    audio_path = os.path.join(AUDIO_DIR, f"{spot_id}.mp3")
+    lang = request.args.get("lang", "ja")
+    if lang not in ("ja", "en"):
+        lang = "ja"
+    suffix = "" if lang == "ja" else "_" + lang
+    audio_path = os.path.join(AUDIO_DIR, f"{spot_id}{suffix}.mp3")
     if not os.path.exists(audio_path):
         # 自動生成を試みる
         spots = load_spots()
         if spot_id in spots:
-            ensure_audio(spot_id, spots[spot_id])
+            ensure_audio(spot_id, spots[spot_id], lang)
     if not os.path.exists(audio_path):
+        # 英語が無ければ日本語にフォールバック
+        if lang == "en":
+            ja_path = os.path.join(AUDIO_DIR, f"{spot_id}.mp3")
+            if os.path.exists(ja_path):
+                return send_file(ja_path, mimetype="audio/mpeg")
         return "音声ファイルが見つかりません", 404
     return send_file(audio_path, mimetype="audio/mpeg")
 

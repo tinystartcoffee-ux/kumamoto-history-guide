@@ -499,7 +499,7 @@ html, body {
 
 <!-- エリアフィルター -->
 <div id="area-bar">
-  <button class="area-btn active" data-area="all"        onclick="filterArea('all')">🗾 全て</button>
+  <button class="area-btn" data-area="all"        onclick="filterArea('all')">🗾 全て</button>
   <button class="area-btn" data-area="kumamoto"          onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
   <button class="area-btn" data-area="tabaruzaka"        onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部</button>
   <button class="area-btn" data-area="kikuchi"           onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池</button>
@@ -2104,7 +2104,7 @@ function filterType(type, btn) {
 }
 
 /* ── エリアフィルター ── */
-let currentArea = 'all';
+let currentArea = 'none';  // 初期は未選択（地方を選ぶまで非表示）
 function filterArea(areaKey) {
   currentArea = areaKey;
   currentBounds = null;
@@ -2133,6 +2133,8 @@ function applyFilters() {
     if (currentBounds) {
       areaOk = spot.lat >= currentBounds.sw[0] && spot.lat <= currentBounds.ne[0] &&
                spot.lon >= currentBounds.sw[1] && spot.lon <= currentBounds.ne[1];
+    } else if (currentArea === 'none') {
+      areaOk = false;  // 未選択時は何も表示しない
     } else {
       areaOk = currentArea === 'all' || mk === currentArea;
     }
@@ -2141,7 +2143,9 @@ function applyFilters() {
     else                  { marker.remove(); }
   });
   if (!currentBounds) {
-    if (bounds.length > 0 && currentArea !== 'all') {
+    if (currentArea === 'none') {
+      map.setView([36.5,136.5], 5);
+    } else if (bounds.length > 0 && currentArea !== 'all') {
       map.fitBounds(bounds, { padding:[50,50], maxZoom:12 });
     } else if (currentArea === 'all' && currentType === 'all') {
       map.setView([36.5,136.5], 5);
@@ -2152,9 +2156,7 @@ function applyFilters() {
   buildList(currentArea);
 }
 
-/* 初期ボタンスタイル */
-const allBtn = document.querySelector('[data-area="all"]');
-allBtn.style.background = '#5c9cf5'; allBtn.style.borderColor = '#5c9cf5'; allBtn.style.color = '#000030';
+/* 初期ボタンスタイル（エリアは未選択、種別のみ全種別を初期選択） */
 const allTypeBtn = document.querySelector('[data-type="all"]');
 allTypeBtn.style.background = '#5c9cf5'; allTypeBtn.style.borderColor = '#5c9cf5'; allTypeBtn.style.color = '#000030';
 
@@ -2170,6 +2172,14 @@ function haversine(lat1,lon1,lat2,lon2) {
 function buildList(areaKey) {
   const container = document.getElementById('list-content');
   container.innerHTML = '';
+  if (areaKey === 'none') {
+    const guide = document.createElement('div');
+    guide.style.cssText = 'padding:48px 24px;text-align:center;color:rgba(255,255,255,0.6);line-height:1.9;font-size:14px';
+    guide.innerHTML = '⬆ 上のメニューから<br><b style="color:#5c9cf5">地方を選択</b>してください<br><br>🗾 全て を押すと全国 ' +
+      Object.keys(SPOTS).length + ' 件を表示します';
+    container.appendChild(guide);
+    return;
+  }
   let filtered = Object.entries(SPOTS).filter(([id,spot]) => {
     const areaOk = areaKey === 'all' || SPOT_AREA[id] === areaKey;
     const typeOk  = currentType === 'all' || getSpotType(id, spot.name||'') === currentType;
@@ -2258,7 +2268,7 @@ function appendSpotCard(container, id, spot) {
     <div class="arrow">▶</div>`;
   container.appendChild(card);
 }
-buildList('all');
+applyFilters();  // 初期は currentArea='none' → 全マーカー非表示＋案内表示
 updateProgress();
 
 /* ── タブ切り替え ── */

@@ -582,14 +582,15 @@ html, body {
 <!-- ヘッダー -->
 <div id="header">
   <div>
-    <h1>⚔ 歴史音声ガイド</h1>
+    <h1 data-i18n="appTitle">⚔ 歴史音声ガイド</h1>
     <p id="progress-badge">▶ 史跡をタップして音声解説</p>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
-    <a href="/figures" class="dq-btn">⚔ 人物</a>
+    <button class="dq-btn" id="lang-btn" onclick="toggleLang()" style="font-size:12px">🌐 EN</button>
+    <a href="/figures" class="dq-btn" data-i18n="people">⚔ 人物</a>
     <button class="dq-btn" id="bgm-btn" onclick="toggleBGM()" style="font-size:12px">🎵 BGM</button>
     <button class="dq-btn" id="bgm-track-btn" onclick="cycleBGMTrack()" style="font-size:12px" title="曲を切替">🏘️ 街</button>
-    <div class="dq-btn" onclick="zoomToMe()" style="font-size:12px">📍 現在地</div>
+    <div class="dq-btn" onclick="zoomToMe()" style="font-size:12px" data-i18n="myLoc">📍 現在地</div>
     <div class="gps-badge" onclick="retryGPS()">
       <div class="gps-dot" id="gpsDot"></div>
       <span id="gpsLabel">GPS</span>
@@ -599,7 +600,7 @@ html, body {
 
 <!-- エリアフィルター -->
 <div id="area-bar" class="prompt">
-  <button class="area-btn" data-area="all"        onclick="filterArea('all')">🗾 全て</button>
+  <button class="area-btn" data-area="all"        onclick="filterArea('all')" data-i18n="allRegions">🗾 全て</button>
   <button class="area-btn" data-area="kumamoto"          onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
   <button class="area-btn" data-area="tabaruzaka"        onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部</button>
   <button class="area-btn" data-area="kikuchi"           onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池</button>
@@ -652,8 +653,8 @@ html, body {
 <div id="region-prompt">
   <div class="rp-box">
     <div class="rp-arrow">⬆</div>
-    <div class="rp-title">地方を選んでください</div>
-    <div class="rp-sub">上のメニューから地方をタップ<br>🗾 全て で全国を一度に表示</div>
+    <div class="rp-title" data-i18n="rpTitle">地方を選んでください</div>
+    <div class="rp-sub" data-i18n="rpSub">上のメニューから地方をタップ<br>🗾 全て で全国を一度に表示</div>
   </div>
 </div>
 
@@ -665,10 +666,10 @@ html, body {
 <!-- 検索ビュー -->
 <div id="search-view">
   <div id="search-input-wrap">
-    <input id="search-input" type="search" placeholder="🔍 史跡名・人物名で検索..." oninput="doSearch(this.value)" autocomplete="off">
+    <input id="search-input" type="search" placeholder="🔍 史跡名・人物名で検索..." data-i18n-ph="searchPh" oninput="doSearch(this.value)" autocomplete="off">
   </div>
   <div id="search-results">
-    <div id="search-hint">史跡名や人物名を入力してください<br>例）「信長」「城」「江戸」</div>
+    <div id="search-hint" data-i18n="searchHint">史跡名や人物名を入力してください<br>例）「信長」「城」「江戸」</div>
   </div>
 </div>
 
@@ -676,11 +677,11 @@ html, body {
 <div id="plan-view">
   <div id="plan-toolbar">
     <div class="plan-mode-row">
-      <button class="plan-mode-btn" id="pm-car" onclick="setPlanMode('car')">🚗 車</button>
-      <button class="plan-mode-btn" id="pm-transit" onclick="setPlanMode('transit')">🚃 公共交通</button>
+      <button class="plan-mode-btn" id="pm-car" onclick="setPlanMode('car')" data-i18n="planCar">🚗 車</button>
+      <button class="plan-mode-btn" id="pm-transit" onclick="setPlanMode('transit')" data-i18n="planTransit">🚃 公共交通</button>
     </div>
     <div id="plan-summary"></div>
-    <a class="plan-nav-btn" id="plan-nav" href="#" onclick="return openPlanNav()">🧭 Googleマップでナビ開始</a>
+    <a class="plan-nav-btn" id="plan-nav" href="#" onclick="return openPlanNav()" data-i18n="planNav">🧭 Googleマップでナビ開始</a>
   </div>
   <div class="plan-list" id="plan-list"></div>
 </div>
@@ -688,16 +689,16 @@ html, body {
 <!-- タブバー -->
 <div id="tab-bar">
   <button class="tab-btn active" id="tab-map"  onclick="switchTab('map')">
-    <span class="tab-icon">🗺️</span>ちず
+    <span class="tab-icon">🗺️</span><span data-i18n="tabMap">ちず</span>
   </button>
   <button class="tab-btn" id="tab-list" onclick="switchTab('list')">
-    <span class="tab-icon">📋</span>リスト
+    <span class="tab-icon">📋</span><span data-i18n="tabList">リスト</span>
   </button>
   <button class="tab-btn" id="tab-search" onclick="switchTab('search')">
-    <span class="tab-icon">🔍</span>けんさく
+    <span class="tab-icon">🔍</span><span data-i18n="tabSearch">けんさく</span>
   </button>
   <button class="tab-btn" id="tab-plan" onclick="switchTab('plan')">
-    <span class="tab-icon">🧭</span>プラン<span id="plan-badge" style="display:none;background:#e94560;border-radius:8px;font-size:10px;padding:0 5px;margin-left:3px"></span>
+    <span class="tab-icon">🧭</span><span data-i18n="tabPlan">プラン</span><span id="plan-badge" style="display:none;background:#e94560;border-radius:8px;font-size:10px;padding:0 5px;margin-left:3px"></span>
   </button>
 </div>
 
@@ -745,6 +746,55 @@ html, body {
 
 const SPOTS = {{ spots | tojson }};
 const SPOT_SIZES = {{ spot_sizes | tojson }};
+
+/* ════════════════════════════════════
+   多言語（i18n）— Step1: UI文言
+   ════════════════════════════════════ */
+const I18N = {
+  appTitle:    { ja:'⚔ 歴史音声ガイド',    en:'⚔ Japan History Audio Guide' },
+  people:      { ja:'⚔ 人物',              en:'⚔ People' },
+  myLoc:       { ja:'📍 現在地',            en:'📍 Locate' },
+  tabMap:      { ja:'ちず',                en:'Map' },
+  tabList:     { ja:'リスト',              en:'List' },
+  tabSearch:   { ja:'けんさく',            en:'Search' },
+  tabPlan:     { ja:'プラン',              en:'Plan' },
+  allRegions:  { ja:'🗾 全て',             en:'🗾 All' },
+  rpTitle:     { ja:'地方を選んでください', en:'Select a Region' },
+  rpSub:       { ja:'上のメニューから地方をタップ<br>🗾 全て で全国を一度に表示',
+                 en:'Tap a region in the menu above<br>or 🗾 All to show the whole country' },
+  searchPh:    { ja:'🔍 史跡名・人物名で検索...', en:'🔍 Search sites or people...' },
+  searchHint:  { ja:'史跡名や人物名を入力してください<br>例）「信長」「城」「江戸」',
+                 en:'Type a site or person name<br>e.g. "Nobunaga", "castle", "Edo"' },
+  planCar:     { ja:'🚗 車',               en:'🚗 Car' },
+  planTransit: { ja:'🚃 公共交通',         en:'🚃 Transit' },
+  planNav:     { ja:'🧭 Googleマップでナビ開始', en:'🧭 Open route in Google Maps' },
+};
+let LANG = localStorage.getItem('lang') || 'ja';
+function t(key) {
+  const e = I18N[key];
+  return e ? (e[LANG] || e.ja) : key;
+}
+function applyLang() {
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-ph'));
+  });
+  const lb = document.getElementById('lang-btn');
+  if (lb) lb.textContent = (LANG === 'ja') ? '🌐 EN' : '🌐 日本語';
+}
+function toggleLang() {
+  LANG = (LANG === 'ja') ? 'en' : 'ja';
+  localStorage.setItem('lang', LANG);
+  applyLang();
+  if (typeof renderPlan === 'function' &&
+      document.getElementById('plan-view') &&
+      document.getElementById('plan-view').classList.contains('show')) {
+    renderPlan();
+  }
+}
 
 /* ── エリア定義 ── */
 const AREAS = {
@@ -2547,6 +2597,7 @@ function appendSpotCard(container, id, spot) {
 applyFilters();  // 初期は currentArea='none' → 全マーカー非表示＋案内表示
 updateProgress();
 updatePlanBadge();
+applyLang();  // 保存された言語設定を適用
 
 /* ── タブ切り替え ── */
 function switchTab(tab) {

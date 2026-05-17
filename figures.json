@@ -10,7 +10,10 @@
     "rank_taiga": 2,
     "rank_great": 0,
     "desc": "「天下布武」を掲げ全国統一に最も近づいた革命的武将。比叡山焼討・長篠の戦いなど歴史を塗り替えた。1582年本能寺の変で明智光秀に討たれ49歳で没。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Oda Nobunaga",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "A revolutionary military commander who advocated ``Tenka Fubu'' and came closest to unifying the country. History was rewritten, including the burning of Mt. Hiei and the Battle of Nagashino. In 1582, he was killed by Akechi Mitsuhide during the Honnoji Incident and died at the age of 49."
   },
   "sakamoto_ryoma": {
     "name": "坂本龍馬",
@@ -23,7 +26,10 @@
     "rank_taiga": 3,
     "rank_great": 0,
     "desc": "土佐藩脱藩の浪士。薩長同盟を仲介し大政奉還を実現させた幕末最大の立役者。1867年暗殺、33歳。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Ryoma Sakamoto",
+    "era_en": "end of the Edo period",
+    "desc_en": "A samurai who left the Tosa domain. He was the most important figure at the end of the Edo period, mediating the Satsuma-Choshu alliance and bringing about the restoration of imperial rule. Assassinated in 1867, aged 33."
   },
   "fukuzawa_yukichi": {
     "name": "福沢諭吉",
@@ -36,7 +42,10 @@
     "rank_taiga": 25,
     "rank_great": 18,
     "desc": "「天は人の上に人を造らず」。慶應義塾創設者。西洋文明を日本に紹介した明治啓蒙思想の巨人。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yukichi Fukuzawa",
+    "era_en": "Edo-Meiji",
+    "desc_en": "\"Heaven does not create man above man.\" Founder of Keio University. A giant of Meiji Enlightenment thought who introduced Western civilization to Japan."
   },
   "date_masamune": {
     "name": "伊達政宗",
@@ -49,7 +58,10 @@
     "rank_taiga": 17,
     "rank_great": 0,
     "desc": "独眼竜の異名を持つ奥州の覇者。仙台藩70万石の礎を築き、支倉常長をヨーロッパに派遣した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Date Masamune",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "The champion of Oshu, nicknamed the One-Eyed Dragon. He built the foundation of the Sendai domain with 700,000 koku and dispatched Hasekura Tsunenaga to Europe."
   },
   "minamoto_yoshitsune": {
     "name": "源義経",
@@ -62,7 +74,10 @@
     "rank_taiga": 4,
     "rank_great": 0,
     "desc": "平家を壇ノ浦に滅ぼした源氏の英雄。兄頼朝に追われ奥州平泉で31歳の生涯を閉じた悲劇の武将。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Yoshitsune Minamoto",
+    "era_en": "Late Heian period",
+    "desc_en": "A hero of the Genji clan who destroyed the Heike clan at Dan-no-ura. A tragic military commander who died at the age of 31 in Hiraizumi, Oshu, chased by his older brother Yoritomo."
   },
   "sanada_yukimura": {
     "name": "真田幸村",
@@ -75,7 +90,10 @@
     "rank_taiga": 5,
     "rank_great": 0,
     "desc": "大坂冬の陣・夏の陣で家康を苦しめた「日本一の兵」。真田丸の築城と突撃で戦国最後の英雄となった。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yukimura Sanada",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "\"Japan's best soldier\" who tormented Ieyasu during the Osaka Winter Siege and Summer Siege. He became the last hero of the Sengoku period due to Sanada Maru's castle building and assault."
   },
   "tokugawa_ieyasu": {
     "name": "徳川家康",
@@ -88,7 +106,10 @@
     "rank_taiga": 1,
     "rank_great": 15,
     "desc": "265年続く江戸幕府の創始者。「鳴くまで待とうホトトギス」。忍耐と計略で天下を統一した戦国最後の覇者。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Tokugawa Ieyasu",
+    "era_en": "Azuchi-Momoyama - Edo",
+    "desc_en": "The founder of the Edo Shogunate, which lasted 265 years. ``Let's wait until it sings.'' The last ruler of the Sengoku period who unified the world with patience and strategy."
   },
   "saigo_takamori": {
     "name": "西郷隆盛",
@@ -101,7 +122,10 @@
     "rank_taiga": 8,
     "rank_great": 0,
     "desc": "薩摩藩の英傑。倒幕・明治維新を主導。西南戦争で政府軍に敗れ城山で自刃。「敬天愛人」の精神を生きた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takamori Saigo",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "A hero of the Satsuma clan. He led the overthrow of the Shogunate and the Meiji Restoration. He was defeated by government forces during the Seinan Rebellion and committed suicide in Shiroyama. He lived the spirit of ``a lover of heaven.''"
   },
   "takeda_shingen": {
     "name": "武田信玄",
@@ -114,7 +138,10 @@
     "rank_taiga": 12,
     "rank_great": 0,
     "desc": "「風林火山」を旗印に甲斐・信濃を制した戦国最強の騎馬軍団の将。信玄堤など内政でも実績を残した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Takeda Shingen",
+    "era_en": "Sengoku period",
+    "desc_en": "The commander of the strongest cavalry corps in the Sengoku period, who controlled Kai and Shinano under the banner of \"Furinkazan.\" He also had achievements in domestic politics such as Shingen Tsutsumi."
   },
   "uesugi_kenshin": {
     "name": "上杉謙信",
@@ -127,7 +154,10 @@
     "rank_taiga": 13,
     "rank_great": 0,
     "desc": "越後の龍。武田信玄と川中島で5度激闘。義を重んじ「敵に塩を送る」逸話で知られる越後の英将。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Kenshin Uesugi",
+    "era_en": "Sengoku period",
+    "desc_en": "Echigo dragon. Five fierce battles with Takeda Shingen on Kawanakajima. A British general from Echigo who valued righteousness and is known for the anecdote of ``sending salt to the enemy.''"
   },
   "toyotomi_hideyoshi": {
     "name": "豊臣秀吉",
@@ -140,7 +170,10 @@
     "rank_taiga": 14,
     "rank_great": 14,
     "desc": "農民から天下人へ。本能寺の変後に信長の後継者として全国統一を達成。太閤検地・刀狩で近世社会を形成。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Toyotomi Hideyoshi",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "From farmers to people of the world. After the Honnoji Incident, he achieved national unification as Nobunaga's successor. Early modern society was formed through Taikokenchi and sword hunting."
   },
   "shotoku_taishi": {
     "name": "聖徳太子",
@@ -153,7 +186,10 @@
     "rank_taiga": 29,
     "rank_great": 0,
     "desc": "十七条憲法・冠位十二階を制定し仏教を振興。四天王寺・法隆寺を建立した日本最初の偉大な政治家。",
-    "era_category": "古代"
+    "era_category": "古代",
+    "name_en": "Prince Shotoku",
+    "era_en": "Asuka period",
+    "desc_en": "Established a 17-article constitution and 12 levels of crown rank to promote Buddhism. Japan's first great politician who built Shitennoji Temple and Horyuji Temple."
   },
   "hijikata_toshizo": {
     "name": "土方歳三",
@@ -166,7 +202,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "新撰組副長「鬼の副長」。武士道を貫き函館五稜郭で最後の戦いを挑み35歳で散った幕末最後の侍。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Toshizo Hijikata",
+    "era_en": "end of the Edo period",
+    "desc_en": "Vice-commander of the Shinsengumi ``Oni Vice-commander''. The last samurai at the end of the Edo period, who persevered in Bushido and fought his final battle at Hakodate Goryokaku, dying at the age of 35."
   },
   "okita_soji": {
     "name": "沖田総司",
@@ -179,7 +218,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "新撰組一番隊組長。天才剣士と謳われた美青年。結核に蝕まれながら幕末の動乱を戦い抜き25歳で没した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Okita Souji",
+    "era_en": "end of the Edo period",
+    "desc_en": "Leader of Shinsengumi's first division. A beautiful young man who was hailed as a genius swordsman. He fought through the turmoil at the end of the Edo period, suffering from tuberculosis, and died at the age of 25."
   },
   "miyamoto_musashi": {
     "name": "宮本武蔵",
@@ -192,7 +234,10 @@
     "rank_taiga": 22,
     "rank_great": 0,
     "desc": "二刀流の剣聖。生涯60余度の試合で不敗。晩年に執筆した『五輪書』は剣術・兵法の古典として今も読まれる。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "miyamoto musashi",
+    "era_en": "Early Edo period",
+    "desc_en": "A dual-wielding swordsman. Undefeated in over 60 matches throughout his career. The Book of Five Rings, which he wrote in his later years, is still read as a classic of swordsmanship and military tactics."
   },
   "akechi_mitsuhide": {
     "name": "明智光秀",
@@ -205,7 +250,10 @@
     "rank_taiga": 10,
     "rank_great": 0,
     "desc": "1582年本能寺の変で主君・織田信長を討った謀将。「三日天下」と呼ばれ山崎の戦いで羽柴秀吉に敗れた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Mitsuhide Akechi",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "A commander who defeated his master Oda Nobunaga during the Honnoji Incident in 1582. He was known as the ``Three-day Tenka'' and was defeated by Hideyoshi Hashiba at the Battle of Yamazaki."
   },
   "murasaki_shikibu": {
     "name": "紫式部",
@@ -218,7 +266,10 @@
     "rank_taiga": 6,
     "rank_great": 0,
     "desc": "『源氏物語』の作者。石山寺で着想を得たと伝わる世界最古の長編小説は約100万字・54帖に及ぶ。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Murasaki Shikibu",
+    "era_en": "Heian period",
+    "desc_en": "Author of \"The Tale of Genji\". The world's oldest full-length novel, said to have been inspired at Ishiyama-dera Temple, is about 1 million characters long and 54 chapters long."
   },
   "kuroda_kanbei": {
     "name": "黒田官兵衛",
@@ -231,7 +282,10 @@
     "rank_taiga": 27,
     "rank_great": 0,
     "desc": "豊臣秀吉の参謀「智謀の軍師」。数々の外交交渉と謀略で秀吉の天下取りを支えた戦略の天才。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Kanbei Kuroda",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "Toyotomi Hideyoshi's staff ``wisdom tactician.'' A strategic genius who supported Hideyoshi's takeover of the country through numerous diplomatic negotiations and schemes."
   },
   "hojo_soun": {
     "name": "北条早雲",
@@ -244,7 +298,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "戦国大名の先駆者。伊豆・相模を制圧し後北条氏の礎を築いた下克上の象徴。小田原城を拠点に活躍。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Hojo Soun",
+    "era_en": "Muromachi to Sengoku period",
+    "desc_en": "A pioneer of the feudal lords of the Sengoku period. A symbol of the Gokujo who conquered Izu and Sagami and laid the foundation of the Gohojo clan. Actively based at Odawara Castle."
   },
   "yoshida_shoin": {
     "name": "吉田松陰",
@@ -257,7 +314,10 @@
     "rank_taiga": 20,
     "rank_great": 30,
     "desc": "松下村塾で伊藤博文・高杉晋作ら明治の俊才を育てた思想家。安政の大獄で29歳で処刑されるも志は弟子が継いだ。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yoshida Shoin",
+    "era_en": "end of the Edo period",
+    "desc_en": "A thinker who nurtured the brilliant minds of the Meiji era, including Hirobumi Ito and Shinsaku Takasugi, at Shoshita Sonjuku. Although he was executed in the Great Prison of Ansei at the age of 29, his disciples inherited his will."
   },
   "mouri_motonari": {
     "name": "毛利元就",
@@ -270,7 +330,10 @@
     "rank_taiga": 0,
     "rank_great": 16,
     "desc": "中国地方を制した策謀の大名。尼子氏・大内氏を滅ぼし10カ国以上を平定。「三本の矢」の教えで知られる。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Motonari Mouri",
+    "era_en": "Sengoku period",
+    "desc_en": "A scheming daimyo who controlled the Chugoku region. He destroyed the Amago and Ouchi clans and subdued more than 10 countries. He is known for his teachings on the ``Three Arrows''."
   },
   "ukita_naoie": {
     "name": "宇喜多直家",
@@ -283,7 +346,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "備前・美作を制した謀将。暗殺と婚姻を巧みに使い弱小勢力から大名に成り上がった「梟雄」の典型。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Naoie Ukita",
+    "era_en": "Sengoku period",
+    "desc_en": "A military commander who controlled Bizen and Mimasaka. He is the epitome of a ``Fukuro'' who rose from a weak force to a daimyo by skillfully using assassinations and marriages."
   },
   "fujiwara_michinaga": {
     "name": "藤原道長",
@@ -296,7 +362,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「この世をば我が世とぞ思ふ」。4人の娘を天皇に嫁がせ摂関政治の絶頂に君臨した平安貴族の頂点。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Michinaga Fujiwara",
+    "era_en": "Heian period",
+    "desc_en": "“I consider this world to be my own.” He was the pinnacle of the Heian aristocracy who married his four daughters to the emperor and reigned at the height of the regent government."
   },
   "ashikaga_takauji": {
     "name": "足利尊氏",
@@ -309,7 +378,10 @@
     "rank_taiga": 24,
     "rank_great": 0,
     "desc": "室町幕府初代将軍。後醍醐天皇の建武新政から離反し幕府を開いた。南北朝の内乱を生き抜いた武将。",
-    "era_category": "鎌倉・南北朝"
+    "era_category": "鎌倉・南北朝",
+    "name_en": "Takauji Ashikaga",
+    "era_en": "Muromachi period",
+    "desc_en": "The first shogun of the Muromachi shogunate. He broke away from Emperor Go-Daigo's Kenmu Restoration and established a shogunate. A military commander who survived the civil war between the Northern and Southern Courts."
   },
   "chosokabe_motochika": {
     "name": "長宗我部元親",
@@ -322,7 +394,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「姫若子」から四国を統一した土佐の雄。秀吉に敗れ土佐一国に封じられるも海軍力で存在感を示した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Motochika Chosokabe",
+    "era_en": "Sengoku period",
+    "desc_en": "A Tosa man who unified Shikoku from Himewakako. Although he was defeated by Hideyoshi and confined to Tosa Province, he made his presence felt with his naval power."
   },
   "tachibana_muneshige": {
     "name": "立花宗茂",
@@ -335,7 +410,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "関ヶ原で西軍に属し改易されながら旧領・柳川を回復した唯一の武将。戦国最強とも称された猛将。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Muneshige Tachibana",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "He was the only military commander who belonged to the Western Army at Sekigahara and regained his former territory, Yanagawa, even though he was given up. A fierce general known as the strongest in the Sengoku period."
   },
   "mogami_yoshiaki": {
     "name": "最上義光",
@@ -348,7 +426,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "出羽山形を制した奥州の智将。関ヶ原では東軍に属し上杉景勝の侵攻を撃退。57万石の礎を築いた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yoshimitsu Mogami",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "A wise general from Oshu who controlled Dewa Yamagata. At Sekigahara, he belonged to the Eastern Army and repelled the invasion of Kagekatsu Uesugi. A foundation of 570,000 koku was built."
   },
   "naoe_kanetsugu": {
     "name": "直江兼続",
@@ -361,7 +442,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "上杉景勝を支えた名参謀。「愛」の前立の兜で知られ、家康への「直江状」で有名な義と知を兼ね備えた武将。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Kanetsugu Naoe",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "A famous staff officer who supported Kagekatsu Uesugi. A military commander with both righteousness and wisdom, known for his helmet with the word \"love\" in front of it, and famous for his \"Naoe letter\" to Ieyasu."
   },
   "takenaka_hanbei": {
     "name": "竹中半兵衛",
@@ -374,7 +458,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "秀吉の軍師。黒田官兵衛とともに「二兵衛」と称された天才軍略家。36歳で病没しその才は惜しまれた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Hanbei Takenaka",
+    "era_en": "Sengoku period",
+    "desc_en": "Hideyoshi's military commander. A genius military strategist who was known as \"Nibei\" along with Kanbei Kuroda. His talent was greatly missed when he passed away from illness at the age of 36."
   },
   "imagawa_yoshimoto": {
     "name": "今川義元",
@@ -387,7 +474,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "東海道を制した「海道一の弓取り」。公家文化を愛した名将だが桶狭間で信長の奇襲に討たれた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yoshimoto Imagawa",
+    "era_en": "Sengoku period",
+    "desc_en": "``The best bowman on the coast'' who conquered the Tokaido. Although he was a famous general who loved the culture of court nobles, he was killed in a surprise attack by Nobunaga at Okehazama."
   },
   "okubo_toshimichi": {
     "name": "大久保利通",
@@ -400,7 +490,10 @@
     "rank_taiga": 0,
     "rank_great": 1,
     "desc": "明治政府の実質的最高権力者。西郷隆盛の盟友から対立し西南戦争を鎮圧。近代国家の制度設計を主導。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Toshimichi Okubo",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "The most powerful person in the Meiji government. An ally of Takamori Saigo confronted him and suppressed the Seinan War. Leading the institutional design of modern nations."
   },
   "kobayakawa_takakage": {
     "name": "小早川隆景",
@@ -413,7 +506,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "毛利元就の三男。知略縦横の外交・軍事で毛利氏を支えた柔軟な戦略家。秀吉に重用され五大老に列した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Takakage Kobayakawa",
+    "era_en": "Sengoku period",
+    "desc_en": "The third son of Mori Motonari. A flexible strategist who supported the Mori clan with his wisdom and lateral diplomacy and military skills. He was highly valued by Hideyoshi and was ranked as one of the Five Elders."
   },
   "hosokawa_yusai": {
     "name": "細川幽斎",
@@ -426,7 +522,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "武将でありながら古今伝授の継承者として知られた文化人。田辺城籠城戦では朝廷が和睦を仲介した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yusai Hosokawa",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "Although he was a military commander, he was a cultural figure known as the inheritor of ancient and modern teachings. During the Battle of Tanabe Castle, the Imperial Court mediated peace."
   },
   "kusunoki_masashige": {
     "name": "楠木正成",
@@ -439,7 +538,10 @@
     "rank_taiga": 23,
     "rank_great": 0,
     "desc": "後醍醐天皇を支えた忠臣。足利尊氏との湊川の戦いで敗死を覚悟し戦った「大楠公」。武士の鑑とされた。",
-    "era_category": "鎌倉・南北朝"
+    "era_category": "鎌倉・南北朝",
+    "name_en": "Masashige Kusunoki",
+    "era_en": "Kamakura - Nanbokucho",
+    "desc_en": "A loyal retainer who supported Emperor Go-Daigo. ``Okusunoki'' fought against Takauji Ashikaga at the Battle of Minatogawa, prepared to lose and die. It was considered a model for samurai."
   },
   "tokugawa_hidetada": {
     "name": "徳川秀忠",
@@ -452,7 +554,10 @@
     "rank_taiga": 0,
     "rank_great": 5,
     "desc": "江戸幕府2代将軍。関ヶ原に遅参し評価は低いが、武家諸法度・禁中並公家諸法度で幕藩体制の基盤を確立。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "Tokugawa Hidetada",
+    "era_en": "Edo period",
+    "desc_en": "The second shogun of the Edo shogunate. Although he arrived late to Sekigahara and received low praise, he established the foundations of the shogunate system with various laws for samurai families, Kinchu, and court nobles."
   },
   "goto_shimpei": {
     "name": "後藤新平",
@@ -465,7 +570,10 @@
     "rank_taiga": 0,
     "rank_great": 3,
     "desc": "台湾総督府民政長官・東京市長。今の東京のインフラと都市計画の設計思想を作った「大風呂敷」の行政家。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shinpei Goto",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "Director-General of Civil Affairs in the Taiwan Governor-General's Office and Mayor of Tokyo. He was the ``Ofuroshiki'' administrator who created the design concept for modern Tokyo's infrastructure and urban planning."
   },
   "yamagata_aritomo": {
     "name": "山縣有朋",
@@ -478,7 +586,10 @@
     "rank_taiga": 0,
     "rank_great": 8,
     "desc": "明治陸軍の父。伊藤博文と並ぶ明治政府の二大巨頭。藩閥政治・軍部の独立を確立し昭和軍国主義の遠因も作った。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Aritomo Yamagata",
+    "era_en": "Meiji",
+    "desc_en": "Father of the Meiji Army. One of the two giants of the Meiji government along with Hirobumi Ito. It established the independence of feudal clan politics and the military, and also created the underlying cause of Showa militarism."
   },
   "taira_kiyomori": {
     "name": "平清盛",
@@ -491,7 +602,10 @@
     "rank_taiga": 11,
     "rank_great": 0,
     "desc": "武士として初めて太政大臣に昇った平家の棟梁。日宋貿易・厳島神社造営など文化経済でも大功績を残した。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Kiyomori Taira",
+    "era_en": "Late Heian period",
+    "desc_en": "He was the leader of the Heike clan and was the first samurai to rise to the rank of Grand Minister of State. He also made great achievements in culture and economy, including trade between Japan and Song and the construction of Itsukushima Shrine."
   },
   "arai_hakuseki": {
     "name": "新井白石",
@@ -504,7 +618,10 @@
     "rank_taiga": 0,
     "rank_great": 28,
     "desc": "6代・7代将軍の侍講。正徳の治を主導した文治政治家。朝鮮通信使の待遇改革や貨幣改鋳で財政を整えた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Arai Shiraishi",
+    "era_en": "Edo period",
+    "desc_en": "Samurai lectures of the 6th and 7th shoguns. A literary politician who led the Shotoku era. The government improved its finances by reforming the treatment of Korean envoys and reminting the country's currency."
   },
   "ino_tadataka": {
     "name": "伊能忠敬",
@@ -517,7 +634,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "50歳から測量を始め17年をかけて日本初の精密な実測地図を完成させた測量家。現代の地図と誤差わずか1/1000。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tadataka Ino",
+    "era_en": "Edo period",
+    "desc_en": "A surveyor who started surveying at the age of 50 and spent 17 years completing Japan's first precise surveyed map. The error is only 1/1000 compared to modern maps."
   },
   "yamamoto_kansuke": {
     "name": "山本勘助",
@@ -530,7 +650,10 @@
     "rank_taiga": 18,
     "rank_great": 0,
     "desc": "武田信玄に仕えた軍師。第4次川中島の戦いで謀略「啄木鳥戦法」を立案し戦死。NHK大河『風林火山』の主人公。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Kansuke Yamamoto",
+    "era_en": "Sengoku period",
+    "desc_en": "A tactician who served Takeda Shingen. He was killed in the 4th Battle of Kawanakajima after devising the strategy ``Takubokucho Tactics.'' The main character of NHK Taiga's ``Furinkazan.''"
   },
   "amago_tsunehisa": {
     "name": "尼子経久",
@@ -543,7 +666,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "出雲の国人から11カ国に及ぶ大名に成り上がった謀将。月山富田城を本拠に毛利氏・大内氏と鎬を削った。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Tsunehisa Amago",
+    "era_en": "Sengoku period",
+    "desc_en": "A military commander who rose from a native of Izumo to a daimyo in 11 countries. Based at Gassan-Tomida Castle, he had a strong relationship with the Mori clan and the Ouchi clan."
   },
   "kikkawa_motoharu": {
     "name": "吉川元春",
@@ -556,7 +682,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "毛利元就の次男。「戦えば負けなし」と称された猛将。弟・小早川隆景とともに毛利の両翼を担った。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Motoharu Yoshikawa",
+    "era_en": "Sengoku period",
+    "desc_en": "Motonari Mori's second son. A fierce general who was known as ``If you fight, you won't lose.'' Along with his younger brother Takakage Kobayakawa, he played the two wings of the Mori movement."
   },
   "hoshina_masayuki": {
     "name": "保科正之",
@@ -569,7 +698,10 @@
     "rank_taiga": 0,
     "rank_great": 2,
     "desc": "江戸幕府3代将軍・家光の異母弟。会津松平家の祖として幕藩体制の制度設計を担い「名君」の誉れ高い。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Masayuki Hoshina",
+    "era_en": "Edo period",
+    "desc_en": "Half-brother of Iemitsu, the third shogun of the Edo shogunate. As the founder of the Aizu Matsudaira family, he was responsible for the institutional design of the shogunate system and was highly praised as a ``great prince.''"
   },
   "gamo_ujisato": {
     "name": "蒲生氏郷",
@@ -582,7 +714,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "信長に見出され秀吉に重用されたキリシタン大名。会津120万石を治め若くして40歳で没した「早世の名将」。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Ujisato Gamo",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "A Christian daimyo who was discovered by Nobunaga and highly valued by Hideyoshi. He was a ``famous general who died young'' who ruled over 1.2 million koku in Aizu and died at the young age of 40."
   },
   "saito_dosan": {
     "name": "斎藤道三",
@@ -595,7 +730,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "油売りから美濃国主に成り上がった「下克上の体現者」。娘婿・織田信長の才能を「子孫は信長に仕えよ」と認めた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Dosan Saito",
+    "era_en": "Sengoku period",
+    "desc_en": "He rose from an oil seller to become the lord of Mino Province, and is the ``embodiment of the Gokujo.'' He recognized the talent of his son-in-law, Nobunaga Oda, and said, ``My descendants should serve Nobunaga.''"
   },
   "hojo_yoshitoki": {
     "name": "北条義時",
@@ -608,7 +746,10 @@
     "rank_taiga": 7,
     "rank_great": 2,
     "desc": "鎌倉幕府2代執権。承久の乱で後鳥羽上皇の討幕計画を打ち砕き武士政権を盤石にした「実質的幕府完成者」。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Yoshitoki Hojo",
+    "era_en": "Kamakura period",
+    "desc_en": "Second regent of the Kamakura Shogunate. He was the ``virtual completer of the shogunate,'' who destroyed Retired Emperor Gotoba's plan to overthrow the shogunate and solidified the samurai government during the Jokyu War."
   },
   "shibusawa_eiichi": {
     "name": "渋沢栄一",
@@ -621,7 +762,10 @@
     "rank_taiga": 9,
     "rank_great": 10,
     "desc": "「日本資本主義の父」。約500の企業・600の社会事業を設立。近代経済の礎を築き2024年から一万円札の顔に。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Eiichi Shibusawa",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "\"Father of Japanese Capitalism\". Approximately 500 companies and 600 social enterprises were established. It laid the foundation for the modern economy and will be the face of the 10,000 yen bill from 2024."
   },
   "atsuhime": {
     "name": "篤姫",
@@ -634,7 +778,10 @@
     "rank_taiga": 15,
     "rank_great": 0,
     "desc": "薩摩藩主・島津斉彬の養女から13代将軍・家定の正室に。大奥に君臨し江戸城無血開城に尽力した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Atsuhime",
+    "era_en": "end of the Edo period",
+    "desc_en": "From being the adopted daughter of Nariakira Shimazu, the lord of the Satsuma domain, to being the legal wife of Iesada, the 13th shogun. He ruled Ooku and worked hard to surrender Edo Castle bloodlessly."
   },
   "tokugawa_yoshimune": {
     "name": "徳川吉宗",
@@ -647,7 +794,10 @@
     "rank_taiga": 16,
     "rank_great": 0,
     "desc": "江戸幕府8代将軍。享保の改革で幕府財政を再建した「中興の祖」。サツマイモの普及など庶民政策でも知られる。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tokugawa Yoshimune",
+    "era_en": "Edo period",
+    "desc_en": "The 8th Shogun of the Edo Shogunate. The ``father of Chukosho'' who rebuilt the shogunate's finances through the Kyoho reforms. He is also known for his policies for the common people, such as the popularization of sweet potatoes."
   },
   "niijima_yae": {
     "name": "新島八重",
@@ -660,7 +810,10 @@
     "rank_taiga": 19,
     "rank_great": 0,
     "desc": "会津藩士の娘。戊辰戦争で銃を持って戦い「幕末のジャンヌ・ダルク」と呼ばれた。後に同志社創設者・新島襄と結婚。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Niijima Yae",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "Daughter of a samurai of the Aizu clan. She fought with a gun during the Boshin War and was called the ``Joanne d'Arc of the end of the Edo period.'' She later married Jo Niijima, the founder of Doshisha."
   },
   "tokugawa_yoshinobu": {
     "name": "徳川慶喜",
@@ -673,7 +826,10 @@
     "rank_taiga": 21,
     "rank_great": 0,
     "desc": "江戸幕府最後の15代将軍。大政奉還を決断し江戸城を無血開城。新時代への橋渡しを担った「悲劇の将軍」。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yoshinobu Tokugawa",
+    "era_en": "end of the Edo period",
+    "desc_en": "The 15th and last shogun of the Edo shogunate. He decided to restore imperial rule and surrendered Edo Castle bloodlessly. The \"tragic general\" who served as a bridge to a new era."
   },
   "fujiwara_fuhito": {
     "name": "藤原不比等",
@@ -686,7 +842,10 @@
     "rank_taiga": 0,
     "rank_great": 7,
     "desc": "大宝律令・養老律令を制定した律令国家の設計者。藤原氏繁栄の基盤を作り日本の政治制度の枠組みを定めた。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Fuhito Fujiwara",
+    "era_en": "Asuka - Nara period",
+    "desc_en": "The architect of the Ritsuryo state who established the Taiho Ritsuryo Code and the Yoro Ritsuryo Code. He created the foundation for the Fujiwara clan's prosperity and set the framework for Japan's political system."
   },
   "ito_hirobumi": {
     "name": "伊藤博文",
@@ -699,7 +858,10 @@
     "rank_taiga": 0,
     "rank_great": 9,
     "desc": "初代内閣総理大臣。大日本帝国憲法を起草し近代国家の礎を築いた。1909年ハルビンで暗殺された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Hirofumi Ito",
+    "era_en": "Meiji",
+    "desc_en": "The first Prime Minister. He drafted the Constitution of the Empire of Japan and laid the foundation for the modern nation. He was assassinated in Harbin in 1909."
   },
   "ono_imoko": {
     "name": "小野妹子",
@@ -712,7 +874,10 @@
     "rank_taiga": 0,
     "rank_great": 11,
     "desc": "607年に遣隋使として「日出づる処の天子」の親書を携え渡航。対等外交を主張した日本外交史の先駆者。",
-    "era_category": "古代"
+    "era_category": "古代",
+    "name_en": "Imoko Ono",
+    "era_en": "Asuka period",
+    "desc_en": "In 607, he traveled as an envoy to the Sui Dynasty, carrying a personal letter from ``The Son of Heaven where the sun rises''. A pioneer in Japanese diplomatic history who advocated equal diplomacy."
   },
   "saicho": {
     "name": "最澄",
@@ -725,7 +890,10 @@
     "rank_taiga": 0,
     "rank_great": 12,
     "desc": "天台宗の開祖。比叡山延暦寺を創建し日本仏教の母山を確立。空海とともに平安仏教の双璧をなした。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Saicho",
+    "era_en": "Heian period",
+    "desc_en": "Founder of the Tendai sect. Founded Mt. Hiei Enryaku-ji Temple and established it as the mother mountain of Japanese Buddhism. Along with Kukai, he was one of the two greats of Heian Buddhism."
   },
   "kukai": {
     "name": "空海",
@@ -738,7 +906,10 @@
     "rank_taiga": 0,
     "rank_great": 13,
     "desc": "真言宗の開祖・弘法大師。高野山に金剛峯寺を開創。書・詩・土木にも長じた平安最大の天才。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Kukai",
+    "era_en": "Heian period",
+    "desc_en": "Kobo Daishi, the founder of the Shingon sect. Founded Kongobu-ji Temple on Mt. Koya. The greatest genius of the Heian period who was also skilled in calligraphy, poetry, and civil engineering."
   },
   "ashikaga_yoshimitsu": {
     "name": "足利義満",
@@ -751,7 +922,10 @@
     "rank_taiga": 0,
     "rank_great": 6,
     "desc": "室町幕府3代将軍。金閣寺を造営し南北朝を合一。日明貿易を開始し「日本国王」を名乗った室町最盛期の将軍。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yoshimitsu Ashikaga",
+    "era_en": "Muromachi period",
+    "desc_en": "The third shogun of the Muromachi shogunate. Built Kinkaku-ji and unified the Northern and Southern Courts. A general at the height of Muromachi who started trade between Japan and Ming Dynasty and called himself the ``King of Japan.''"
   },
   "shimazu_nariakira": {
     "name": "島津斉彬",
@@ -764,7 +938,10 @@
     "rank_taiga": 0,
     "rank_great": 17,
     "desc": "薩摩藩11代藩主。西洋の技術を積極的に導入し日本最初の洋式工場「集成館」を建設。西郷隆盛を見出した名君。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Nariakira Shimazu",
+    "era_en": "end of the Edo period",
+    "desc_en": "The 11th lord of the Satsuma domain. We actively introduced Western technology and built Japan's first Western-style factory, Shuseikan. The famous lord who discovered Takamori Saigo."
   },
   "sugita_genpaku": {
     "name": "杉田玄白",
@@ -777,7 +954,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『解体新書』を翻訳出版し日本の蘭学・西洋医学の扉を開いた。「腑分け」の衝撃体験を『蘭学事始』に記した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Genpaku Sugita",
+    "era_en": "Edo period",
+    "desc_en": "He translated and published \"Kaitai Shinsho\" and opened the door to Dutch studies and Western medicine in Japan. He wrote about the shocking experience of ``understanding'' in ``Dangaku Jiji Hajime.''"
   },
   "ogata_koan": {
     "name": "緒方洪庵",
@@ -790,7 +970,10 @@
     "rank_taiga": 0,
     "rank_great": 20,
     "desc": "大阪・適塾を開き福沢諭吉・大村益次郎ら近代日本を担う人材を多数育成。天然痘予防にも尽力した医師。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Koan Ogata",
+    "era_en": "Edo period",
+    "desc_en": "Opened Tekijuku in Osaka and trained many people who would lead modern Japan, including Yukichi Fukuzawa and Masujiro Omura. A doctor who worked hard to prevent smallpox."
   },
   "kitasato_shibasaburo": {
     "name": "北里柴三郎",
@@ -803,7 +986,10 @@
     "rank_taiga": 0,
     "rank_great": 22,
     "desc": "破傷風菌の純粋培養・血清療法を確立。ペスト菌を発見し伝染病研究所を設立した近代医学の先駆者。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shibasaburo Kitasato",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "Established pure culture and serum therapy of Clostridium tetani. A pioneer of modern medicine who discovered the plague bacterium and established the Institute for Infectious Diseases."
   },
   "takasugi_shinsaku": {
     "name": "高杉晋作",
@@ -816,7 +1002,10 @@
     "rank_taiga": 0,
     "rank_great": 23,
     "desc": "松下村塾出身の奇才。身分を問わない奇兵隊を組織し功山寺挙兵で長州を倒幕へ導いた。29歳で病没。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shinsaku Takasugi",
+    "era_en": "end of the Edo period",
+    "desc_en": "A genius from Matsushita Village School. He organized a group of military soldiers regardless of social status and led Choshu to overthrow the shogunate by raising troops at Kozanji Temple. Died of illness at the age of 29."
   },
   "komatsu_tatewaki": {
     "name": "小松帯刀",
@@ -829,7 +1018,10 @@
     "rank_taiga": 0,
     "rank_great": 24,
     "desc": "薩摩藩家老。薩長同盟締結を陰で支えた実務の天才。西郷・大久保の陰に隠れがちだが薩摩倒幕の立役者。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Komatsu belt sword",
+    "era_en": "end of the Edo period",
+    "desc_en": "Satsuma feudal chief retainer. A practical genius who supported the conclusion of the Satsuma-Choshu Alliance behind the scenes. Although he tends to be overshadowed by Saigo and Okubo, he was a key player in overthrowing the Satsuma shogunate."
   },
   "iwakura_tomomi": {
     "name": "岩倉具視",
@@ -842,7 +1034,10 @@
     "rank_taiga": 0,
     "rank_great": 25,
     "desc": "公家出身の明治維新参謀。岩倉使節団を率いて欧米を視察し、帰国後は内治優先の路線を確立した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tomomi Iwakura",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "A member of the Meiji Restoration staff from a noble family. He led the Iwakura Mission to inspect Europe and the United States, and after returning to Japan, he established a policy of prioritizing domestic rule."
   },
   "kamo_mabuchi": {
     "name": "賀茂真淵",
@@ -855,7 +1050,10 @@
     "rank_taiga": 0,
     "rank_great": 26,
     "desc": "国学の祖のひとり。『万葉集』研究を深め本居宣長に影響を与えた。「ますらをぶり」を提唱し日本文化を再評価。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Kamo Mabuchi",
+    "era_en": "Edo period",
+    "desc_en": "One of the founders of Japanese studies. He deepened his research on the Manyoshu and influenced Norinaga Motoori. Advocating \"Masura-o-buri\" and re-evaluating Japanese culture."
   },
   "tanuma_okitsugu": {
     "name": "田沼意次",
@@ -868,7 +1066,10 @@
     "rank_taiga": 0,
     "rank_great": 27,
     "desc": "老中として重商主義政策を推進した革新的政治家。賄賂政治のイメージとは裏腹に経済発展に寄与した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tanuma Yoshitsugu",
+    "era_en": "Edo period",
+    "desc_en": "An innovative politician who promoted mercantilist policies as a senior citizen. Contrary to the image of bribery politics, it contributed to economic development."
   },
   "kido_takayoshi": {
     "name": "木戸孝允",
@@ -881,7 +1082,10 @@
     "rank_taiga": 0,
     "rank_great": 29,
     "desc": "長州の倒幕の中心人物。薩長同盟・五箇条の御誓文起草に関わり「維新の三傑」のひとりに数えられる。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takayoshi Kido",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "A central figure in the overthrow of Choshu. He was involved in the drafting of the five-article oath of the Satsuma-Choshu Alliance and is considered one of the ``three great figures of the Meiji Restoration.''"
   },
   "matsuura_takeshiro": {
     "name": "松浦武四郎",
@@ -894,7 +1098,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "6度にわたる北海道探検で詳細な地図を作成し「北海道」の名付け親となった幕末の探検家・冒険家。蝦夷地の実情を幕府に報告し続けた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takeshiro Matsuura",
+    "era_en": "Edo period",
+    "desc_en": "An explorer and adventurer at the end of the Edo period who created detailed maps during his six expeditions to Hokkaido and became the father of the name ``Hokkaido.'' He continued to report the actual situation in Ezochi to the shogunate."
   },
   "enomoto_takeaki": {
     "name": "榎本武揚",
@@ -907,7 +1114,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "旧幕府海軍副総裁。五稜郭に立て籠もり新政府軍に抵抗した最後の幕臣。降伏後は明治政府に登用され逓信大臣・文部大臣を歴任。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takeaki Enomoto",
+    "era_en": "end of the Edo period",
+    "desc_en": "Former vice president of the Shogunate Navy. The last retainer of the shogun who barricaded himself in Goryokaku and resisted the new government forces. After the surrender, he was appointed to the Meiji government and served as Minister of Communications and Minister of Education."
   },
   "yoda_benzo": {
     "name": "依田勉三",
@@ -920,7 +1130,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「晩成社」を率いて十勝平野を開拓した北海道農業の父。「この広野を我が手で開く」と若者たちとともに原野に鍬を入れた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Benzo Yoda",
+    "era_en": "Meiji era",
+    "desc_en": "The father of agriculture in Hokkaido, who led Banseisha and pioneered the Tokachi plains. ``I will open up this vast field with my own hands,'' he said as he and other young people put a hoe into the field."
   },
   "dazai_osamu": {
     "name": "太宰治",
@@ -933,7 +1146,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『人間失格』『走れメロス』の作家。津軽の豪農に生まれ自己破壊的な生を生きた無頼派文学の代表者。39歳で玉川上水に入水。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Osamu Dazai",
+    "era_en": "Showa era",
+    "desc_en": "Author of ``No Longer Human'' and ``Run, Melos.'' A representative of Buraiha literature who was born into a wealthy farming family in Tsugaru and lived a self-destructive life. Entered Tamagawa Josui at the age of 39."
   },
   "munakata_shiko": {
     "name": "棟方志功",
@@ -946,7 +1162,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「わだばゴッホになる」と上京した青森出身の板画家。ヴェネツィア・ビエンナーレなど国際的に評価された近代日本を代表する版画家。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Shiko Munakata",
+    "era_en": "Showa era",
+    "desc_en": "A woodblock artist from Aomori who moved to Tokyo with the idea of ​​becoming Van Gogh. A printmaker representing modern Japan who has received international acclaim, including at the Venice Biennale."
   },
   "hara_takashi": {
     "name": "原敬",
@@ -959,7 +1178,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日本初の本格的な政党内閣を組織した「平民宰相」。爵位を持たず平民のまま首相となった最初の人物。東京駅で暗殺された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takashi Hara",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "The ``commoner prime minister'' organized Japan's first full-fledged political party cabinet. He was the first person to become prime minister as a commoner without a title. He was assassinated at Tokyo Station."
   },
   "nitobe_inazo": {
     "name": "新渡戸稲造",
@@ -972,7 +1194,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『武士道』を英語で著し日本精神を世界に紹介した教育者・農学者。旧五千円札の顔として知られ「太平洋は私の内海」の名言でも有名。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Nitobe Inazo",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "An educator and agriculturalist who wrote \"Bushido\" in English and introduced the Japanese spirit to the world. He is known as the face of the old 5,000 yen bill and is also famous for the famous quote, ``The Pacific Ocean is my inland sea.''"
   },
   "miyazawa_kenji": {
     "name": "宮沢賢治",
@@ -985,7 +1210,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「雨ニモマケズ」「銀河鉄道の夜」の詩人・童話作家。37歳で没するまで理想の農業と芸術を追い求めた岩手の天才。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Kenji Miyazawa",
+    "era_en": "Taisho/Showa",
+    "desc_en": "Poet and fairy tale writer of ``Ame Nimo Makezu'' and ``Night on the Galactic Railway.'' A genius from Iwate who pursued his ideals of agriculture and art until his death at the age of 37."
   },
   "hasekura_tsunenaga": {
     "name": "支倉常長",
@@ -998,7 +1226,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "伊達政宗の命を受けてスペイン・ローマへ渡った日本人最初の公式欧州使節（慶長遣欧使節）。7年の旅路の末に帰国後は切支丹禁制で不遇の晩年を送った。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "Tsunenaga Hasekura",
+    "era_en": "Early Edo period",
+    "desc_en": "The first official Japanese mission to Europe (the Keicho Mission to Europe), which went to Spain and Rome on the orders of Date Masamune. After returning to Japan at the end of a seven-year journey, he spent his later years in misfortune as he was forced to commit suicide."
   },
   "doi_bansui": {
     "name": "土井晩翠",
@@ -1011,7 +1242,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「荒城の月」の作詞者。滝廉太郎の曲と組み合わさり日本の抒情歌の名曲となった。仙台出身の明治を代表するロマン派詩人。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Bansui Doi",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "Lyricist of \"Kojo no Tsuki\". Combined with Rentaro Taki's song, it became a masterpiece of Japanese lyrical poetry. A Romantic poet representing the Meiji era, born in Sendai."
   },
   "yoshino_sakuzo": {
     "name": "吉野作造",
@@ -1024,7 +1258,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "大正デモクラシーの理論的支柱となった「民本主義」を提唱した政治学者。普通選挙・議会政治の確立を論じ時代を動かした。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Sakuzo Yoshino",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "A political scientist who advocated ``people's principles,'' which became the theoretical pillar of Taisho democracy. He moved the era by arguing for the establishment of universal suffrage and parliamentary politics."
   },
   "ono_komachi": {
     "name": "小野小町",
@@ -1037,7 +1274,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "六歌仙・三十六歌仙のひとり。絶世の美女として伝説化された平安時代最高の女流歌人。秋田出身説が有力とされる。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Ono Komachi",
+    "era_en": "Heian period",
+    "desc_en": "One of the 36 poets. The greatest female poet of the Heian period, who became legendary as an unparalleled beauty. The most likely theory is that he was born in Akita."
   },
   "hirata_atsutane": {
     "name": "平田篤胤",
@@ -1050,7 +1290,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "復古神道・国学の大成者。本居宣長の著作に感銘を受け独自の死後世界論・神道思想を構築し幕末尊王思想に大きな影響を与えた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Atsutane Hirata",
+    "era_en": "Edo period",
+    "desc_en": "A master of restoration Shintoism and Japanese studies. Impressed by the writings of Norinaga Motoori, he developed his own theory of the afterlife and Shinto philosophy, which had a great influence on the philosophy of the Son of Kings at the end of the Edo period."
   },
   "ishikawa_rikino": {
     "name": "石川理紀之助",
@@ -1063,7 +1306,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「老農」と呼ばれた農業改革の先駆者。荒れ地を開拓し農民の生活向上に生涯を捧げた秋田の義人。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Rikinosuke Ishikawa",
+    "era_en": "Meiji era",
+    "desc_en": "A pioneer of agricultural reform who was called the \"Old Farmer.\" A Yoshito from Akita who dedicated his life to cultivating wasteland and improving the lives of farmers."
   },
   "mogami_tokunai": {
     "name": "最上徳内",
@@ -1076,7 +1322,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "択捉島・国後島の探検調査で蝦夷地の実情を明らかにした幕府の探検家。山形出身の農民から蘭学を学び北方探検の第一人者となった。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Mogami Tokunai",
+    "era_en": "Edo period",
+    "desc_en": "An explorer of the shogunate who revealed the actual situation of Ezochi through expeditions on Etorofu Island and Kunashir Island. He learned Dutch studies from a farmer from Yamagata and became a leading figure in northern exploration."
   },
   "saito_mokichi": {
     "name": "斎藤茂吉",
@@ -1089,7 +1338,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "アララギ派の歌人・精神科医。「死にたまふ母」など写生と内面の融合した歌風で近代短歌の最高峰と評される。山形県上山出身。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Mokichi Saito",
+    "era_en": "Meiji-Showa",
+    "desc_en": "Araragi poet and psychiatrist. Her style of poetry, such as ``Shitatamafu Haha'' (Shitatamafu Haha), is said to be the pinnacle of modern tanka, which combines sketches and inner thoughts. Born in Kaminoyama, Yamagata Prefecture."
   },
   "noguchi_hideyo": {
     "name": "野口英世",
@@ -1102,7 +1354,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "黄熱病・梅毒研究に生涯を捧げた細菌学者。福島県猪苗代の貧農出身から世界的な医学者に。1928年にガーナで黄熱病により51歳で没。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Hideyo Noguchi",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "A bacteriologist who devoted his life to research on yellow fever and syphilis. From a humble farming background in Inawashiro, Fukushima Prefecture, he became a world-renowned medical scientist. He died of yellow fever in Ghana in 1928 at the age of 51."
   },
   "soma_yoshitane": {
     "name": "相馬義胤",
@@ -1115,7 +1370,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "陸奥相馬氏の戦国大名。長年続いた伊達氏との抗争を経て相馬藩を存続させた。野馬追（のまおい）の伝統を守り続けた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yoshitane Soma",
+    "era_en": "Sengoku period",
+    "desc_en": "Sengoku daimyo of the Mutsu Soma clan. After many years of conflict with the Date clan, the Soma clan was kept in existence. He continued to preserve the tradition of Nomaoi."
   },
   "tokugawa_nariaki": {
     "name": "徳川斉昭",
@@ -1128,7 +1386,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "水戸藩9代藩主・尊王攘夷論の旗手。水戸学の中心人物として幕末の思想界に多大な影響を与えた。息子は15代将軍・徳川慶喜。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tokugawa Nariaki",
+    "era_en": "Edo period",
+    "desc_en": "The 9th lord of the Mito domain and the standard-bearer of the sonno-joi theory. As a central figure in Mito studies, he had a great influence on the world of thought at the end of the Edo period. His son was Yoshinobu Tokugawa, the 15th shogun."
   },
   "mamiya_rinzo": {
     "name": "間宮林蔵",
@@ -1141,7 +1402,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "樺太が島であることを日本人として初めて確認した探検家。「間宮海峡」に名を残す江戸最大の探検家。茨城出身。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Rinzo Mamiya",
+    "era_en": "Edo period",
+    "desc_en": "He was the first Japanese explorer to confirm that Sakhalin was an island. Edo's greatest explorer, who left his name on the Mamiya Strait. Born in Ibaraki."
   },
   "tanaka_shozo": {
     "name": "田中正造",
@@ -1154,7 +1418,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "足尾銅山鉱毒事件を明治天皇に直訴した日本初の公害問題の活動家。議員辞職し最後まで農民とともに闘い渡良瀬川の土となった。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shozo Tanaka",
+    "era_en": "Meiji era",
+    "desc_en": "Japan's first pollution activist who directly complained to Emperor Meiji about the Ashio Copper Mine poisoning incident. He resigned as a member of the Diet and fought alongside the farmers until the end, becoming the soil of the Watarase River."
   },
   "shodo_shonin": {
     "name": "勝道上人",
@@ -1167,7 +1434,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日光山を開いた天台宗の高僧。782年に日光山に初登頂し、中禅寺湖畔に立木観音（中禅寺）を建立して日光を霊場とした。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Shodo Shonin",
+    "era_en": "Nara period",
+    "desc_en": "A high priest of the Tendai sect who opened Mt. Nikko. In 782, he first climbed Mt. Nikko, built Tachiki Kannon (Chuzenji) on the shore of Lake Chuzenji, and made Nikko a sacred place."
   },
   "niijima_jo": {
     "name": "新島襄",
@@ -1180,7 +1450,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "アメリカに密航して神学を学び帰国後に同志社英学校（現・同志社大学）を設立。キリスト教主義教育の礎を築いた群馬出身の教育者。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Niijima Jo",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "Stowed away to the United States, studied theology, and after returning home established Doshisha English School (currently Doshisha University). An educator from Gunma who laid the foundation for Christian education."
   },
   "hanawa_hokiichi": {
     "name": "塙保己一",
@@ -1193,7 +1466,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "盲目の国学者。失明しながらも和学講談所を設立し『群書類従』666冊を編纂した不屈の学者。ヘレン・ケラーが尊敬した人物。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Koichi Hanawa",
+    "era_en": "Edo period",
+    "desc_en": "A blind nationalist. Although he lost his eyesight, he was an indomitable scholar who founded the Wagaku Kodansho and compiled 666 volumes of Gunshoju. A person Helen Keller admired."
   },
   "ogino_ginko": {
     "name": "荻野吟子",
@@ -1206,7 +1482,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日本で初めて医術開業試験に合格した女性医師。男女差別の壁を乗り越え女性の医療従事への道を開いた先駆者。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Ginko Ogino",
+    "era_en": "Meiji era",
+    "desc_en": "The first female doctor in Japan to pass the medical practice exam. A pioneer who overcame the barrier of gender discrimination and paved the way for women to enter the medical profession."
   },
   "nichiren": {
     "name": "日蓮",
@@ -1219,7 +1498,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日蓮宗の開祖。「南無妙法蓮華経」を唱え法華経こそ正法と主張。幕府への諫言を繰り返し流罪・法難を受けながらも信念を曲げなかった。",
-    "era_category": "鎌倉・南北朝"
+    "era_category": "鎌倉・南北朝",
+    "name_en": "Nichiren",
+    "era_en": "Kamakura period",
+    "desc_en": "Founder of Nichiren Buddhism. He chants ``Namu-myoho-renge-kyo'' and claims that the Lotus Sutra is the correct law. Even though he repeatedly reprimanded the shogunate and suffered exile and legal tribulations, he did not waver in his beliefs."
   },
   "hasegawa_heizo": {
     "name": "長谷川平蔵",
@@ -1232,7 +1514,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "火付盗賊改方長官として犯罪者の更生施設「人足寄場」を設立した実在の幕臣。池波正太郎の小説『鬼平犯科帳』で不動の人気を誇る。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Hasegawa Hirazo",
+    "era_en": "Edo period",
+    "desc_en": "An actual retainer of the shogunate who established a rehabilitation facility for criminals called ``Hitoashiyoroba'' as the head of the reform of the thieves. The novel \"Onihei Hankacho\" by Shotaro Ikenami has gained immense popularity."
   },
   "katsu_kaishu": {
     "name": "勝海舟",
@@ -1245,7 +1530,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "幕末最高の実務家。咸臨丸で太平洋を渡り、西郷隆盛との会談で江戸城の無血開城を実現させた。「氷川清話」に語録を残す。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Kaishu Katsu",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "The best practical person at the end of the Edo period. He crossed the Pacific Ocean on the Kanrin Maru and had a meeting with Takamori Saigo, which led to the bloodless surrender of Edo Castle. Leaves a record of his words in ``Hikawa Seiwa.''"
   },
   "natsume_soseki": {
     "name": "夏目漱石",
@@ -1258,7 +1546,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『吾輩は猫である』『坊っちゃん』『こころ』の作家。近代日本文学の最高峰。旧千円札の顔として広く親しまれた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Natsume Soseki",
+    "era_en": "Meiji era",
+    "desc_en": "Author of ``I am a cat,'' ``Botchan,'' and ``Kokoro.'' The pinnacle of modern Japanese literature. He was widely known as the face of the old 1,000 yen bill."
   },
   "hiraga_gennai": {
     "name": "平賀源内",
@@ -1271,7 +1562,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "エレキテル（静電気発生器）を復元した天才発明家・科学者・戯作者。香川県出身だが江戸で活躍した「江戸の発明王」。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Hiraga Gennai",
+    "era_en": "Edo period",
+    "desc_en": "A genius inventor, scientist, and playwright who restored the electric electrostatic generator. Although he was born in Kagawa Prefecture, he was active in Edo as the ``King of Inventors of Edo.''"
   },
   "hojo_ujiyasu": {
     "name": "北条氏康",
@@ -1284,7 +1578,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "後北条氏3代当主。武田信玄・上杉謙信と「三国同盟」を結び関東を安定統治。小田原城を強化し「関東の覇者」と称された。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Ujiyasu Hojo",
+    "era_en": "Sengoku period",
+    "desc_en": "Third generation head of the Gohojo clan. Formed the ``Triple Alliance'' with Takeda Shingen and Uesugi Kenshin to provide stable control over the Kanto region. He strengthened Odawara Castle and was known as the ``Conqueror of Kanto.''"
   },
   "john_manjiro": {
     "name": "ジョン万次郎",
@@ -1297,7 +1594,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "土佐出身の漁師が漂流してアメリカに渡り英語・航海術を習得。帰国後に幕府の通訳として日米外交に貢献した開国の陰の功労者。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "John Manjiro",
+    "era_en": "Edo period",
+    "desc_en": "A fisherman from Tosa drifts to America and learns English and navigation. After returning to Japan, he served as an interpreter for the Shogunate and contributed to Japan-US diplomacy."
   },
   "ryokan": {
     "name": "良寛",
@@ -1310,7 +1610,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "越後の禅僧・歌人・書家。清貧の中で子供たちと遊び、詩・歌・書を愛した「托鉢の仙人」。その書は日本書道史上最高峰のひとつ。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Ryohiro",
+    "era_en": "Edo period",
+    "desc_en": "A Zen monk, poet, and calligrapher from Echigo. A ``mendicant hermit'' who lived in poverty and played with children and loved poetry, song, and calligraphy. The calligraphy is one of the best in the history of Japanese calligraphy."
   },
   "kawai_tsugunosuke": {
     "name": "河井継之助",
@@ -1323,7 +1626,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "長岡藩家老。戊辰戦争で中立を目指したが実現せず、ガトリング砲を駆使して新政府軍と死闘を演じた「最後の武士」的人物。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tsuginosuke Kawai",
+    "era_en": "end of the Edo period",
+    "desc_en": "Chief retainer of the Nagaoka clan. He was the ``last samurai'' figure who aimed for neutrality during the Boshin War, but failed to do so, and fought to the death against the new government's forces, making full use of the Gatling gun."
   },
   "maeda_toshinaga": {
     "name": "前田利長",
@@ -1336,7 +1642,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "加賀藩初代藩主。利家の長男として藩の礎を築き、富山城から高岡城に移り「高岡開町」を行った。鋳物・漆器の産業振興でも知られる。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Toshinaga Maeda",
+    "era_en": "Azuchi-Momoyama - Edo",
+    "desc_en": "The first lord of the Kaga domain. As the eldest son of Toshiie, he laid the foundation of the domain and moved from Toyama Castle to Takaoka Castle and conducted ``Takaoka Kaimachi.'' It is also known for promoting the casting and lacquerware industries."
   },
   "yasuda_zenjiro": {
     "name": "安田善次郎",
@@ -1349,7 +1658,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "安田財閥の創始者。富山出身の両替商から身を起こし安田銀行（現みずほ銀行）を設立。明治財界の巨人として「守銭奴」とも呼ばれた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Zenjiro Yasuda",
+    "era_en": "Meiji era",
+    "desc_en": "Founder of the Yasuda Zaibatsu. He started his career as a money exchanger from Toyama and established Yasuda Bank (currently Mizuho Bank). As a giant of the Meiji business world, he was also known as the ``mistress.''"
   },
   "taki_rentaro": {
     "name": "滝廉太郎",
@@ -1362,7 +1674,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「荒城の月」「花」「箱根八里」の作曲家。富山・大分にゆかりを持ち西洋音楽を日本に根付かせた近代音楽の先駆者。23歳で結核により早世。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Rentaro Taki",
+    "era_en": "Meiji era",
+    "desc_en": "Composer of \"Kojo no Tsuki,\" \"Hana,\" and \"Hakone Hachiri.\" A pioneer of modern music who has connections to Toyama and Oita and who made Western music take root in Japan. He died prematurely from tuberculosis at the age of 23."
   },
   "maeda_toshiie": {
     "name": "前田利家",
@@ -1375,7 +1690,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "加賀百万石の礎を築いた武将。信長・秀吉に仕え五大老のひとりとなった。「加賀のとびや」の異名を持つ槍の名手。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Toshiie Maeda",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "A military commander who built the foundation of Kaga Hyakumangoku. He served Nobunaga and Hideyoshi and became one of the Five Elders. A master spearman known as ``Kaga no Tobiya.''"
   },
   "hashimoto_sanai": {
     "name": "橋本左内",
@@ -1388,7 +1706,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "越前藩の天才的俊才。15歳で『啓発録』を著し将軍継嗣問題で一橋派を支持したが安政の大獄で25歳で処刑された幕末の悲劇の俊英。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Hashimoto Sanai",
+    "era_en": "end of the Edo period",
+    "desc_en": "A genius of the Echizen clan. A tragic Toshihide at the end of the Edo period, who wrote ``Enlightenment'' at the age of 15 and supported the Hitotsubashi faction on the issue of succession to the shogun, but was executed at the age of 25 in the Great Prison of Ansei."
   },
   "yuri_kimasa": {
     "name": "由利公正",
@@ -1401,7 +1722,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "五箇条の御誓文の起草に参加し明治財政の基礎を作った越前藩士。東京府知事として首都整備にも尽力した維新の実務家。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yuri Masayoshi",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "A samurai of the Echizen clan who participated in the drafting of the Five Articles Oath and created the foundation of Meiji finances. A Meiji Restoration practitioner who worked hard to improve the capital as the governor of Tokyo."
   },
   "takeda_katsuyori": {
     "name": "武田勝頼",
@@ -1414,7 +1738,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "武田信玄の後継者。長篠の戦いで織田・徳川連合の鉄砲隊に敗北し武田家滅亡の一因となったが、最期は天目山で主従揃って散った。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Katsuyori Takeda",
+    "era_en": "Sengoku period",
+    "desc_en": "Successor of Takeda Shingen. At the Battle of Nagashino, they were defeated by the gun corps of the Oda-Tokugawa coalition, which contributed to the downfall of the Takeda family, but in the end, they were all scattered at Tenmokuyama."
   },
   "yamagata_masakage": {
     "name": "山県昌景",
@@ -1427,7 +1754,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "武田信玄の重臣・武田四天王のひとり。赤備えの騎馬隊を率いた猛将で長篠の戦いで37歳（異説あり）で散った武田最強の将。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Yamagata Masakage",
+    "era_en": "Sengoku period",
+    "desc_en": "A senior vassal of Takeda Shingen and one of the Four Takeda Kings. He was a fierce general who led the cavalry of the Red Reserve, and was Takeda's strongest general who died at the age of 37 (there are different theories) at the Battle of Nagashino."
   },
   "kiso_yoshinaka": {
     "name": "木曾義仲",
@@ -1440,7 +1770,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「旭将軍」と呼ばれた源氏の武将。平家を京から追い落としたが腐敗して義経に討たれた悲劇の英雄。倶利伽羅峠の戦いで名を上げた。",
-    "era_category": "平安"
+    "era_category": "平安",
+    "name_en": "Yoshinaka Kiso",
+    "era_en": "Late Heian period",
+    "desc_en": "A Genji military commander known as ``Asahi Shogun.'' A tragic hero who drove the Heike from Kyoto, but was corrupted and killed by Yoshitsune. He rose to fame at the Battle of Kurikara Pass."
   },
   "shimazaki_toson": {
     "name": "島崎藤村",
@@ -1453,7 +1786,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『夜明け前』『破戒』の小説家・詩人。長野県馬籠（現岐阜県）出身。「まだあげそめし前髪の」の詩で知られる近代文学の旗手。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Toson Shimazaki",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "Novelist and poet of ``Before Dawn'' and ``Hakai''. Born in Magome, Nagano Prefecture (currently Gifu Prefecture). A standard-bearer of modern literature, known for his poem ``Madaagesomeshi Bangae no.''"
   },
   "kani_saizo": {
     "name": "可児才蔵",
@@ -1466,7 +1802,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「笹の才蔵」の異名を持つ戦国最強の首取り武者。関ヶ原で多数の首を取りながら帰り討ちせず笹を目印に置いた戦場の怪人。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Saizo Kani",
+    "era_en": "Sengoku period",
+    "desc_en": "The strongest warrior in the Sengoku period, nicknamed ``Sasa no Saizo.'' A monster on the battlefield who took many heads at Sekigahara, but instead of returning home, he placed a bamboo tree as a landmark."
   },
   "enku": {
     "name": "円空",
@@ -1479,7 +1818,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "生涯12万体とも言われる円空仏を刻んだ遊行の僧・仏師。荒々しくも温かみある独特の作風は20世紀に再評価された江戸の天才。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Enku",
+    "era_en": "Edo period",
+    "desc_en": "An itinerant monk and Buddhist sculptor who carved 120,000 statues of Enku Buddha during his lifetime. His unique style, which is both rough and warm, was a genius of the Edo period and was reevaluated in the 20th century."
   },
   "yamaoka_tesshu": {
     "name": "山岡鉄舟",
@@ -1492,7 +1834,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "剣・禅・書の達人。西郷隆盛と江戸城明け渡しの事前交渉を行った幕臣。明治後は天皇の侍従として尽くした「最後の武士」。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tesshu Yamaoka",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "Master of swords, Zen, and calligraphy. A shogun vassal who negotiated with Saigo Takamori to surrender Edo Castle. After the Meiji period, he was the ``last samurai'' who served as the emperor's attendant."
   },
   "kato_kiyomasa": {
     "name": "加藤清正",
@@ -1505,7 +1850,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "熊本城を築いた猛将。「虎退治」伝説で知られ朝鮮出兵でも活躍。熊本城の堅固さは西南戦争でも証明された「築城の名人」。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Kiyomasa Kato",
+    "era_en": "Azuchi-Momoyama - Edo",
+    "desc_en": "A fierce general who built Kumamoto Castle. Known for the legend of ``slaying a tiger,'' he also played an active role in dispatching troops to Korea. The solidity of Kumamoto Castle was proven even during the Seinan Rebellion, making it a ``master castle builder.''"
   },
   "toyoda_sakichi": {
     "name": "豊田佐吉",
@@ -1518,7 +1866,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "自動織機を発明しトヨタ自動車の礎を作った「発明王」。「研究と創造」の精神はトヨタイズムとして世界中に継承されている。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Sakichi Toyoda",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "The ``King of Inventions'' who invented the automatic loom and laid the foundation for Toyota Motor Corporation. The spirit of ``research and creativity'' has been passed down throughout the world as Toyotaism."
   },
   "motoori_norinaga": {
     "name": "本居宣長",
@@ -1531,7 +1882,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "国学の大成者。35年かけて『古事記伝』を著し日本の古典文学を科学的に研究した。「もののあわれ」の概念を提唱した日本文化論の礎石。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Norinaga Motoori",
+    "era_en": "Edo period",
+    "desc_en": "A master of Japanese studies. He spent 35 years writing Kojikiden and scientifically researching classical Japanese literature. A cornerstone of Japanese cultural theory that proposed the concept of \"mono aware.\""
   },
   "todo_takatora": {
     "name": "藤堂高虎",
@@ -1544,7 +1898,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "7人の主君に仕えた「渡り奉公の名人」にして日本一の築城名人。宇和島城・今治城・津城など全国各地に名城を残した。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Takatora Todo",
+    "era_en": "Sengoku ~ Edo",
+    "desc_en": "He was a ``master of migratory servants'' who served seven lords, and was the best castle builder in Japan. He left behind famous castles all over the country, including Uwajima Castle, Imabari Castle, and Tsu Castle."
   },
   "matsuo_basho": {
     "name": "松尾芭蕉",
@@ -1557,7 +1914,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「古池や蛙飛び込む水の音」。俳諧を芸術に高めた俳聖。三重県伊賀出身で『奥の細道』など多くの紀行文を残した江戸最高の詩人。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Matsuo Basho",
+    "era_en": "Edo period",
+    "desc_en": "\"The sound of old ponds and water with frogs jumping in.\" A haiku master who elevated haikai to an art form. Born in Iga, Mie Prefecture, he was one of the greatest poets of the Edo period and wrote many travelogues, including ``Oku no Hosomichi.''"
   },
   "ishida_mitsunari": {
     "name": "石田三成",
@@ -1570,7 +1930,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "豊臣政権の官僚。関ヶ原の戦いで西軍を率いて家康と対立し敗死。「義に生きた」忠義の人として近年再評価が著しい。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Mitsunari Ishida",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "A bureaucrat of the Toyotomi government. At the Battle of Sekigahara, he led the Western army and opposed Ieyasu and was defeated. In recent years, he has been significantly reevaluated as a loyal person who ``lived righteously.''"
   },
   "ii_naosuke": {
     "name": "井伊直弼",
@@ -1583,7 +1946,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "大老として日米修好通商条約に調印し開国を推進。安政の大獄で反対派を弾圧したが桜田門外の変で水戸藩士に暗殺された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Naosuke Ii",
+    "era_en": "Edo period",
+    "desc_en": "As an elder, he signed the Japan-US Treaty of Amity and Commerce and promoted the opening of the country. He suppressed the opposition in the Great Prison of Ansei, but was assassinated by a retainer of the Mito clan during the Sakuradamon Incident."
   },
   "azai_nagamasa": {
     "name": "浅井長政",
@@ -1596,7 +1962,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "織田信長の妹・お市の方を妻とした近江の武将。義のために信長との同盟を破り朝倉氏とともに対立し小谷城で自刃した悲劇の武将。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Nagamasa Asai",
+    "era_en": "Sengoku period",
+    "desc_en": "A military commander from Omi whose wife was Oda Nobunaga's younger sister, Oichi. A tragic military commander who broke his alliance with Nobunaga for the sake of righteousness, fought with the Asakura clan, and committed suicide at Odari Castle."
   },
   "sen_no_rikyu": {
     "name": "千利休",
@@ -1609,7 +1978,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "茶道の大成者。「侘び茶」を極め「一期一会」の精神を確立。信長・秀吉の茶頭を務めたが秀吉の怒りを買い切腹を命じられた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Sen no Rikyu",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "Master of tea ceremony. Mastering \"Wabicha\" and establishing a \"once in a lifetime\" spirit. He served as tea master for Nobunaga and Hideyoshi, but he angered Hideyoshi and was ordered to commit seppuku."
   },
   "kazunomiya": {
     "name": "和宮親子内親王",
@@ -1622,7 +1994,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "孝明天皇の妹。公武合体のため14代将軍・徳川家茂に降嫁した皇女。夫の急逝後も江戸城に留まり無血開城に尽力した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Kazumiya parent and child Imperial Prince",
+    "era_en": "end of the Edo period",
+    "desc_en": "Sister of Emperor Komei. A princess who married the 14th shogun, Tokugawa Iemochi, in order to unite the civil and military forces. Even after her husband's sudden death, she remained in Edo Castle and worked hard to bring about the bloodless surrender of the castle."
   },
   "yosano_akiko": {
     "name": "与謝野晶子",
@@ -1635,7 +2010,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「君死にたまふことなかれ」。大阪堺出身の情熱的な歌人。日露戦争に反対する詩で反響を呼び近代日本女性文学のを開いた。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Akiko Yosano",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "\"Don't let yourself die.\" A passionate poet from Sakai, Osaka. Her poems opposing the Russo-Japanese War created a sensation and opened the door to modern Japanese women's literature."
   },
   "godai_tomoatsu": {
     "name": "五代友厚",
@@ -1648,7 +2026,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「大阪の恩人」。薩摩藩出身で大阪商工会議所設立など近代大阪の経済基盤を整備した実業家。朝ドラ「あさが来た」のモデルでもある。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tomoatsu Godai",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "\"Osaka's benefactor.\" A businessman from the Satsuma domain who established the economic foundations of modern Osaka, including establishing the Osaka Chamber of Commerce and Industry. She is also the model for the morning drama \"Asa ga Kita\"."
   },
   "takataya_kahei": {
     "name": "高田屋嘉兵衛",
@@ -1661,7 +2042,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "北前船で蝦夷地貿易を独占した淡路出身の豪商。ロシアに抑留されながら日露交渉に尽力した「北の海の大冒険家」。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Kahei Takadaya",
+    "era_en": "Edo period",
+    "desc_en": "A wealthy merchant from Awaji who monopolized the Ezo area trade with Kitamaebune ships. A ``Great Adventurer of the Northern Seas'' who worked hard for Japan-Russia negotiations while being interned by Russia."
   },
   "yanagita_kunio": {
     "name": "柳田國男",
@@ -1674,7 +2058,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『遠野物語』で日本民俗学を確立した先駆者。兵庫県出身で各地の伝承・習俗を記録し「日本人の心の地図」を描いた。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Kunio Yanagida",
+    "era_en": "Meiji-Showa",
+    "desc_en": "A pioneer who established Japanese folklore with \"The Tales of Tono.\" Born in Hyogo Prefecture, he recorded the folklore and customs of each region and drew a ``map of the Japanese heart.''"
   },
   "gyoki": {
     "name": "行基",
@@ -1687,7 +2074,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "庶民とともに池・橋・道路を作り「菩薩」と呼ばれた奈良時代の高僧。東大寺大仏建立の勧進に当たり日本初の大僧正となった。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Gyoki",
+    "era_en": "Nara period",
+    "desc_en": "A high priest from the Nara period who was called a \"Bodhisattva\" because he built ponds, bridges, and roads together with the common people. He became Japan's first chief priest when promoting the construction of the Great Buddha of Todaiji Temple."
   },
   "nakano_oe": {
     "name": "中大兄皇子",
@@ -1700,7 +2090,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "大化の改新（645年）を断行した皇子。中臣鎌足とともに蘇我氏を倒し天智天皇として即位し律令国家の礎を築いた。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Prince Naka no Oe",
+    "era_en": "Asuka period",
+    "desc_en": "A prince who carried out the Taika Reforms (645). Together with Nakatomi Kamatari, he overthrew the Soga clan, ascended the throne as Emperor Tenji, and laid the foundation for the Ritsuryo state."
   },
   "ganjin": {
     "name": "鑑真",
@@ -1713,7 +2106,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日本への渡航を6度試み失明しながらも754年に来日した唐の高僧。唐招提寺を建立し戒律を伝えた日中文化交流の象徴的人物。",
-    "era_category": "飛鳥・奈良"
+    "era_category": "飛鳥・奈良",
+    "name_en": "Jianjin",
+    "era_en": "Nara period",
+    "desc_en": "A high priest from the Tang Dynasty who arrived in Japan in 754 despite losing his eyesight after attempting to travel to Japan six times. A symbolic figure of cultural exchange between Japan and China who built Toshodaiji Temple and passed on the precepts."
   },
   "minakata_kumagusu": {
     "name": "南方熊楠",
@@ -1726,7 +2122,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "独学で粘菌学・民俗学・博物学に精通した和歌山出身の奇才。神社合祀令に反対して自然保護に尽力し「知の巨人」と称された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Minakata Kumagusu",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "A self-taught genius from Wakayama who is well-versed in slime mold studies, folklore, and natural history. He was known as a ``giant of knowledge'' for his efforts to protect nature in opposition to the ordinance to enshrine shrines."
   },
   "araki_mataemon": {
     "name": "荒木又右衛門",
@@ -1739,7 +2138,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「鍵屋の辻の決闘」（日本三大仇討）の主役。鳥取藩の剣客で義兄の仇討ちを助け史上最多の刃傷沙汰を演じた「剣豪の仇討士」。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "Araki Mataemon",
+    "era_en": "Edo period",
+    "desc_en": "The main character of ``The Duel of the Locksmith's Tsuji'' (Japan's Three Great Revenges). A ``swordsman avenger'' who was a swordsman of the Tottori clan who helped his brother-in-law avenge his death and suffered the most sword wounds in history."
   },
   "ozaki_hosai": {
     "name": "尾崎放哉",
@@ -1752,7 +2154,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「咳をしても一人」で知られる自由律俳人。東大卒のエリートから放浪の俳人への転落と昇華。種子島で孤独に没した漂泊の俳人。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Houya Ozaki",
+    "era_en": "Taisho/Showa",
+    "desc_en": "A free-spirited haiku poet known for ``Even if I cough, I'm alone.'' The fall and ascension from an elite graduate of the University of Tokyo to a wandering haiku poet. A wandering haiku poet who died alone on Tanegashima."
   },
   "koizumi_yakumo": {
     "name": "小泉八雲（ラフカディオ・ハーン）",
@@ -1765,7 +2170,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "ギリシャ生まれのアイルランド系作家。松江に住み日本文化を愛して帰化。『怪談』『日本の面影』で日本の精神を世界に伝えた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yakumo Koizumi (Lafcadio Hearn)",
+    "era_en": "Meiji era",
+    "desc_en": "Greek-born Irish writer. He lived in Matsue and became a naturalized citizen because he loved Japanese culture. He conveyed the spirit of Japan to the world with ``Ghost Stories'' and ``The Faces of Japan.''"
   },
   "kodama_gentaro": {
     "name": "児玉源太郎",
@@ -1778,7 +2186,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日露戦争の満洲軍総参謀長として乃木希典を補佐し旅順攻略・奉天会戦を指導した明治陸軍の知将。島根県出身。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Gentaro Kodama",
+    "era_en": "Meiji era",
+    "desc_en": "A wise general of the Meiji Army who assisted Maresuke Nogi as the chief of general staff of the Manchurian Army during the Russo-Japanese War and led the capture of Port Arthur and the Battle of Mukden. Born in Shimane Prefecture."
   },
   "ukita_hideie": {
     "name": "宇喜多秀家",
@@ -1791,7 +2202,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "豊臣政権の五大老のひとり。関ヶ原で西軍の副将として奮戦したが敗れ八丈島に50年間流配された薄命の武将。84歳まで生きた。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "Hideie Ukita",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "One of the five elders of the Toyotomi government. A warlord with a short lifespan who fought hard as a lieutenant general of the Western Army at Sekigahara, but was defeated and banished to Hachijojima for 50 years. He lived to be 84 years old."
   },
   "inukai_tsuyoshi": {
     "name": "犬養毅",
@@ -1804,7 +2218,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「話せばわかる」。岡山出身の元老政治家。立憲政友会総裁・首相として政党政治を守ろうとしたが5.15事件で海軍将校に暗殺された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Takeshi Inukai",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "\"If you talk, you'll understand.\" An old politician from Okayama.立憲政友会総裁・首相として政党政治を守ろうとしたが5.15事件で海軍将校に暗殺された。"
   },
   "rai_sanyo": {
     "name": "頼山陽",
@@ -1817,7 +2234,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「日本外史」を著し勤王思想・尊王攘夷に多大な影響を与えた儒学者・詩人・歴史家。広島出身で幕末志士のバイブルとなった。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Rai Sanyo",
+    "era_en": "Edo period",
+    "desc_en": "A Confucian scholar, poet, and historian who wrote ``Japanese Foreign History'' and had a great influence on the idea of ​​respect for the king and the son-no-joi movement. Born in Hiroshima, it became the bible for patriots at the end of the Edo period."
   },
   "hachisuka_iemasa": {
     "name": "蜂須賀家政",
@@ -1830,7 +2250,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "阿波徳島藩の初代藩主。父・正勝の秀吉への功績を継ぎ徳島城を築いて阿波25万石の礎を築いた。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Hachisuka Housekeeping",
+    "era_en": "Azuchi-Momoyama - Edo",
+    "desc_en": "阿波徳島藩の初代藩主。 Inheriting the achievements of his father Masakatsu to Hideyoshi, he built Tokushima Castle and laid the foundation for Awa 250,000 koku."
   },
   "kagawa_toyohiko": {
     "name": "賀川豊彦",
@@ -1843,7 +2266,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "神戸のスラム街で貧民救済活動を行ったキリスト教社会運動家。労働運動・農民組合運動を指導しノーベル平和賞候補にもなった。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Toyohiko Kagawa",
+    "era_en": "Meiji-Showa",
+    "desc_en": "A Christian social activist who carried out relief activities for the poor in the slums of Kobe. He led the labor movement and farmers' union movement and was nominated for the Nobel Peace Prize."
   },
   "kikuchi_kan": {
     "name": "菊池寛",
@@ -1856,7 +2282,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "『父帰る』『恩讐の彼方に』の劇作家・小説家。文藝春秋社を設立し芥川賞・直木賞を創設した日本文学界の大仕掛け人。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Hiroshi Kikuchi",
+    "era_en": "Taisho/Showa",
+    "desc_en": "Playwright and novelist of ``My Father Returns'' and ``Beyond the Enmity.'' A major figurehead in the world of Japanese literature who founded Bungeishunjusha and created the Akutagawa Prize and the Naoki Prize."
   },
   "nogi_maresuke": {
     "name": "乃木希典",
@@ -1869,7 +2298,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日露戦争で旅順を攻略した陸軍大将。明治天皇崩御の際に殉死した武人。「死のう」という決断が軍国主義の象徴ともなった。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Maresuke Nogi",
+    "era_en": "Meiji era",
+    "desc_en": "Army general who captured Port Arthur during the Russo-Japanese War. A military man who died at the time of Emperor Meiji's death. The decision to ``die'' became a symbol of militarism."
   },
   "masaoka_shiki": {
     "name": "正岡子規",
@@ -1882,7 +2314,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "近代俳句・短歌を革新した松山出身の文学者。結核で35歳で没するまで「写生」の理念で日本語表現を変革した天才。夏目漱石と親友。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shiki Masaoka",
+    "era_en": "Meiji era",
+    "desc_en": "A literary figure from Matsuyama who revolutionized modern haiku and tanka. A genius who revolutionized Japanese expression with his philosophy of ``sketching'' until he died of tuberculosis at the age of 35. A close friend of Natsume Soseki."
   },
   "akiyama_saneyuki": {
     "name": "秋山真之",
@@ -1895,7 +2330,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "日本海海戦でバルチック艦隊を迎え撃つ作戦を立案した海軍参謀。坂の上の雲の主人公のひとりとして司馬遼太郎に描かれた。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Masayuki Akiyama",
+    "era_en": "Meiji era",
+    "desc_en": "A naval staff officer who planned the strategy to intercept the Baltic Fleet in the Battle of the Sea of ​​Japan. He was drawn by Ryotaro Shiba as one of the main characters in Saka no Ue no Kumo."
   },
   "nakaoka_shintaro": {
     "name": "中岡慎太郎",
@@ -1908,7 +2346,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "薩長同盟の成立に坂本龍馬とともに奔走した土佐の志士。龍馬とともに近江屋で暗殺され30歳で没した。高知では龍馬と並ぶ英雄。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shintaro Nakaoka",
+    "era_en": "end of the Edo period",
+    "desc_en": "A Tosa patriot who worked hard with Ryoma Sakamoto to establish the Satsuma-Choshu Alliance. He was assassinated along with Ryoma at Omiya and died at the age of 30. In Kochi, he is a hero along with Ryoma."
   },
   "iwasaki_yataro": {
     "name": "岩崎弥太郎",
@@ -1921,7 +2362,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "三菱財閥の創設者。土佐の下級藩士から貿易・海運業で明治最大の財閥を築いた立志伝中の人物。「商売は戦争だ」の言葉が有名。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yataro Iwasaki",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "Founder of the Mitsubishi Zaibatsu. A man who is said to have built up the largest financial conglomerate of the Meiji era in the trade and shipping industries from a low-ranking samurai in Tosa. He is famous for saying, \"Business is war.\""
   },
   "itagaki_taisuke": {
     "name": "板垣退助",
@@ -1934,7 +2378,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「板垣死すとも自由は死せず」。自由民権運動の旗手。土佐出身で立志社・自由党を結成し議会制民主主義の確立に生涯を捧げた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Taisuke Itagaki",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "“Even if Itagaki dies, freedom will never die.” Standard bearer of the freedom and civil rights movement. Born in Tosa, he founded the Risshisha Liberal Party and devoted his life to establishing parliamentary democracy."
   },
   "nabeshima_naomasa": {
     "name": "鍋島直正",
@@ -1947,7 +2394,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "佐賀藩10代藩主。日本最初の蒸気船・反射炉を建造し西洋技術を積極導入した明治維新の礎を作った「佐賀の先駆大名」。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Nabeshima Naomasa",
+    "era_en": "Edo period",
+    "desc_en": "The 10th lord of the Saga domain. The pioneer daimyo of Saga built Japan's first steamship and reverberatory furnace, and laid the foundation for the Meiji Restoration by actively introducing Western technology."
   },
   "okuma_shigenobu": {
     "name": "大隈重信",
@@ -1960,7 +2410,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "早稲田大学の創設者・初代学長。2度の首相就任で外交・財政に功績。「立憲改進党」を結成し政党政治の発展に尽力した佐賀の巨人。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shigenobu Okuma",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "Founder and first president of Waseda University. He served as prime minister twice and made achievements in foreign policy and finance. A giant of Saga who formed the ``Constitutional Reform Party'' and worked hard to develop party politics."
   },
   "eto_shimpei": {
     "name": "江藤新平",
@@ -1973,7 +2426,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "明治政府初代司法卿として近代司法制度を確立した先駆者。佐賀の乱で政府に反旗を翻し処刑された。法治国家日本の礎を作った。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Shinpei Eto",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "A pioneer who established the modern judicial system as the first justice minister of the Meiji government. He rebelled against the government during the Saga Rebellion and was executed. He created the foundation of Japan as a nation ruled by law."
   },
   "siebold": {
     "name": "シーボルト",
@@ -1986,7 +2442,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "長崎・鳴滝塾で日本の医学・博物学・地理学を西洋に紹介したドイツ人医師。日本地図を国外に持ち出しシーボルト事件を起こした。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Siebold",
+    "era_en": "Edo period",
+    "desc_en": "A German doctor who introduced Japanese medicine, natural history, and geography to the West at Narutaki Juku in Nagasaki. He took a map of Japan out of the country and caused the Siebold Incident."
   },
   "takashima_shuhan": {
     "name": "高島秋帆",
@@ -1999,7 +2458,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "長崎の商人。オランダ式銃陣を研究し日本初の西洋式軍事訓練を実施した近代兵学の祖。幕府に陥れられ投獄されながらも幕末に復権した。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Akiho Takashima",
+    "era_en": "Edo period",
+    "desc_en": "A merchant from Nagasaki. A father of modern military tactics who studied Dutch-style gun formations and conducted Japan's first Western-style military training. Although he was captured and imprisoned by the Shogunate, he was restored to power at the end of the Edo period."
   },
   "nagai_takashi": {
     "name": "永井隆",
@@ -2012,7 +2474,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "長崎の医師・放射線科学者。原爆投下で被爆しながら救護活動を続け『長崎の鐘』を執筆。原爆の惨禍と平和を世界に伝えた「長崎の聖人」。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Takashi Nagai",
+    "era_en": "Showa era",
+    "desc_en": "Physician and radiation scientist in Nagasaki. While suffering from the atomic bombing, he continued to work on relief efforts and wrote \"The Bell of Nagasaki.\" \"Saint of Nagasaki\" who conveyed the devastation and peace of the atomic bomb to the world."
   },
   "yokoi_shonan": {
     "name": "横井小楠",
@@ -2025,7 +2490,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "熊本実学派の思想家。「公議輿論」「四民平等」を唱え坂本龍馬・由利公正に影響を与えた幕末最大の思想家。明治2年に暗殺された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Yokoi Kogusu",
+    "era_en": "end of the Edo period",
+    "desc_en": "A thinker of the Kumamoto Jitsugaku school. The greatest thinker of the late Edo period, who advocated ``kojikoshiron'' and ``the equality of the four peoples,'' and influenced Ryoma Sakamoto and Kosei Yuri. He was assassinated in the 2nd year of Meiji."
   },
   "tokuutomi_soho": {
     "name": "徳富蘇峰",
@@ -2038,7 +2506,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "民友社・国民新聞を創設したジャーナリスト・歴史家。熊本出身で日本の近代言論界を牽引したが晩年は戦争責任を問われた。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Tokutomi Soho",
+    "era_en": "Meiji-Showa",
+    "desc_en": "Journalist and historian who founded Minyusha and Kokumin Shimbun. Born in Kumamoto, he led Japan's modern press, but in his later years was blamed for the war."
   },
   "otomo_sorin": {
     "name": "大友宗麟",
@@ -2051,7 +2522,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "豊後を本拠にキリスト教を積極的に保護したキリシタン大名。フランシスコ・ザビエルを招き南蛮貿易で繁栄したが晩年は島津氏に敗退。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Otomo Sourin",
+    "era_en": "Sengoku period",
+    "desc_en": "A Christian daimyo who actively protected Christianity based in Bungo. He invited Francisco Xavier and prospered through trade between South and Vietnam, but was defeated by the Shimazu clan in his later years."
   },
   "wakayama_bokusui": {
     "name": "若山牧水",
@@ -2064,7 +2538,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「白鳥は哀しからずや空の青」。旅と酒を愛した宮崎出身の歌人。日本各地を旅して詠んだ抒情歌は今も多くの人に愛される。",
-    "era_category": "幕末・明治"
+    "era_category": "幕末・明治",
+    "name_en": "Wakayama Bokusui",
+    "era_en": "Meiji-Taisho",
+    "desc_en": "“Swans are sad, but the sky is blue.” A poet from Miyazaki who loved traveling and drinking. The lyrical poems he wrote while traveling around Japan are still loved by many people."
   },
   "ito_mancio": {
     "name": "伊東マンショ",
@@ -2077,7 +2554,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "天正遣欧少年使節の正使。15歳でローマ教皇グレゴリウス13世に謁見した日本初の公式欧州使節のひとり。宮崎（日向）の大名の甥。",
-    "era_category": "安土桃山"
+    "era_category": "安土桃山",
+    "name_en": "Ito Mansion",
+    "era_en": "Azuchi-Momoyama period",
+    "desc_en": "The official envoy of the Tensho Children's Mission to Europe. One of Japan's first official envoys to Europe, he had an audience with Pope Gregory XIII at the age of 15. Nephew of the Daimyo of Miyazaki (Hyuga)."
   },
   "togo_heihachiro": {
     "name": "東郷平八郎",
@@ -2090,7 +2570,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "「東洋のネルソン」。日本海海戦でバルチック艦隊を全滅させた連合艦隊司令長官。「神様、仏様、東郷様」と民衆に崇拝された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Heihachiro Togo",
+    "era_en": "Meiji era",
+    "desc_en": "\"Nelson of the East\" Commander-in-chief of the Combined Fleet who annihilated the Baltic Fleet in the Battle of the Sea of ​​Japan. The people worshiped him as ``God, Buddha, Togo-sama.''"
   },
   "sho_tai": {
     "name": "尚泰",
@@ -2103,7 +2586,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "最後の琉球国王。明治政府の「琉球処分」（1879年）で廃位され王国は沖縄県となった。東京に移住し侯爵として余生を送った。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Naoyasu",
+    "era_en": "Late Edo period ~ Meiji period",
+    "desc_en": "The last Ryukyu king. It was dethroned by the Meiji government's ``Ryukyu Disposal'' (1879), and the kingdom became Okinawa Prefecture. He moved to Tokyo and lived out the rest of his life as a marquis."
   },
   "sai_on": {
     "name": "蔡温",
@@ -2116,7 +2602,10 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "琉球王国の三司官（最高位の官職）。森林保護政策・農業改革を行い琉球の繁栄を支えた政治家。「琉球の孔子」と称された。",
-    "era_category": "江戸"
+    "era_category": "江戸",
+    "name_en": "Cai Wen",
+    "era_en": "Edo period",
+    "desc_en": "Three commanders (highest official position) of the Ryukyu Kingdom. A politician who supported the prosperity of the Ryukyus through forest protection policies and agricultural reforms. He was called the ``Ryukyu Confucius.''"
   },
   "jana_ueekata": {
     "name": "謝名親方（鄭迵）",
@@ -2129,6 +2618,9 @@
     "rank_taiga": 0,
     "rank_great": 0,
     "desc": "薩摩藩の琉球侵攻（1609年）に最後まで抵抗した琉球の三司官。捕らえられ薩摩で処刑されたが「琉球の忠臣」として語り継がれる。",
-    "era_category": "室町・戦国"
+    "era_category": "室町・戦国",
+    "name_en": "Master Jana (Zheng Bao)",
+    "era_en": "Early Edo period",
+    "desc_en": "The three Ryukyuan commanders who resisted the Satsuma domain's invasion of Ryukyu (1609) to the end. Although he was captured and executed in Satsuma, he is remembered as a ``loyal retainer of the Ryukyus.''"
   }
 }

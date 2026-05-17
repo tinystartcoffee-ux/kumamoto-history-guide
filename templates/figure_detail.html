@@ -111,16 +111,16 @@ header {
 <header>
   <a class="back" href="/figures">‹</a>
   <div class="header-info">
-    <h1>{{ figure.name }}</h1>
+    <h1 id="fg-name" data-en="{{ figure.name_en|default('') }}">{{ figure.name }}</h1>
     <div class="kana">{{ figure.kana }}</div>
   </div>
-  <div class="era-badge">{{ figure.era }}</div>
+  <div class="era-badge" data-en="{{ figure.era_en|default('') }}">{{ figure.era }}</div>
 </header>
 
 <div class="scrollable">
 
 <div class="profile-section">
-  <div class="profile-desc">{{ figure.desc }}</div>
+  <div class="profile-desc" data-en="{{ figure.desc_en|default('') }}">{{ figure.desc }}</div>
   <div class="rank-badges">
     {% if figure.rank_popular > 0 %}
       <span class="rank-tag">🏆 人気 {{ figure.rank_popular }}位</span>
@@ -154,19 +154,31 @@ header {
         <div class="spot-thumb-placeholder">🏯</div>
       {% endif %}
       <div class="spot-info">
-        <div class="spot-name">{{ s.name }}</div>
+        <div class="spot-name" data-en="{{ s.name_en|default('') }}">{{ s.name }}</div>
         <div class="spot-kana">{{ s.kana }}</div>
         <div class="spot-era">{{ s.era }}</div>
-        <div class="spot-highlight">{{ s.highlight }}</div>
+        <div class="spot-highlight" data-en="{{ s.highlight_en|default('') }}">{{ s.highlight }}</div>
       </div>
       <div class="arrow">›</div>
     </a>
     {% endfor %}
   {% else %}
-    <div class="no-spots">ゆかりのスポットはまだ登録されていません</div>
+    <div class="no-spots" data-en="No related sites registered yet">ゆかりのスポットはまだ登録されていません</div>
   {% endif %}
 </div>
 
 </div><!-- /scrollable -->
+<script>
+if (localStorage.getItem('lang') === 'en') {
+  document.documentElement.lang = 'en';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = el.getAttribute('data-en');
+    if (v) el.textContent = v;
+  });
+  document.querySelectorAll('.kana, .spot-kana').forEach(el => el.style.display = 'none');
+  const n = document.getElementById('fg-name');
+  if (n && n.textContent) document.title = n.textContent + ' — Japan History Audio Guide';
+}
+</script>
 </body>
 </html>

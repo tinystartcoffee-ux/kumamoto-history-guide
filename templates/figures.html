@@ -130,10 +130,10 @@ header h1 { font-size: 18px; font-weight: 700; }
     {% if rank > 0 %}{{ rank }}{% else %}—{% endif %}
   </div>
   <div class="figure-info">
-    <div class="figure-name">{{ f.name }}</div>
+    <div class="figure-name" data-en="{{ f.name_en|default('') }}">{{ f.name }}</div>
     <div class="figure-kana">{{ f.kana }}</div>
-    <div class="figure-era">{{ f.era }}</div>
-    <div class="figure-desc">{{ f.desc }}</div>
+    <div class="figure-era" data-en="{{ f.era_en|default('') }}">{{ f.era }}</div>
+    <div class="figure-desc" data-en="{{ f.desc_en|default('') }}">{{ f.desc }}</div>
   </div>
   <div class="arrow">›</div>
 </a>
@@ -259,6 +259,16 @@ function switchEra(era, btn) {
   } else {
     label.textContent = era + ' — ' + count + '人';
   }
+}
+
+/* 言語切替（英語データがあれば差し替え） */
+if (localStorage.getItem('lang') === 'en') {
+  document.documentElement.lang = 'en';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = el.getAttribute('data-en');
+    if (v) el.textContent = v;
+  });
+  document.querySelectorAll('.figure-kana').forEach(el => el.style.display = 'none');
 }
 </script>
 </body>

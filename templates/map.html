@@ -782,6 +782,44 @@ function t(key) {
 /* スポットの名前・見どころを現在言語で取得（英語データが無ければ日本語） */
 function sName(s) { return (LANG === 'en' && s && s.name_en) ? s.name_en : (s ? s.name : ''); }
 function sHi(s)   { return (LANG === 'en' && s && s.highlight_en) ? s.highlight_en : (s ? (s.highlight||'') : ''); }
+/* 地方・種別ボタン（絵文字込み二言語） */
+const AREA_DISP = {
+  kumamoto:{ja:'🏯 熊本市',en:'🏯 Kumamoto'}, tabaruzaka:{ja:'⚔️ 北部',en:'⚔️ Tabaruzaka'},
+  kikuchi:{ja:'⚜️ 菊池',en:'⚜️ Kikuchi'}, tamana:{ja:'🌊 玉名',en:'🌊 Tamana'},
+  yatsushiro:{ja:'⛪ 八代',en:'⛪ Yatsushiro'}, aso:{ja:'🌋 阿蘇',en:'🌋 Aso'},
+  hitoyoshi:{ja:'🏔️ 人吉',en:'🏔️ Hitoyoshi'}, kamimashiki:{ja:'🌉 上益城',en:'🌉 Kamimashiki'},
+  oguni:{ja:'🌲 小国',en:'🌲 Oguni'}, oita:{ja:'🏮 大分',en:'🏮 Oita'},
+  nagasaki:{ja:'⛪ 長崎',en:'⛪ Nagasaki'}, fukuoka:{ja:'🏮 福岡',en:'🏮 Fukuoka'},
+  kagoshima:{ja:'🌋 鹿児島',en:'🌋 Kagoshima'}, miyazaki:{ja:'🌄 宮崎',en:'🌄 Miyazaki'},
+  saga:{ja:'🏺 佐賀',en:'🏺 Saga'}, kanto:{ja:'🗼 関東',en:'🗼 Kanto'},
+  kinki:{ja:'🏯 近畿',en:'🏯 Kinki'}, chubu:{ja:'🗻 中部',en:'🗻 Chubu'},
+  tohoku:{ja:'❄️ 東北',en:'❄️ Tohoku'}, hokkaido:{ja:'🐻 北海道',en:'🐻 Hokkaido'},
+  chugoku:{ja:'🦌 中国',en:'🦌 Chugoku'}, shikoku:{ja:'🍊 四国',en:'🍊 Shikoku'},
+  okinawa:{ja:'🌺 沖縄',en:'🌺 Okinawa'}
+};
+const TYPE_DISP = {
+  all:{ja:'🗾 全種別',en:'🗾 All types'}, castle:{ja:'🏯 城',en:'🏯 Castle'},
+  shrine:{ja:'⛩️ 神社',en:'⛩️ Shrine'}, temple:{ja:'🛕 寺院',en:'🛕 Temple'},
+  tomb:{ja:'🪦 墓・古墳',en:'🪦 Tomb'}, battle:{ja:'⚔️ 古戦場',en:'⚔️ Battlefield'},
+  museum:{ja:'🏛️ 博物館',en:'🏛️ Museum'}, park:{ja:'🌳 公園',en:'🌳 Park'},
+  garden:{ja:'🌸 庭園',en:'🌸 Garden'}, house:{ja:'🏠 屋敷',en:'🏠 Residence'},
+  port:{ja:'⚓ 港',en:'⚓ Port'}, monument:{ja:'🗿 石碑',en:'🗿 Monument'}
+};
+const PREF_EN = {
+  tokyo:'Tokyo',kanagawa:'Kanagawa',saitama:'Saitama',chiba:'Chiba',ibaraki:'Ibaraki',
+  tochigi:'Tochigi',gunma:'Gunma',osaka:'Osaka',kyoto:'Kyoto',hyogo:'Hyogo',nara:'Nara',
+  wakayama:'Wakayama',shiga:'Shiga',mie:'Mie',aichi:'Aichi',shizuoka:'Shizuoka',
+  nagano:'Nagano',gifu:'Gifu',niigata:'Niigata',toyama:'Toyama',ishikawa:'Ishikawa',
+  fukui:'Fukui',yamanashi:'Yamanashi',miyagi:'Miyagi',fukushima:'Fukushima',iwate:'Iwate',
+  yamagata:'Yamagata',akita:'Akita',aomori:'Aomori',hokkaido:'Hokkaido',hiroshima:'Hiroshima',
+  yamaguchi:'Yamaguchi',okayama:'Okayama',shimane:'Shimane',tottori:'Tottori',
+  tokushima:'Tokushima',kagawa:'Kagawa',ehime:'Ehime',kochi:'Kochi'
+};
+const AREA_EN = {};
+Object.keys(AREA_DISP).forEach(k => {
+  AREA_EN[k] = AREA_DISP[k].en.replace(/^\S+\s/, '');
+});
+
 function applyLang() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -789,6 +827,14 @@ function applyLang() {
   });
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     el.placeholder = t(el.getAttribute('data-i18n-ph'));
+  });
+  document.querySelectorAll('.area-btn').forEach(b => {
+    const m = AREA_DISP[b.dataset.area];
+    if (m) b.textContent = m[LANG] || m.ja;
+  });
+  document.querySelectorAll('.type-btn').forEach(b => {
+    const m = TYPE_DISP[b.dataset.type];
+    if (m) b.textContent = m[LANG] || m.ja;
   });
   const lb = document.getElementById('lang-btn');
   if (lb) lb.textContent = (LANG === 'ja') ? '🌐 EN' : '🌐 日本語';
@@ -2077,9 +2123,12 @@ function renderPlan() {
   document.getElementById('pm-car').classList.toggle('active', planMode === 'car');
   document.getElementById('pm-transit').classList.toggle('active', planMode === 'transit');
 
+  const EN = (LANG === 'en');
   const ids = optimizeRoute(getPlan());
   if (ids.length === 0) {
-    list.innerHTML = '<div id="plan-empty">🧭 まだプランが空です<br><br>地図のスポットをタップして<br>「🧭 プランに追加」を押すと<br>ここに巡回ルートが組まれます</div>';
+    list.innerHTML = EN
+      ? '<div id="plan-empty">🧭 Your plan is empty<br><br>Tap a site on the map<br>and press “🧭 Add to plan”<br>to build a route here</div>'
+      : '<div id="plan-empty">🧭 まだプランが空です<br><br>地図のスポットをタップして<br>「🧭 プランに追加」を押すと<br>ここに巡回ルートが組まれます</div>';
     summary.textContent = '';
     navBtn.style.display = 'none';
     return;
@@ -2089,12 +2138,11 @@ function renderPlan() {
   let html = '';
   let moveMin = 0;
   const STAY = 30;
-  // 現在地→最初の脚
   if (userLat !== null) {
     const d = haversine(userLat, userLon, SPOTS[ids[0]].lat, SPOTS[ids[0]].lon);
     const m = legMinutes(d);
     moveMin += m;
-    html += `<div class="plan-leg">📍 現在地 → 約${d.toFixed(1)}km / ${m}分</div>`;
+    html += `<div class="plan-leg">${EN?`📍 You → ~${d.toFixed(1)}km / ${m}min`:`📍 現在地 → 約${d.toFixed(1)}km / ${m}分`}</div>`;
   }
   ids.forEach((id, i) => {
     const s = SPOTS[id];
@@ -2103,13 +2151,13 @@ function renderPlan() {
       const d = haversine(prev.lat, prev.lon, s.lat, s.lon);
       const m = legMinutes(d);
       moveMin += m;
-      html += `<div class="plan-leg">↓ 約${d.toFixed(1)}km / ${m}分</div>`;
+      html += `<div class="plan-leg">${EN?`↓ ~${d.toFixed(1)}km / ${m}min`:`↓ 約${d.toFixed(1)}km / ${m}分`}</div>`;
     }
     html += `<div class="plan-card">
       <div class="plan-num">${i+1}</div>
       <div class="plan-info">
-        <div class="plan-name">${s.name}</div>
-        <div class="plan-meta">滞在 約${STAY}分 ・ ${s.era||''}</div>
+        <div class="plan-name">${sName(s)}</div>
+        <div class="plan-meta">${EN?`Stay ~${STAY}min`:`滞在 約${STAY}分`} ・ ${s.era||''}</div>
       </div>
       <button class="plan-del" onclick="togglePlan('${id}')">✕</button>
     </div>`;
@@ -2119,14 +2167,20 @@ function renderPlan() {
   const stayMin = ids.length * STAY;
   const total = moveMin + stayMin;
   const h = Math.floor(total / 60), mm = total % 60;
-  const totalStr = (h ? h + '時間' : '') + (mm ? mm + '分' : (h ? '' : '0分'));
-  summary.innerHTML = `📍 ${ids.length}スポット ／ 移動 約${moveMin}分 ＋ 滞在 約${stayMin}分<br>` +
-    `<b style="font-size:15px">合計 約${totalStr}</b>（${planMode === 'car' ? '車' : '公共交通'}）`;
+  if (EN) {
+    const totalStr = (h ? h + 'h ' : '') + (mm ? mm + 'min' : (h ? '' : '0min'));
+    summary.innerHTML = `📍 ${ids.length} spots ／ travel ~${moveMin}min ＋ stay ~${stayMin}min<br>` +
+      `<b style="font-size:15px">Total ~${totalStr}</b> (${planMode === 'car' ? 'Car' : 'Transit'})`;
+  } else {
+    const totalStr = (h ? h + '時間' : '') + (mm ? mm + '分' : (h ? '' : '0分'));
+    summary.innerHTML = `📍 ${ids.length}スポット ／ 移動 約${moveMin}分 ＋ 滞在 約${stayMin}分<br>` +
+      `<b style="font-size:15px">合計 約${totalStr}</b>（${planMode === 'car' ? '車' : '公共交通'}）`;
+  }
 }
 
 function openPlanNav() {
   const ids = optimizeRoute(getPlan());
-  if (ids.length === 0) { alert('プランが空です'); return false; }
+  if (ids.length === 0) { alert(LANG==='en'?'Your plan is empty':'プランが空です'); return false; }
   const mode = planMode === 'car' ? 'driving' : 'transit';
   const pts = ids.map(id => `${SPOTS[id].lat},${SPOTS[id].lon}`);
   let url;
@@ -2311,7 +2365,7 @@ function showPrefBar(regionKey) {
   // ← 戻るボタン
   const back = document.createElement('button');
   back.className = 'drill-btn back';
-  back.textContent = '← 全エリア';
+  back.textContent = (LANG==='en') ? '← All regions' : '← 全エリア';
   back.onclick = () => { hidePrefBar(); filterArea('all'); };
   bar.appendChild(back);
 
@@ -2535,7 +2589,7 @@ function buildList(areaKey) {
     const nearLabel = document.createElement('div');
     nearLabel.className = 'list-area-header';
     nearLabel.style.color = '#FFD700';
-    nearLabel.textContent = `📍 近い順（${filtered.length}件）`;
+    nearLabel.textContent = (LANG==='en') ? `📍 Nearest first (${filtered.length})` : `📍 近い順（${filtered.length}件）`;
     container.appendChild(nearLabel);
     filtered.forEach(([id,spot]) => appendSpotCard(container, id, spot));
   } else {
@@ -2564,6 +2618,12 @@ function buildList(areaKey) {
 const REGION_ORDER = ['hokkaido','tohoku','kanto','chubu','kinki','chugoku','shikoku',
   'fukuoka','saga','nagasaki','oita','kumamoto','tabaruzaka','kikuchi','tamana',
   'yatsushiro','aso','hitoyoshi','kamimashiki','oguni','miyazaki','kagoshima','okinawa'];
+function prefName(prefKey, jaName) {
+  return (LANG === 'en' && PREF_EN[prefKey]) ? PREF_EN[prefKey] : jaName;
+}
+function areaName(aKey, jaName) {
+  return (LANG === 'en' && AREA_EN[aKey]) ? AREA_EN[aKey] : jaName;
+}
 function prefOf(id, spot) {
   const aKey = SPOT_AREA[id] || 'kumamoto';
   let ri = REGION_ORDER.indexOf(aKey); if (ri < 0) ri = 90;
@@ -2575,7 +2635,7 @@ function prefOf(id, spot) {
       const p = list[i];
       if (spot.lat >= p.sw[0] && spot.lat <= p.ne[0] &&
           spot.lon >= p.sw[1] && spot.lon <= p.ne[1]) {
-        return { key:p.key, name:p.name, emoji:p.emoji, color:col, rank:ri*100+i };
+        return { key:p.key, name:prefName(p.key,p.name), emoji:p.emoji, color:col, rank:ri*100+i };
       }
     }
     // 2) 矩形外 → 最寄りの県中心にスナップ
@@ -2586,10 +2646,10 @@ function prefOf(id, spot) {
       if (d < bd) { bd = d; bi = i; }
     }
     const p = list[bi];
-    return { key:p.key, name:p.name, emoji:p.emoji, color:col, rank:ri*100+bi };
+    return { key:p.key, name:prefName(p.key,p.name), emoji:p.emoji, color:col, rank:ri*100+bi };
   }
   const a = AREAS[aKey] || AREAS.kumamoto;
-  return { key:aKey, name:a.name, emoji:a.emoji, color:a.color, rank:ri*100 };
+  return { key:aKey, name:areaName(aKey,a.name), emoji:a.emoji, color:a.color, rank:ri*100 };
 }
 
 function appendSpotCard(container, id, spot) {
@@ -2680,8 +2740,10 @@ function updateProgress() {
   const pct     = Math.floor(visited / total * 100);
   document.getElementById('progress-badge').textContent =
     visited > 0
-      ? `🏆 ${visited} / ${total} 件訪問済み（${pct}%）`
-      : '▶ 史跡をタップして音声解説';
+      ? (LANG === 'en' ? `🏆 ${visited} / ${total} visited (${pct}%)`
+                       : `🏆 ${visited} / ${total} 件訪問済み（${pct}%）`)
+      : (LANG === 'en' ? '▶ Tap a site for audio guide'
+                       : '▶ 史跡をタップして音声解説');
 }
 
 /* ── GPS ── */

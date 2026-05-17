@@ -2186,22 +2186,57 @@ function buildList(areaKey) {
     container.appendChild(nearLabel);
     filtered.forEach(([id,spot]) => appendSpotCard(container, id, spot));
   } else {
+    // 県単位でグループ化（地方→県の順に並べる）
     const grouped = {};
     filtered.forEach(([id,spot]) => {
-      const aKey = SPOT_AREA[id] || 'kumamoto';
-      if (!grouped[aKey]) grouped[aKey] = [];
-      grouped[aKey].push([id,spot]);
+      const p = prefOf(id, spot);
+      if (!grouped[p.key]) grouped[p.key] = { info:p, spots:[] };
+      grouped[p.key].spots.push([id,spot]);
     });
-    Object.entries(grouped).forEach(([aKey,spots]) => {
-      const area = AREAS[aKey]; if (!area) return;
+    const keys = Object.keys(grouped).sort((a,b) =>
+      grouped[a].info.rank - grouped[b].info.rank);
+    keys.forEach(k => {
+      const g = grouped[k];
       const header = document.createElement('div');
       header.className = 'list-area-header';
-      header.style.color = area.color;
-      header.textContent = `${area.emoji} ${area.name}（${spots.length}）`;
+      header.style.color = g.info.color;
+      header.textContent = `${g.info.emoji} ${g.info.name}（${g.spots.length}）`;
       container.appendChild(header);
-      spots.forEach(([id,spot]) => appendSpotCard(container, id, spot));
+      g.spots.forEach(([id,spot]) => appendSpotCard(container, id, spot));
     });
   }
+}
+
+/* スポットの所属県を判定（広域地方は県境界矩形で細分、九州は地区/県のまま） */
+const REGION_ORDER = ['hokkaido','tohoku','kanto','chubu','kinki','chugoku','shikoku',
+  'fukuoka','saga','nagasaki','oita','kumamoto','tabaruzaka','kikuchi','tamana',
+  'yatsushiro','aso','hitoyoshi','kamimashiki','oguni','miyazaki','kagoshima','okinawa'];
+function prefOf(id, spot) {
+  const aKey = SPOT_AREA[id] || 'kumamoto';
+  let ri = REGION_ORDER.indexOf(aKey); if (ri < 0) ri = 90;
+  if (PREF_DATA[aKey]) {
+    const list = PREF_DATA[aKey];
+    const col = AREAS[aKey]?.color || '#5c9cf5';
+    // 1) 県境界矩形内
+    for (let i = 0; i < list.length; i++) {
+      const p = list[i];
+      if (spot.lat >= p.sw[0] && spot.lat <= p.ne[0] &&
+          spot.lon >= p.sw[1] && spot.lon <= p.ne[1]) {
+        return { key:p.key, name:p.name, emoji:p.emoji, color:col, rank:ri*100+i };
+      }
+    }
+    // 2) 矩形外 → 最寄りの県中心にスナップ
+    let bi = 0, bd = Infinity;
+    for (let i = 0; i < list.length; i++) {
+      const c = list[i].center;
+      const d = (spot.lat-c[0])*(spot.lat-c[0]) + (spot.lon-c[1])*(spot.lon-c[1]);
+      if (d < bd) { bd = d; bi = i; }
+    }
+    const p = list[bi];
+    return { key:p.key, name:p.name, emoji:p.emoji, color:col, rank:ri*100+bi };
+  }
+  const a = AREAS[aKey] || AREAS.kumamoto;
+  return { key:aKey, name:a.name, emoji:a.emoji, color:a.color, rank:ri*100 };
 }
 
 function appendSpotCard(container, id, spot) {

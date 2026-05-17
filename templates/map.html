@@ -768,12 +768,20 @@ const I18N = {
   planCar:     { ja:'🚗 車',               en:'🚗 Car' },
   planTransit: { ja:'🚃 公共交通',         en:'🚃 Transit' },
   planNav:     { ja:'🧭 Googleマップでナビ開始', en:'🧭 Open route in Google Maps' },
+  popupAudio:  { ja:'▶ 音声解説を聞く',   en:'▶ Listen to audio guide' },
+  visitedDo:   { ja:'＋ 訪問済みにする',   en:'＋ Mark as visited' },
+  visitedDone: { ja:'✓ 訪問済み',          en:'✓ Visited' },
+  planAdd:     { ja:'🧭 プランに追加',     en:'🧭 Add to plan' },
+  planAdded:   { ja:'✓ プランに追加済み',  en:'✓ Added to plan' },
 };
 let LANG = localStorage.getItem('lang') || 'ja';
 function t(key) {
   const e = I18N[key];
   return e ? (e[LANG] || e.ja) : key;
 }
+/* スポットの名前・見どころを現在言語で取得（英語データが無ければ日本語） */
+function sName(s) { return (LANG === 'en' && s && s.name_en) ? s.name_en : (s ? s.name : ''); }
+function sHi(s)   { return (LANG === 'en' && s && s.highlight_en) ? s.highlight_en : (s ? (s.highlight||'') : ''); }
 function applyLang() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -789,11 +797,18 @@ function toggleLang() {
   LANG = (LANG === 'ja') ? 'en' : 'ja';
   localStorage.setItem('lang', LANG);
   applyLang();
-  if (typeof renderPlan === 'function' &&
-      document.getElementById('plan-view') &&
-      document.getElementById('plan-view').classList.contains('show')) {
-    renderPlan();
-  }
+  // 開いているビューを言語反映で再描画
+  try {
+    if (document.getElementById('list-view').classList.contains('show'))
+      buildList(currentArea);
+    const si = document.getElementById('search-input');
+    if (document.getElementById('search-view').classList.contains('show') && si && si.value.trim())
+      doSearch(si.value);
+    if (document.getElementById('plan-view').classList.contains('show') &&
+        typeof renderPlan === 'function')
+      renderPlan();
+    if (typeof map !== 'undefined' && map.closePopup) map.closePopup();
+  } catch (e) {}
 }
 
 /* ── エリア定義 ── */
@@ -2192,18 +2207,20 @@ Object.entries(SPOTS).forEach(([id, spot]) => {
   });
   const marker = L.marker([spot.lat, spot.lon], { icon }).addTo(map);
   const isVisited = visitedSet.has(id);
-  marker.bindPopup(`
-    <div class="popup-name">${meta.emoji} ${spot.name}</div>
+  marker.bindPopup(() => {
+    const v = visitedSet.has(id), p = inPlan(id);
+    return `
+    <div class="popup-name">${meta.emoji} ${sName(spot)}</div>
     <div class="popup-era">${spot.era}</div>
-    <div class="popup-highlight">${spot.highlight}</div>
-    <a class="popup-btn" href="/spot/${id}">▶ 音声解説を聞く</a>
-    <button class="popup-btn" id="visited-btn-${id}" onclick="markVisited('${id}')" style="margin-top:6px;background:${isVisited?'#444455':'#1a1a5e'};color:${isVisited?'#88AAFF':'#AAAAFF'};border-color:${isVisited?'#6666AA':'rgba(255,255,255,0.4)'}">
-      ${isVisited?'✓ 訪問済み':'＋ 訪問済みにする'}
+    <div class="popup-highlight">${sHi(spot)}</div>
+    <a class="popup-btn" href="/spot/${id}">${t('popupAudio')}</a>
+    <button class="popup-btn" id="visited-btn-${id}" onclick="markVisited('${id}')" style="margin-top:6px;background:${v?'#444455':'#1a1a5e'};color:${v?'#88AAFF':'#AAAAFF'};border-color:${v?'#6666AA':'rgba(255,255,255,0.4)'}">
+      ${v?t('visitedDone'):t('visitedDo')}
     </button>
-    <button class="popup-btn" id="plan-btn-${id}" onclick="togglePlan('${id}')" style="margin-top:6px;background:${inPlan(id)?'#2a5a2a':'#1a1a5e'};color:${inPlan(id)?'#88FF88':'#AAFFAA'};border-color:${inPlan(id)?'#55AA55':'rgba(255,255,255,0.4)'}">
-      ${inPlan(id)?'✓ プランに追加済み':'🧭 プランに追加'}
-    </button>
-  `, { maxWidth: 260 });
+    <button class="popup-btn" id="plan-btn-${id}" onclick="togglePlan('${id}')" style="margin-top:6px;background:${p?'#2a5a2a':'#1a1a5e'};color:${p?'#88FF88':'#AAFFAA'};border-color:${p?'#55AA55':'rgba(255,255,255,0.4)'}">
+      ${p?t('planAdded'):t('planAdd')}
+    </button>`;
+  }, { maxWidth: 260 });
   marker.on('click', () => playPikon());
   marker.on('popupopen', () => BGM.setOverride('town'));
   marker.on('popupclose', () => BGM.clearOverride());
@@ -2587,8 +2604,8 @@ function appendSpotCard(container, id, spot) {
   card.innerHTML = `
     <div class="spot-icon-box" style="background:${meta.color}33;border-color:${meta.color}66">${meta.emoji}</div>
     <div class="spot-info">
-      <div class="spot-name">${visited?'✓ ':''}${spot.name}</div>
-      <div class="spot-kana">${spot.kana||''}${dist}</div>
+      <div class="spot-name">${visited?'✓ ':''}${sName(spot)}</div>
+      <div class="spot-kana">${LANG==='en'?'':(spot.kana||'')}${dist}</div>
       <div class="spot-era">${spot.era}</div>
     </div>
     <div class="arrow">▶</div>`;
@@ -2638,22 +2655,20 @@ function doSearch(query) {
   });
 
   const matched = Object.entries(SPOTS).filter(([id, s]) => {
-    return (s.name||'').includes(q)
-        || (s.kana||'').includes(q)
-        || (s.era||'').includes(q)
-        || (s.highlight||'').includes(q)
-        || figMatchIds.has(id);
+    const hay = `${s.name||''}${s.kana||''}${s.era||''}${s.highlight||''}${s.name_en||''}${s.highlight_en||''}`.toLowerCase();
+    return hay.includes(q) || figMatchIds.has(id);
   });
 
   results.innerHTML = '';
   if (!matched.length) {
-    results.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:12px;">「${query}」に一致する史跡が見つかりません</div>`;
+    const msg = LANG === 'en' ? `No sites found for "${query}"` : `「${query}」に一致する史跡が見つかりません`;
+    results.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:12px;">${msg}</div>`;
     return;
   }
   const label = document.createElement('div');
   label.className = 'list-area-header';
   label.style.color = '#FFD700';
-  label.textContent = `🔍 「${query}」— ${matched.length}件`;
+  label.textContent = LANG === 'en' ? `🔍 "${query}" — ${matched.length}` : `🔍 「${query}」— ${matched.length}件`;
   results.appendChild(label);
   matched.forEach(([id, spot]) => appendSpotCard(results, id, spot));
 }

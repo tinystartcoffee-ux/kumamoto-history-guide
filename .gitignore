@@ -4,3 +4,4 @@ cloudflared
 start.sh
 歴史音声ガイドを起動.command
 /tmp/
+.env

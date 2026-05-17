@@ -223,7 +223,7 @@ header {
 <header>
   <a class="back" href="/">‹</a>
   <div class="header-info">
-    <h1>{{ spot.name }}</h1>
+    <h1 id="sp-name">{{ spot.name }}</h1>
     <div class="kana">{{ spot.kana }}</div>
   </div>
   <div class="era-badge">{{ spot.era }}</div>
@@ -274,7 +274,7 @@ header {
 </div>
 
 <div class="content-section">
-  <div class="highlight-box">{{ spot.highlight }}</div>
+  <div class="highlight-box" id="sp-highlight">{{ spot.highlight }}</div>
 
   <a class="maps-btn" href="https://www.google.com/maps/dir/?api=1&destination={{ spot.lat }},{{ spot.lon }}&travelmode=transit" target="_blank">
     🗺️ Google Maps で経路を見る
@@ -294,13 +294,31 @@ header {
   {% endif %}
 
   <div class="section-label">■ 解説テキスト</div>
-  <div class="text-body">{{ spot.text }}</div>
+  <div class="text-body" id="sp-text">{{ spot.text }}</div>
 </div>
 </div><!-- /scrollable -->
 
 <audio id="audio" src="/audio/{{ spot_id }}" preload="auto"></audio>
 
 <script>
+/* 言語切替（英語データがあれば差し替え） */
+const SPOT_I18N = {
+  name_en:      {{ spot.name_en|default('')|tojson }},
+  highlight_en: {{ spot.highlight_en|default('')|tojson }},
+  text_en:      {{ spot.text_en|default('')|tojson }}
+};
+if (localStorage.getItem('lang') === 'en') {
+  document.documentElement.lang = 'en';
+  if (SPOT_I18N.name_en) {
+    document.getElementById('sp-name').textContent = SPOT_I18N.name_en;
+    document.title = SPOT_I18N.name_en + ' — Japan History Audio Guide';
+  }
+  if (SPOT_I18N.highlight_en)
+    document.getElementById('sp-highlight').textContent = SPOT_I18N.highlight_en;
+  if (SPOT_I18N.text_en)
+    document.getElementById('sp-text').textContent = SPOT_I18N.text_en;
+}
+
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('playBtn');
 const progressBar = document.getElementById('progressBar');

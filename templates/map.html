@@ -180,12 +180,12 @@ html, body {
   position: fixed;
   top: var(--map-top); bottom: 52px; left: 0; right: 0;
   z-index: 500;
-  display: flex;
-  align-items: flex-start; justify-content: center;
-  pointer-events: none;
+  display: block;
   overflow-y: auto;
-  padding: 14px 12px;
   -webkit-overflow-scrolling: touch;
+  padding: 14px 12px;
+  pointer-events: none;
+  text-align: center;
 }
 #region-prompt .rp-box {
   background: rgba(0,0,40,0.86);
@@ -194,8 +194,9 @@ html, body {
   padding: 18px 18px 20px;
   text-align: center;
   box-shadow: 0 0 26px rgba(92,156,245,0.55);
-  margin: auto;
+  display: inline-block;
   width: 100%; max-width: 360px;
+  pointer-events: auto;
 }
 #region-prompt .rp-arrow {
   font-size: 30px; line-height: 1; color: #5c9cf5;
@@ -817,6 +818,7 @@ const AREA_DISP = {
   kinki:{ja:'🏯 近畿',en:'🏯 Kinki'}, chubu:{ja:'🗻 中部',en:'🗻 Chubu'},
   tohoku:{ja:'❄️ 東北',en:'❄️ Tohoku'}, hokkaido:{ja:'🐻 北海道',en:'🐻 Hokkaido'},
   chugoku:{ja:'🦌 中国',en:'🦌 Chugoku'}, shikoku:{ja:'🍊 四国',en:'🍊 Shikoku'},
+  kyushu:{ja:'🌋 九州',en:'🌋 Kyushu'},
   okinawa:{ja:'🌺 沖縄',en:'🌺 Okinawa'}
 };
 const TYPE_DISP = {
@@ -841,14 +843,18 @@ const AREA_EN = {};
 Object.keys(AREA_DISP).forEach(k => {
   AREA_EN[k] = AREA_DISP[k].en.replace(/^\S+\s/, '');
 });
-/* 熊本県内サブエリア（「熊本」1つにまとめて普通の地方扱い） */
+/* 熊本県内サブエリア（area-barの「熊本市」ボタン用） */
 const KUMAMOTO_SUB = new Set(['kumamoto','tabaruzaka','kikuchi','tamana',
   'yatsushiro','aso','hitoyoshi','kamimashiki','oguni']);
-/* 地方選択画面に出す地方（熊本細分は除外し他県と同列に） */
-const PROMPT_REGIONS = ['hokkaido','tohoku','kanto','chubu','kinki','chugoku',
-  'shikoku','fukuoka','saga','nagasaki','kumamoto','oita','miyazaki','kagoshima','okinawa'];
+/* 九州全体（県別を1つの「九州」にまとめ、他地方と同列に） */
+const KYUSHU_SUB = new Set(['fukuoka','saga','nagasaki','oita','miyazaki','kagoshima',
+  'kumamoto','tabaruzaka','kikuchi','tamana','yatsushiro','aso','hitoyoshi','kamimashiki','oguni']);
+/* 地方選択画面に出す地方（北→南の広域9ブロックに統一） */
+const PROMPT_REGIONS = ['hokkaido','tohoku','kanto','chubu','kinki',
+  'chugoku','shikoku','kyushu','okinawa'];
 function inArea(mk, areaKey) {
   if (areaKey === 'all') return true;
+  if (areaKey === 'kyushu') return KYUSHU_SUB.has(mk);
   if (areaKey === 'kumamoto') return KUMAMOTO_SUB.has(mk);
   return mk === areaKey;
 }

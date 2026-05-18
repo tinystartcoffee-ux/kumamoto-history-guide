@@ -57,8 +57,12 @@ html, body {
   color: #FFD700;
   text-shadow: 2px 2px 0 #000000, -1px -1px 0 #AA6600;
   letter-spacing: .06em;
+  white-space: nowrap;
 }
-#header p { font-size: 9px; color: #8888CC; margin-top: 2px; letter-spacing: .04em; }
+#header p { font-size: 9px; color: #8888CC; margin-top: 2px; letter-spacing: .04em; white-space: nowrap; }
+#header > div:first-child { flex-shrink: 0; }
+#header > div:last-child { min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#header > div:last-child::-webkit-scrollbar { display: none; }
 
 /* DQ風ボタン共通 */
 .dq-btn {
@@ -74,6 +78,7 @@ html, body {
   letter-spacing: .04em;
   transition: none;
   -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
 }
 .dq-btn:active { transform: translate(2px,2px); box-shadow: none; }
 
@@ -836,6 +841,17 @@ const AREA_EN = {};
 Object.keys(AREA_DISP).forEach(k => {
   AREA_EN[k] = AREA_DISP[k].en.replace(/^\S+\s/, '');
 });
+/* 熊本県内サブエリア（「熊本」1つにまとめて普通の地方扱い） */
+const KUMAMOTO_SUB = new Set(['kumamoto','tabaruzaka','kikuchi','tamana',
+  'yatsushiro','aso','hitoyoshi','kamimashiki','oguni']);
+/* 地方選択画面に出す地方（熊本細分は除外し他県と同列に） */
+const PROMPT_REGIONS = ['hokkaido','tohoku','kanto','chubu','kinki','chugoku',
+  'shikoku','fukuoka','saga','nagasaki','kumamoto','oita','miyazaki','kagoshima','okinawa'];
+function inArea(mk, areaKey) {
+  if (areaKey === 'all') return true;
+  if (areaKey === 'kumamoto') return KUMAMOTO_SUB.has(mk);
+  return mk === areaKey;
+}
 
 function applyLang() {
   document.documentElement.lang = LANG;
@@ -860,9 +876,9 @@ function applyLang() {
 /* 「地方を選んでください」画面内の地方ボタンを生成 */
 function buildRegionChips() {
   const box = document.getElementById('rp-regions');
-  if (!box || typeof REGION_ORDER === 'undefined') return;
+  if (!box) return;
   box.innerHTML = '';
-  REGION_ORDER.forEach(k => {
+  PROMPT_REGIONS.forEach(k => {
     const m = AREA_DISP[k];
     if (!m) return;
     const b = document.createElement('button');
@@ -2582,7 +2598,7 @@ function applyFilters() {
     } else if (currentArea === 'none') {
       areaOk = false;  // 未選択時は何も表示しない
     } else {
-      areaOk = currentArea === 'all' || mk === currentArea;
+      areaOk = inArea(mk, currentArea);
     }
     const typeOk = currentType === 'all' || type === currentType;
     if (areaOk && typeOk) { marker.addTo(map); bounds.push([spot.lat, spot.lon]); }
@@ -2627,7 +2643,7 @@ function buildList(areaKey) {
     return;
   }
   let filtered = Object.entries(SPOTS).filter(([id,spot]) => {
-    const areaOk = areaKey === 'all' || SPOT_AREA[id] === areaKey;
+    const areaOk = inArea(SPOT_AREA[id], areaKey);
     const typeOk  = currentType === 'all' || getSpotType(id, spot.name||'') === currentType;
     return areaOk && typeOk;
   });

@@ -1092,6 +1092,22 @@ const BGM = (() => {
     nodes = [];
   };
 
+  /* バックグラウンド/離脱時に確実に停止（復帰時の二重再生を防ぐ） */
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAll();
+      if (ctx && ctx.state === 'running') { try { ctx.suspend(); } catch(e) {} }
+    }
+  });
+  window.addEventListener('pagehide', () => {
+    stopAll();
+    if (ctx) { try { ctx.suspend(); } catch(e) {} }
+  });
+  window.addEventListener('pageshow', (e) => {
+    // bfcache から復元された場合、生き残った旧音を確実に止める
+    if (e.persisted) stopAll();
+  });
+
   // 音名→周波数（例: hz('G',5) = 783.99 Hz）
   const hz = (name, oct = 5) => {
     const i = ['C','Cs','D','Ds','E','F','Fs','G','Gs','A','As','B'].indexOf(name);

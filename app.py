@@ -126,16 +126,23 @@ def api_spots():
     return jsonify(spots)
 
 def _keep_alive():
+    """無料枠節約：日中(JST 8-23時)のみ起こし続け、深夜はスリープ許容。
+    これによりRenderの月間稼働時間を約450h/月に抑える（無料枠750h以内）。"""
+    import datetime
     base = os.environ.get("RENDER_EXTERNAL_URL", "").rstrip("/")
     if not base:
         return
     time.sleep(60)
     while True:
-        try:
-            urlreq.urlopen(f"{base}/health", timeout=10)
-        except Exception:
-            pass
-        time.sleep(600)  # 10分ごと
+        jst_hour = (datetime.datetime.utcnow().hour + 9) % 24
+        if 8 <= jst_hour < 23:
+            try:
+                urlreq.urlopen(f"{base}/health", timeout=10)
+            except Exception:
+                pass
+            time.sleep(780)    # 営業時間帯：13分ごと（15分スリープ手前で起こす）
+        else:
+            time.sleep(1800)   # 深夜：pingせずスリープ許容（稼働時間を消費しない）
 
 threading.Thread(target=_keep_alive, daemon=True).start()
 

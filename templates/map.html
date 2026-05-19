@@ -22,25 +22,12 @@ html, body {
   overflow: hidden;
 }
 
-/* ── マップタイルをドット絵化 ── */
+/* ── マップタイル（鮮明・見やすさ優先） ── */
 .leaflet-tile {
-  image-rendering: pixelated !important;
-  image-rendering: crisp-edges !important;
+  image-rendering: auto !important;
 }
 .leaflet-tile-pane {
-  filter: saturate(195%) contrast(108%) brightness(90%) hue-rotate(-8deg);
-}
-/* ドット感を強調するグリッドオーバーレイ */
-#map::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,0,30,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,30,0.07) 1px, transparent 1px);
-  background-size: 4px 4px;
-  pointer-events: none;
-  z-index: 400;
+  filter: saturate(112%) contrast(102%);
 }
 
 /* ── ヘッダー（DQウィンドウ風） ── */
@@ -622,30 +609,16 @@ html, body {
 
 <!-- エリアフィルター -->
 <div id="area-bar" class="prompt">
-  <button class="area-btn" data-area="all"        onclick="filterArea('all')" data-i18n="allRegions">🗾 全て</button>
-  <button class="area-btn" data-area="kumamoto"          onclick="filterArea('kumamoto')"   style="--ac:#2196F3">🏯 熊本市</button>
-  <button class="area-btn" data-area="tabaruzaka"        onclick="filterArea('tabaruzaka')" style="--ac:#F44336">⚔️ 北部</button>
-  <button class="area-btn" data-area="kikuchi"           onclick="filterArea('kikuchi')"    style="--ac:#9C27B0">⚜️ 菊池</button>
-  <button class="area-btn" data-area="tamana"            onclick="filterArea('tamana')"     style="--ac:#FF9800">🌊 玉名</button>
-  <button class="area-btn" data-area="yatsushiro"        onclick="filterArea('yatsushiro')" style="--ac:#009688">⛪ 八代</button>
-  <button class="area-btn" data-area="aso"               onclick="filterArea('aso')"        style="--ac:#4CAF50">🌋 阿蘇</button>
-  <button class="area-btn" data-area="hitoyoshi"         onclick="filterArea('hitoyoshi')"  style="--ac:#795548">🏔️ 人吉</button>
-  <button class="area-btn" data-area="kamimashiki"       onclick="filterArea('kamimashiki')"style="--ac:#FF5722">🌉 上益城</button>
-  <button class="area-btn" data-area="oguni"             onclick="filterArea('oguni')"      style="--ac:#00BCD4">🌲 小国</button>
-  <button class="area-btn" data-area="oita"              onclick="filterArea('oita')"       style="--ac:#E91E63">🏮 大分</button>
-  <button class="area-btn" data-area="nagasaki"          onclick="filterArea('nagasaki')"   style="--ac:#FF6B6B">⛪ 長崎</button>
-  <button class="area-btn" data-area="fukuoka"           onclick="filterArea('fukuoka')"    style="--ac:#FF9800">🏮 福岡</button>
-  <button class="area-btn" data-area="kagoshima"         onclick="filterArea('kagoshima')"  style="--ac:#8BC34A">🌋 鹿児島</button>
-  <button class="area-btn" data-area="miyazaki"          onclick="filterArea('miyazaki')"   style="--ac:#4CAF50">🌄 宮崎</button>
-  <button class="area-btn" data-area="saga"              onclick="filterArea('saga')"       style="--ac:#9C27B0">🏺 佐賀</button>
-  <button class="area-btn" data-area="kanto"             onclick="filterArea('kanto')"      style="--ac:#3F51B5">🗼 関東</button>
-  <button class="area-btn" data-area="kinki"             onclick="filterArea('kinki')"      style="--ac:#E040FB">🏯 近畿</button>
-  <button class="area-btn" data-area="chubu"             onclick="filterArea('chubu')"      style="--ac:#00BCD4">🗻 中部</button>
-  <button class="area-btn" data-area="tohoku"            onclick="filterArea('tohoku')"     style="--ac:#76FF03">❄️ 東北</button>
-  <button class="area-btn" data-area="hokkaido"          onclick="filterArea('hokkaido')"   style="--ac:#00E5FF">🐻 北海道</button>
-  <button class="area-btn" data-area="chugoku"           onclick="filterArea('chugoku')"    style="--ac:#FFEA00">🦌 中国</button>
-  <button class="area-btn" data-area="shikoku"           onclick="filterArea('shikoku')"    style="--ac:#FF6D00">🍊 四国</button>
-  <button class="area-btn" data-area="okinawa"           onclick="filterArea('okinawa')"    style="--ac:#FF4081">🌺 沖縄</button>
+  <button class="area-btn" data-area="all"      onclick="filterArea('all')" data-i18n="allRegions">🗾 全て</button>
+  <button class="area-btn" data-area="hokkaido" onclick="filterArea('hokkaido')" style="--ac:#00E5FF">🐻 北海道</button>
+  <button class="area-btn" data-area="tohoku"   onclick="filterArea('tohoku')"   style="--ac:#76FF03">❄️ 東北</button>
+  <button class="area-btn" data-area="kanto"    onclick="filterArea('kanto')"    style="--ac:#3F51B5">🗼 関東</button>
+  <button class="area-btn" data-area="chubu"    onclick="filterArea('chubu')"    style="--ac:#00BCD4">🗻 中部</button>
+  <button class="area-btn" data-area="kinki"    onclick="filterArea('kinki')"    style="--ac:#E040FB">🏯 近畿</button>
+  <button class="area-btn" data-area="chugoku"  onclick="filterArea('chugoku')"  style="--ac:#FFEA00">🦌 中国</button>
+  <button class="area-btn" data-area="shikoku"  onclick="filterArea('shikoku')"  style="--ac:#FF6D00">🍊 四国</button>
+  <button class="area-btn" data-area="kyushu"   onclick="filterArea('kyushu')"   style="--ac:#FF7043">🌋 九州</button>
+  <button class="area-btn" data-area="okinawa"  onclick="filterArea('okinawa')"  style="--ac:#FF4081">🌺 沖縄</button>
 </div>
 
 <!-- 種別フィルター -->
@@ -1046,10 +1019,10 @@ function getTypeColor(id, name) { return TYPE_META[getSpotType(id, name)].color;
 /* ── ドット絵ピクセルマーカーHTML生成（divIcon用） ── */
 function makeMarkerHTML(color, emoji, size=28, visited=false) {
   // 四角枠なし：絵文字を大きく＋白フチで地図に埋もれず視認しやすく
-  const fs     = Math.round(size * 1.05);
+  const fs     = Math.round(size * 1.25);
   const alpha  = visited ? '0.5' : '1';
   const filter = (visited ? 'grayscale(1) ' : '') +
-    'drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1.5px #fff) drop-shadow(0 1px 1px rgba(0,0,0,0.55))';
+    'drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 2px 2px rgba(0,0,0,0.7))';
   return `<div style="
     width:${size}px;height:${size}px;
     display:flex;align-items:center;justify-content:center;
